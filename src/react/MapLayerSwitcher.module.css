@@ -1,0 +1,35 @@
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+.groupLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(9, 22, 37, 0.15);
+  border-radius: 999px;
+  padding: 0.5rem 0.875rem;
+}
+
+.layerButton {
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 0.875rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(9, 22, 37, 0.15);
+  cursor: pointer;
+}
+
+.layerButtonActive {
+  color: #fff;
+  background: var(--color-primary);
+}

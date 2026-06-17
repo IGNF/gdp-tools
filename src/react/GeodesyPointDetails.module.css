@@ -1,0 +1,131 @@
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-medium);
+}
+
+.attributeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.attributeRow {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--color-light);
+}
+
+.attributeRow:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.attributeRow dt {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-medium);
+}
+
+.attributeRow dd {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-dark);
+  word-break: break-word;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.attributeRow dd a {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.imageBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+}
+
+.imageLink {
+  display: inline-block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.imageThumb {
+  display: block;
+  max-width: 100%;
+  max-height: 5rem;
+  border: 1px solid var(--color-light);
+  border-radius: 4px;
+  object-fit: contain;
+  background: #fff;
+  transition: max-height 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .imageLink:hover .imageThumb {
+    max-height: 12rem;
+  }
+}
+
+.pictoCode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  color: var(--color-dark);
+  word-break: break-all;
+}
+
+.imageOpenLink {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.empty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-medium);
+}
+
+.dispoStates {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.dispoDotAvailable,
+.dispoDotUnavailable {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.dispoDotAvailable {
+  background: rgba(38, 165, 129, 0.95);
+}
+
+.dispoDotUnavailable {
+  background: rgba(231, 76, 60, 0.95);
+}

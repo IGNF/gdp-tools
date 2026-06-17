@@ -1,0 +1,89 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  border: 1px solid var(--color-light-tint, #e8ecf0);
+  border-radius: 10px;
+  background: white;
+  padding: 0.875rem 1rem;
+}
+
+.filterLabel {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-dark, #1a1a1a);
+}
+
+.segmented {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.segment {
+  flex: 1;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--color-light, #ddd);
+  border-radius: 8px;
+  background: var(--color-light-light, #f7f9fb);
+  font-size: 0.8125rem;
+  color: var(--color-dark, #1a1a1a);
+  cursor: pointer;
+}
+
+.segment[data-active='true'] {
+  border-color: var(--color-primary, #007bff);
+  background: color-mix(in srgb, var(--color-primary, #007bff) 12%, white);
+  font-weight: 600;
+}
+
+.dateRow,
+.textRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--color-dark, #1a1a1a);
+}
+
+.dateInput,
+.textInput,
+.select {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--color-light, #ddd);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--color-dark, #1a1a1a);
+  background: white;
+}
+
+.dateInput:disabled,
+.textInput:disabled {
+  opacity: 0.55;
+  background: var(--color-light-light, #f7f9fb);
+}
+
+.clearButton {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-primary, #007bff);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,17 @@
+.titleRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.titlePicto {
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.titleText {
+  min-width: 0;
+}

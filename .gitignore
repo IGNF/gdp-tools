@@ -1,0 +1,29 @@
+# Dépendances et artefacts de build
+node_modules
+dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache TypeScript
+*.tsbuildinfo
+
+# Variables d'environnement locales (clés WFS, etc.)
+.env
+.env.*
+!.env.example
+
+# Fichiers locaux Vite / éditeur
+*.local
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Tests (si vous en ajoutez plus tard)
+coverage

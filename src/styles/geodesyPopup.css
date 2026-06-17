@@ -1,0 +1,134 @@
+/**
+ * Info-bulle géodésie — look proche EspaceCo / ol-ext « default »
+ * (fond blanc, titre vert, tableau d’attributs).
+ * S’appuie sur les variables de bof-mobile global.css.
+ */
+
+.ol-popup.geodesy-ec.default > div {
+  border: 1px solid var(--color-primary, #26a581);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(9, 22, 37, 0.18);
+  overflow: hidden;
+}
+
+.ol-popup.geodesy-ec .ol-popup-content {
+  padding: 0;
+  max-width: min(20rem, calc(100vw - 2rem));
+  max-height: min(16rem, 40vh);
+  overflow: auto;
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature h1 {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary, #26a581);
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature th,
+.ol-popup.geodesy-ec .ol-popupfeature td {
+  padding: 0.375rem 0.625rem;
+  border-bottom: 1px solid var(--color-light, #e8eaed);
+  text-align: left;
+  vertical-align: top;
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature th {
+  width: 38%;
+  font-weight: 600;
+  color: var(--color-medium, #788089);
+  background: var(--color-light-light, #f4f6f8);
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature td {
+  color: var(--color-dark, #091625);
+  word-break: break-word;
+  max-width: 0;
+  overflow: hidden;
+}
+
+.ol-popup.geodesy-ec .ol-popupfeature td a {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-primary, #26a581);
+  text-decoration: underline;
+}
+
+.ol-popup.geodesy-ec .geodesy-attribute-image__link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+  text-decoration: none;
+}
+
+.ol-popup.geodesy-ec .geodesy-attribute-image__thumb {
+  display: block;
+  max-width: min(100%, 10rem);
+  max-height: 5rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-light, #e8eaed);
+  object-fit: contain;
+  background: #fff;
+  transition: max-height 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ol-popup.geodesy-ec .geodesy-attribute-image__link:hover .geodesy-attribute-image__thumb {
+    max-height: 12rem;
+  }
+}
+
+.ol-popup.geodesy-ec .geodesy-attribute-image__caption {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary, #26a581);
+  text-decoration: underline;
+}
+
+.ol-popup.geodesy-ec .closeBox {
+  background-color: var(--color-primary-shade, #1c7b66);
+}
+
+.ol-popup.geodesy-ec .closeBox:hover {
+  background-color: var(--color-primary, #26a581);
+}
+
+/* HTML GetFeatureInfo brut (fallback GeoServer) */
+.ol-popup.geodesy-ec .geodesy-popup-html table.featureInfo {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.ol-popup.geodesy-ec .geodesy-popup-html table.featureInfo caption {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-primary, #26a581);
+  text-transform: none;
+}
+
+.ol-popup.geodesy-ec .geodesy-popup-html table.featureInfo th {
+  font-weight: 600;
+  color: var(--color-medium, #788089);
+  background: var(--color-light-light, #f4f6f8);
+  text-transform: none;
+}
+
+.ol-popup.geodesy-ec .geodesy-popup-html table.featureInfo td {
+  background: #fff;
+}
