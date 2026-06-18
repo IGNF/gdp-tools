@@ -9,7 +9,7 @@ export const GEODESY_GDP_RGP2_FICHE_URL =
   'https://fiches-geodesie.ign.fr/st-datageod.php/pt-rgp-1-redirect.html';
 
 /** Libellé du lien fiche dans la fiche repère RGP. */
-export const GEODESY_GDP_RGP2_FICHE_LINK_LABEL = 'Fiche IGN';
+export const GEODESY_GDP_RGP2_FICHE_LINK_LABEL = 'Fiche RGP';
 
 /** Texte affiché pour le lien fiche station RGP. */
 export const GEODESY_GDP_RGP2_FICHE_LINK_TEXT = 'Consulter la fiche station';
