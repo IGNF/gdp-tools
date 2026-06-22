@@ -11,43 +11,55 @@ import Text from 'ol/style/Text';
 
 import { getGeodesyWfsClusterMemberCount, getGeodesyWfsClusterMembers } from '../wfs/geodesyWfsLayerUtils';
 
-/** Style d’un cluster WFS (cercle + effectif). */
+/** Style d’un cluster WFS (cercle rayonné + effectif, aligné sur l’ancien Géodésie de poche). */
 export interface GeodesyWfsClusterStyleOptions {
-  /** Couleur fixe (prioritaire sur le dégradé). */
+  /** Couleur fixe (prioritaire sur les seuils). */
   fillColor?: string;
-  /** Couleur des petits clusters (défaut : vert). */
-  minClusterColor?: string;
+  /** Couleur des petits clusters — effectif ≤ mediumClusterThreshold (défaut : vert). */
+  smallClusterColor?: string;
+  /** Couleur des clusters moyens (défaut : orange). */
+  mediumClusterColor?: string;
   /** Couleur des grands clusters (défaut : rouge). */
-  maxClusterColor?: string;
-  /** Effectif à partir duquel la pastille est rouge (défaut : 12). */
-  gradientMaxCount?: number;
+  largeClusterColor?: string;
+  /** Seuil orange strictement supérieur (défaut : 8). */
+  mediumClusterThreshold?: number;
+  /** Seuil rouge strictement supérieur (défaut : 25). */
+  largeClusterThreshold?: number;
   strokeColor?: string;
   textColor?: string;
-  /** Rayon minimal du cercle cluster (défaut : 12). */
+  /** Rayon minimal du disque (défaut : 8). */
   minRadius?: number;
-  /** Rayon maximal du cercle cluster (défaut : 22). */
+  /** Rayon maximal du disque (défaut : 20). */
   maxRadius?: number;
+  /** Facteur de taille selon l’effectif (défaut : 0,75). */
+  radiusScale?: number;
 }
 
 const DEFAULT_CLUSTER_STYLE_OPTIONS = {
   strokeColor: '#ffffff',
   textColor: '#ffffff',
-  minRadius: 12,
-  maxRadius: 22,
-  minClusterColor: 'rgba(38, 165, 129, 0.88)',
-  maxClusterColor: 'rgba(220, 53, 69, 0.88)',
-  gradientMaxCount: 12,
+  minRadius: 8,
+  maxRadius: 20,
+  radiusScale: 0.75,
+  smallClusterColor: 'rgb(0, 128, 0)',
+  mediumClusterColor: 'rgb(255, 128, 0)',
+  largeClusterColor: 'rgb(192, 0, 0)',
+  mediumClusterThreshold: 8,
+  largeClusterThreshold: 25,
 } as const satisfies Omit<GeodesyWfsClusterStyleOptions, 'fillColor'>;
 
 type ResolvedClusterStyleOptions = {
   fillColor?: string;
-  minClusterColor: string;
-  maxClusterColor: string;
-  gradientMaxCount: number;
+  smallClusterColor: string;
+  mediumClusterColor: string;
+  largeClusterColor: string;
+  mediumClusterThreshold: number;
+  largeClusterThreshold: number;
   strokeColor: string;
   textColor: string;
   minRadius: number;
   maxRadius: number;
+  radiusScale: number;
 };
 
 function parseRgbaColor(color: string): [number, number, number, number] | null {
@@ -70,38 +82,79 @@ function formatRgbaColor(r: number, g: number, b: number, a: number): string {
   return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${a.toFixed(2)})`;
 }
 
+function parseRgbTriplet(
+  color: string,
+  fallback: [number, number, number],
+): [number, number, number] {
+  const parsed = parseRgbaColor(color);
+  if (!parsed) {
+    return fallback;
+  }
+
+  return [parsed[0], parsed[1], parsed[2]];
+}
+
+function resolveClusterRgb(
+  size: number,
+  options: ResolvedClusterStyleOptions,
+): [number, number, number] {
+  if (size > options.largeClusterThreshold) {
+    return parseRgbTriplet(options.largeClusterColor, [192, 0, 0]);
+  }
+
+  if (size > options.mediumClusterThreshold) {
+    return parseRgbTriplet(options.mediumClusterColor, [255, 128, 0]);
+  }
+
+  return parseRgbTriplet(options.smallClusterColor, [0, 128, 0]);
+}
+
 function resolveClusterFillColor(size: number, options: ResolvedClusterStyleOptions): string {
   if (options.fillColor) {
     return options.fillColor;
   }
 
-  const minColor = parseRgbaColor(options.minClusterColor) ?? [38, 165, 129, 0.88];
-  const maxColor = parseRgbaColor(options.maxClusterColor) ?? [220, 53, 69, 0.88];
-  const gradientMaxCount = Math.max(2, options.gradientMaxCount);
-  const ratio = Math.min(1, Math.max(0, (size - 2) / (gradientMaxCount - 2)));
+  const [r, g, b] = resolveClusterRgb(size, options);
+  return formatRgbaColor(r, g, b, 1);
+}
 
-  return formatRgbaColor(
-    minColor[0] + ratio * (maxColor[0] - minColor[0]),
-    minColor[1] + ratio * (maxColor[1] - minColor[1]),
-    minColor[2] + ratio * (maxColor[2] - minColor[2]),
-    minColor[3] + ratio * (maxColor[3] - minColor[3]),
+function resolveClusterRadius(size: number, options: ResolvedClusterStyleOptions): number {
+  return Math.max(
+    options.minRadius,
+    Math.min(size * options.radiusScale, options.maxRadius),
   );
+}
+
+const CLUSTER_RAY_COUNT = 6;
+const CLUSTER_RAY_STROKE_WIDTH = 15;
+
+function createClusterRayStroke(fillColor: string, radius: number): Stroke {
+  const rgba = parseRgbaColor(fillColor);
+  const rayColor = rgba
+    ? formatRgbaColor(rgba[0], rgba[1], rgba[2], 0.5)
+    : fillColor;
+  const dashLength = (2 * Math.PI * radius) / CLUSTER_RAY_COUNT;
+
+  return new Stroke({
+    color: rayColor,
+    width: CLUSTER_RAY_STROKE_WIDTH,
+    lineDash: [0, dashLength, dashLength, dashLength, dashLength, dashLength, dashLength],
+    lineCap: 'butt',
+  });
 }
 
 function createClusterBadgeStyle(
   size: number,
   options: ResolvedClusterStyleOptions,
 ): Style {
-  const radius = Math.min(
-    options.maxRadius,
-    Math.max(options.minRadius, options.minRadius + Math.log2(size) * 3),
-  );
+  const radius = resolveClusterRadius(size, options);
+  const fillColor = resolveClusterFillColor(size, options);
 
   return new Style({
     image: new CircleStyle({
       radius,
-      fill: new Fill({ color: resolveClusterFillColor(size, options) }),
-      stroke: new Stroke({ color: options.strokeColor, width: 2 }),
+      fill: new Fill({ color: fillColor }),
+      stroke: createClusterRayStroke(fillColor, radius),
     }),
     text: new Text({
       text: String(size),
@@ -112,8 +165,8 @@ function createClusterBadgeStyle(
 }
 
 /**
- * Style combiné : picto pour un point seul, pastille numérotée pour un cluster.
- * Inspiré de {@link https://viglino.github.io/ol-ext/examples/animation/map.animatedcluster.html}.
+ * Style combiné : picto pour un point seul, cluster rayonné pour un amas.
+ * Taille et couleurs alignées sur l’ancien Géodésie de poche (`vieux-gdp/src/js/map/style2.js`).
  */
 export function createGeodesyWfsClusterStyleFunction(
   pointStyle: StyleFunction,
