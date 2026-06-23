@@ -7,6 +7,47 @@ import { fetchWithTimeout } from '../utils/fetchWithTimeout';
 import { parseGeodesyGdpRgp2 } from './parseGeodesyGdpRgp2';
 
 const annexLoadCache = new Map<string, Promise<Feature<Geometry>[]>>();
+const annexLoadTimestamps = new Map<string, number>();
+
+function buildAnnexCacheKey(
+  definition: GeodesyAnnexLayerDefinition,
+  dataProjection: string,
+): string {
+  return `${definition.url}|${definition.format}|${dataProjection}`;
+}
+
+function resolveAnnexCacheKey(
+  definition: GeodesyAnnexLayerDefinition,
+  catalog?: GeodesyCatalog,
+): string {
+  const dataProjection = catalog?.wfsDataProjection ?? 'EPSG:4326';
+  return buildAnnexCacheKey(definition, dataProjection);
+}
+
+/** Vide le cache mémoire des flux annexes (tout ou une définition précise). */
+export function clearGeodesyAnnexFeaturesCache(
+  definition?: GeodesyAnnexLayerDefinition,
+  catalog?: GeodesyCatalog,
+): void {
+  if (!definition) {
+    annexLoadCache.clear();
+    annexLoadTimestamps.clear();
+    return;
+  }
+
+  const cacheKey = resolveAnnexCacheKey(definition, catalog);
+  annexLoadCache.delete(cacheKey);
+  annexLoadTimestamps.delete(cacheKey);
+}
+
+/** Date du dernier chargement réussi d’un flux annexe (null si jamais chargé). */
+export function getGeodesyAnnexFeaturesLastLoadedAt(
+  options: Pick<LoadGeodesyAnnexFeaturesOptions, 'definition' | 'catalog'>,
+): Date | null {
+  const cacheKey = resolveAnnexCacheKey(options.definition, options.catalog);
+  const timestamp = annexLoadTimestamps.get(cacheKey);
+  return timestamp !== undefined ? new Date(timestamp) : null;
+}
 
 export interface LoadGeodesyAnnexFeaturesOptions {
   catalog?: GeodesyCatalog;
@@ -40,14 +81,16 @@ export async function loadGeodesyAnnexFeatures(
   options: LoadGeodesyAnnexFeaturesOptions,
 ): Promise<Feature<Geometry>[]> {
   const { definition, catalog } = options;
-  const dataProjection = catalog?.wfsDataProjection ?? 'EPSG:4326';
-  const cacheKey = `${definition.url}|${definition.format}|${dataProjection}`;
+  const cacheKey = resolveAnnexCacheKey(definition, catalog);
 
   let pending = annexLoadCache.get(cacheKey);
   if (!pending) {
-    pending = fetchAnnexPayload(definition.url).then((payload) =>
-      parseAnnexPayload(definition, payload, dataProjection),
-    );
+    pending = fetchAnnexPayload(definition.url)
+      .then((payload) => parseAnnexPayload(definition, payload, catalog?.wfsDataProjection ?? 'EPSG:4326'))
+      .then((features) => {
+        annexLoadTimestamps.set(cacheKey, Date.now());
+        return features;
+      });
     annexLoadCache.set(cacheKey, pending);
   }
 
