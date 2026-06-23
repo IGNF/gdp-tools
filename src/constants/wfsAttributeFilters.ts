@@ -1,5 +1,6 @@
 import type Feature from 'ol/Feature';
 
+import { resolveGeodesyNetworkFilterCategories } from './geodesyNetworkFilterCategories';
 import { isEmptyGeodesyAttributeValue } from '../interaction/geodesyFeatureAttributes';
 import { readGeodesyWfsBusinessId } from '../wfs/geodesyWfsFeatureId';
 import type { GeodesyWfsLayerId } from './wfs';
@@ -55,11 +56,23 @@ export interface GeodesyWfsChoiceFilterDefinition extends GeodesyWfsAttributeFil
   options: readonly GeodesyWfsChoiceFilterOption[];
 }
 
+/** Filtre à choix multiples (ex. RBF / RDF / Triplet / Non triplet). */
+export interface GeodesyWfsMultiChoiceFilterDefinition extends GeodesyWfsAttributeFilterDefinitionBase {
+  type: 'multiChoice';
+  options: readonly GeodesyWfsChoiceFilterOption[];
+  /**
+   * Stratégie de classification des repères.
+   * Défaut : `network-category`.
+   */
+  matcher?: 'network-category';
+}
+
 export type GeodesyWfsAttributeFilterDefinition =
   | GeodesyWfsBooleanFilterDefinition
   | GeodesyWfsDateFilterDefinition
   | GeodesyWfsTextFilterDefinition
-  | GeodesyWfsChoiceFilterDefinition;
+  | GeodesyWfsChoiceFilterDefinition
+  | GeodesyWfsMultiChoiceFilterDefinition;
 
 /**
  * Valeurs actives des filtres.
@@ -326,9 +339,68 @@ function featureMatchesChoiceFilter(
   return normalized === selected.value.toLowerCase();
 }
 
-function isActiveFilterValue(value: boolean | string | null | undefined): boolean {
+function parseMultiChoiceSelections(value: string): Set<string> {
+  return new Set(
+    value
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean),
+  );
+}
+
+export function getGeodesyWfsMultiChoiceSelectedValues(
+  definition: GeodesyWfsMultiChoiceFilterDefinition,
+  value: boolean | string | null | undefined,
+): Set<string> {
+  if (value === null || value === undefined) {
+    return new Set(definition.options.map((option) => option.value));
+  }
+
+  if (typeof value === 'string' && value.trim() === '') {
+    return new Set();
+  }
+
+  if (typeof value !== 'string') {
+    return new Set(definition.options.map((option) => option.value));
+  }
+
+  return parseMultiChoiceSelections(value);
+}
+
+function featureMatchesMultiChoiceFilter(
+  feature: Feature,
+  definition: GeodesyWfsMultiChoiceFilterDefinition,
+  filterValue: string,
+  _filterContext: GeodesyWfsAttributeFilterMatchContext,
+): boolean {
+  const selected = parseMultiChoiceSelections(filterValue);
+  if (selected.size === 0) {
+    return false;
+  }
+
+  if (selected.size >= definition.options.length) {
+    return true;
+  }
+
+  const categories = resolveGeodesyNetworkFilterCategories(feature.getProperties());
+  return categories.some((category) => selected.has(category));
+}
+
+function isActiveFilterValue(
+  definition: GeodesyWfsAttributeFilterDefinition,
+  value: boolean | string | null | undefined,
+): boolean {
   if (value === null || value === undefined) {
     return false;
+  }
+
+  if (definition.type === 'multiChoice') {
+    if (typeof value !== 'string') {
+      return false;
+    }
+
+    const selected = parseMultiChoiceSelections(value);
+    return selected.size < definition.options.length;
   }
 
   if (typeof value === 'boolean') {
@@ -358,6 +430,8 @@ function featureMatchesFilterDefinition(
       return featureMatchesTextFilter(feature, definition, String(filterValue), filterContext);
     case 'choice':
       return featureMatchesChoiceFilter(feature, definition, String(filterValue), filterContext);
+    case 'multiChoice':
+      return featureMatchesMultiChoiceFilter(feature, definition, String(filterValue), filterContext);
     default:
       return true;
   }
@@ -371,7 +445,7 @@ function featureMatchesAttributeFilters(
 ): boolean {
   for (const definition of definitions) {
     const filterValue = values[definition.id];
-    if (!isActiveFilterValue(filterValue)) {
+    if (!isActiveFilterValue(definition, filterValue)) {
       continue;
     }
 
@@ -397,7 +471,7 @@ export function geodesyWfsFeatureMatchesAttributeFilters(
   }
 
   const hasActiveFilter = definitions.some((definition) =>
-    isActiveFilterValue(values[definition.id]),
+    isActiveFilterValue(definition, values[definition.id]),
   );
 
   if (!hasActiveFilter) {
@@ -419,7 +493,8 @@ export function countActiveGeodesyWfsAttributeFilters(
   definitions: readonly GeodesyWfsAttributeFilterDefinition[],
   values: GeodesyWfsAttributeFilterValues,
 ): number {
-  return definitions.filter((definition) => isActiveFilterValue(values[definition.id])).length;
+  return definitions.filter((definition) => isActiveFilterValue(definition, values[definition.id]))
+    .length;
 }
 
 export function createDefaultGeodesyWfsAttributeFilterValues(

@@ -2,6 +2,7 @@ import type {
   GeodesyWfsAttributeFilterDefinition,
   GeodesyWfsAttributeFilterValues,
 } from '../constants/wfsAttributeFilters';
+import { getGeodesyWfsMultiChoiceSelectedValues } from '../constants/wfsAttributeFilters';
 
 import styles from './GeodesyWfsAttributeFiltersPanel.module.css';
 
@@ -166,6 +167,57 @@ function ChoiceFilterControl({
   );
 }
 
+function MultiChoiceFilterControl({
+  definition,
+  value,
+  onChange,
+}: {
+  definition: Extract<GeodesyWfsAttributeFilterDefinition, { type: 'multiChoice' }>;
+  value: boolean | string | null | undefined;
+  onChange: (value: boolean | string | null) => void;
+}) {
+  const selected = getGeodesyWfsMultiChoiceSelectedValues(definition, value);
+
+  const handleToggle = (optionValue: string) => {
+    const next = new Set(selected);
+
+    if (next.has(optionValue)) {
+      next.delete(optionValue);
+    } else {
+      next.add(optionValue);
+    }
+
+    if (next.size === 0) {
+      onChange('');
+      return;
+    }
+
+    if (next.size === definition.options.length) {
+      onChange(null);
+      return;
+    }
+
+    onChange([...next].join(','));
+  };
+
+  return (
+    <div className={styles.segmented} role="group" aria-label={definition.title}>
+      {definition.options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          className={styles.segment}
+          data-active={selected.has(option.value) ? 'true' : undefined}
+          aria-pressed={selected.has(option.value)}
+          onClick={() => handleToggle(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /** Panneau de filtres attributs WFS (profil expert). */
 export function GeodesyWfsAttributeFiltersPanel({
   filters,
@@ -206,6 +258,13 @@ export function GeodesyWfsAttributeFiltersPanel({
           ) : null}
           {definition.type === 'choice' ? (
             <ChoiceFilterControl
+              definition={definition}
+              value={values[definition.id]}
+              onChange={(next) => onChange(updateValue(values, definition.id, next))}
+            />
+          ) : null}
+          {definition.type === 'multiChoice' ? (
+            <MultiChoiceFilterControl
               definition={definition}
               value={values[definition.id]}
               onChange={(next) => onChange(updateValue(values, definition.id, next))}

@@ -93,8 +93,16 @@ export {
   type GeodesyWfsChoiceFilterDefinition,
   type GeodesyWfsChoiceFilterOption,
   type GeodesyWfsDateFilterDefinition,
+  type GeodesyWfsMultiChoiceFilterDefinition,
   type GeodesyWfsTextFilterDefinition,
+  getGeodesyWfsMultiChoiceSelectedValues,
 } from './constants/wfsAttributeFilters';
+export {
+  GEODESY_NETWORK_FILTER_CATEGORIES,
+  isGeodesyTripletPoint,
+  resolveGeodesyNetworkFilterCategories,
+  type GeodesyNetworkFilterCategory,
+} from './constants/geodesyNetworkFilterCategories';
 export {
   clearGeodesyWfsAttributeFilterValues,
   getGeodesyWfsAttributeFilterValues,
@@ -135,8 +143,11 @@ export {
 } from './constants/geodesyExternalUrl';
 export {
   loadGeodesyAnnexFeatures,
+  clearGeodesyAnnexFeaturesCache,
+  getGeodesyAnnexFeaturesLastLoadedAt,
   type LoadGeodesyAnnexFeaturesOptions,
 } from './annex/loadGeodesyAnnexFeatures';
+export { reloadGeodesyAnnexLayerOnMap } from './annex/reloadGeodesyAnnexLayerOnMap';
 export {
   queryGeodesyAnnexAtPixel,
   type QueryGeodesyAnnexAtPixelOptions,
