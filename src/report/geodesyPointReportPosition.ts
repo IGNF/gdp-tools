@@ -5,7 +5,10 @@ import {
 import type { GeodesyPointReportContext } from './geodesyPointReportContext';
 
 /** Domaines WFS pour lesquels la position peut être ajustée lors d’un signalement. */
-export const GEODESY_POINT_REPORT_POSITION_EDITABLE_DOMAINES = ['nivf', 'nivo'] as const;
+export const GEODESY_POINT_REPORT_POSITION_EDITABLE_DOMAINES = ['nivf', 'nivo', 'nive'] as const;
+
+/** Domaines WFS de canevas (2e ordre / densification), non signalables. */
+export const GEODESY_POINT_REPORT_BLOCKED_DOMAINES = ['rsge', 'nive'] as const;
 
 export function extractGeodesyPointReportDomaine(
   context: Pick<GeodesyPointReportContext, 'properties'>,
@@ -29,6 +32,22 @@ export function isGeodesyPointReportPositionEditable(
   );
 
   return allowed.has(domaine);
+}
+
+/** True si le signalement est autorisé sur ce repère (faux pour les points de canevas). */
+export function isGeodesyPointReportAllowed(
+  context: Pick<GeodesyPointReportContext, 'properties'>,
+): boolean {
+  const domaine = extractGeodesyPointReportDomaine(context);
+  if (!domaine) {
+    return true;
+  }
+
+  const blocked = new Set(
+    GEODESY_POINT_REPORT_BLOCKED_DOMAINES.map((code) => code.toLowerCase()),
+  );
+
+  return !blocked.has(domaine);
 }
 
 /** Contexte signalement avec une position ajustée par l’utilisateur. */

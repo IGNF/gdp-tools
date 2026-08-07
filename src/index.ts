@@ -310,8 +310,10 @@ export {
   type GeodesyPointReportContext,
 } from './report/geodesyPointReportContext';
 export {
+  GEODESY_POINT_REPORT_BLOCKED_DOMAINES,
   GEODESY_POINT_REPORT_POSITION_EDITABLE_DOMAINES,
   extractGeodesyPointReportDomaine,
+  isGeodesyPointReportAllowed,
   isGeodesyPointReportPositionEditable,
   withGeodesyPointReportPosition,
 } from './report/geodesyPointReportPosition';
