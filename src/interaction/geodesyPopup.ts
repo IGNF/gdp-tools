@@ -10,6 +10,7 @@ import {
   prefetchGeodesyImagesFromHits,
   rewriteGeodesyHtmlSnippetImages,
 } from '../cache/geodesyImageCache';
+import { prefetchPartnerLogosFromHits } from '../partner/partnerLogo';
 import { getGeodesyCatalogFromMap } from '../catalog/getGeodesyCatalogFromMap';
 import { buildGeodesyPopupTemplate } from './geodesyPopupTemplate';
 import { queryGeodesyAtClick } from './queryGeodesyAtClick';
@@ -72,7 +73,10 @@ export function registerGeodesyPopup(
         return;
       }
 
-      await prefetchGeodesyImagesFromHits(hits);
+      await Promise.all([
+        prefetchGeodesyImagesFromHits(hits),
+        prefetchPartnerLogosFromHits(hits),
+      ]);
 
       const first = hits[0];
       const htmlSnippet = first.feature.get('_htmlSnippet') as string | undefined;

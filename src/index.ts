@@ -287,6 +287,16 @@ export {
   resolveGeodesyImageDisplayUrl,
 } from './cache/geodesyImageCache';
 export {
+  buildPartnerLogoUrl,
+  collectPartnerIdFromProperties,
+  collectPartnerIdsFromHits,
+  prefetchPartnerLogo,
+  prefetchPartnerLogoById,
+  prefetchPartnerLogos,
+  prefetchPartnerLogosFromHits,
+  resolvePartnerLogoDisplayUrl,
+} from './partner/partnerLogo';
+export {
   GEODESY_POINT_REPORT_MANDATORY_ATTRIBUTE_KEYS,
   GEODESY_POINT_REPORT_PHOTO_SLOTS,
   GEODESY_POINT_REPORT_THEME,
