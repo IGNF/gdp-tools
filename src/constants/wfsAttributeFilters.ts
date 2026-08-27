@@ -489,12 +489,32 @@ export function geodesyWfsFeatureMatchesAttributeFilters(
   return featureMatchesAttributeFilters(feature, definitions, values, filterContext);
 }
 
+function countActiveMultiChoiceOptions(
+  definition: GeodesyWfsMultiChoiceFilterDefinition,
+  value: boolean | string | null | undefined,
+): number {
+  if (value === null || value === undefined) {
+    return 0;
+  }
+
+  const selected = getGeodesyWfsMultiChoiceSelectedValues(definition, value);
+  return Math.max(0, definition.options.length - selected.size);
+}
+
+/** Nombre de contraintes actives : chaque type de point désactivé compte pour 1. */
 export function countActiveGeodesyWfsAttributeFilters(
   definitions: readonly GeodesyWfsAttributeFilterDefinition[],
   values: GeodesyWfsAttributeFilterValues,
 ): number {
-  return definitions.filter((definition) => isActiveFilterValue(definition, values[definition.id]))
-    .length;
+  return definitions.reduce((count, definition) => {
+    const value = values[definition.id];
+
+    if (definition.type === 'multiChoice') {
+      return count + countActiveMultiChoiceOptions(definition, value);
+    }
+
+    return count + (isActiveFilterValue(definition, value) ? 1 : 0);
+  }, 0);
 }
 
 export function createDefaultGeodesyWfsAttributeFilterValues(
