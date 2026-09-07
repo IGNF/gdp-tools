@@ -4,7 +4,7 @@ import {
   type BuildGeodesyPointDisplayOptions,
 } from '../report/geodesyPointDisplay';
 import { buildGeodesyPointReportContext } from '../report/geodesyPointReportContext';
-import type { QueryGeodesyAtClickOptions } from '../interaction/queryGeodesyAtClick';
+import { queryGeodesyAtClick, type QueryGeodesyAtClickOptions } from '../interaction/queryGeodesyAtClick';
 import { clearGeodesyWfsClusterExplosion, getGeodesyWfsClusterSelectInteraction } from '../interaction/geodesyWfsClusterSelect';
 import { isAnyGeodesyLayerVisible } from '../geodesyLayerVisibility';
 import { getGeodesyCatalogFromMap } from '../catalog/getGeodesyCatalogFromMap';
@@ -98,6 +98,9 @@ export function useGeodesyMapClick(
 ): {
   pendingClick: GeodesyMapClickResult | null;
   clearPendingClick: () => void;
+  /** Rejoue la résolution géodésique du clic à une coordonnée donnée (sans pixel/événement réel) ;
+   *  résout à `true` si un point géodésique a été trouvé et affiché. */
+  openAtCoordinate: (coordinate: Coordinate) => Promise<boolean>;
 } {
   const {
     enabled = true,
@@ -117,6 +120,34 @@ export function useGeodesyMapClick(
     }
     setPendingClick(null);
   }, [map]);
+
+  const openAtCoordinate = useCallback(
+    async (coordinate: Coordinate): Promise<boolean> => {
+      if (!map) {
+        return false;
+      }
+
+      const pixel = map.getPixelFromCoordinate(coordinate);
+      if (!pixel) {
+        return false;
+      }
+
+      const hits = await queryGeodesyAtClick(map, coordinate, pixel, query);
+      if (hits.length === 0) {
+        return false;
+      }
+
+      const displayOptions = buildDisplayOptions(map, {
+        attributeCatalog,
+        externalUrlSource,
+        transformExternalUrl,
+        pictoUrlMaps,
+      });
+      setPendingClick(buildGeodesyClickResult(hits[0], coordinate, displayOptions));
+      return true;
+    },
+    [map, query, attributeCatalog, externalUrlSource, transformExternalUrl, pictoUrlMaps],
+  );
 
   useEffect(() => {
     if (!map || !enabled || !isMapReady) {
@@ -291,5 +322,5 @@ export function useGeodesyMapClick(
     transformExternalUrl,
   ]);
 
-  return { pendingClick, clearPendingClick };
+  return { pendingClick, clearPendingClick, openAtCoordinate };
 }
