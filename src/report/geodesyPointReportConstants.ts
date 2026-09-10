@@ -18,7 +18,10 @@ export const GEODESY_POINT_REPORT_PHOTO_SLOTS: readonly GeodesyPointReportPhotoS
   { role: 'photo2', attachmentKey: 'photo1', label: 'Photo complémentaire', mandatory: false },
 ];
 
-/** Attributs thème préremplis depuis les propriétés du repère. */
+/**
+ * Attributs thème préremplis depuis les propriétés du repère.
+ * Liste de repli historique (pof-mobile) — ne pas réduire, les apps passent un thème EspaceCo.
+ */
 export const GEODESY_POINT_REPORT_THEME_ATTRIBUTE_KEYS = [
   'id',
   'domaine',
@@ -27,6 +30,18 @@ export const GEODESY_POINT_REPORT_THEME_ATTRIBUTE_KEYS = [
   'type',
   'etat',
   'commune',
+] as const;
+
+/**
+ * Contrat GDP (thème EspaceCo `gdp-tools`) : photo + ces champs, sans dump de fiche / sketch.
+ * La liste effective reste celle du thème communauté si elle est fournie par l’app.
+ */
+export const GDP_POINT_REPORT_THEME_ATTRIBUTE_KEYS = [
+  'id',
+  'domaine',
+  'etat',
+  'gps',
+  'move',
 ] as const;
 
 /** Toujours transmis au signalement, même absents de la fiche ou du thème collaboratif. */

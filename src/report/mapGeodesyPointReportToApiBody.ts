@@ -14,13 +14,18 @@ export interface MapGeodesyPointReportToApiBodyOptions {
   theme?: string;
   /** Fusionnés avec les attributs dérivés du repère. */
   themeAttributes?: Record<string, string>;
+  /**
+   * Clés de repli si `themeAttributes` est omis.
+   * Sans effet sur pof-mobile, qui fournit déjà `themeAttributes`.
+   */
+  attributeKeys?: readonly string[];
   /** Statut collaboratif (défaut : `submit`, attendu par l’API EspaceCo). */
   status?: string;
 }
 
 /**
  * Corps de requête `report.add()` pour un signalement sur point géodésique.
- * L’app cliente appelle l’API collaboratif ; le thème est {@link GEODESY_POINT_REPORT_THEME}.
+ * Pas de `sketch` : seuls géométrie, commentaire, thème et pièces jointes sont transmis.
  */
 export function mapGeodesyPointReportToApiBody(
   context: GeodesyPointReportContext,
@@ -28,7 +33,11 @@ export function mapGeodesyPointReportToApiBody(
 ): Record<string, unknown> {
   const themeAttributes = mergeGeodesyPointReportMandatoryThemeAttributes(
     context,
-    options.themeAttributes ?? buildGeodesyPointReportThemeAttributes(context),
+    options.themeAttributes ??
+      buildGeodesyPointReportThemeAttributes(
+        context,
+        options.attributeKeys ? { keys: options.attributeKeys } : undefined,
+      ),
   );
 
   const apiAttributes = {

@@ -24,7 +24,9 @@ const CANONICAL_ATTRIBUTE_ALIASES: Record<string, readonly string[]> = {
   nom: ['nom', 'name', 'libelle', 'libelle_repere'],
   no: ['no', 'numero', 'numero_repere', 'num_repere'],
   type: ['type', 'groupe_type', 'groupetype'],
-  etat: ['etat', 'state'],
+  etat: ['etat', 'state', 'etat du point', 'etat_du_point', 'etatdupoint'],
+  gps: ['gps', 'expl_gps', 'expl_gpscode', 'exploitation gps', 'exploitation_gps'],
+  move: ['move', 'deplace', 'deplacement', 'moved', 'position_modifiee'],
   commune: ['commune', 'nom_commune'],
 };
 
@@ -65,6 +67,11 @@ export function buildGeodesyPointReportPrefillMap(
   const businessId = context.geodesyId ?? readGeodesyPointReportId(context.properties);
   registerPrefillValue(map, 'id', businessId);
   registerPrefillValue(map, 'domaine', context.properties.domaine ?? context.properties.DOMAINE);
+  registerPrefillValue(
+    map,
+    'gps',
+    context.properties.expl_gps ?? context.properties.expl_gpscode ?? context.properties.gps,
+  );
 
   return map;
 }
@@ -86,6 +93,21 @@ function expandAttributeLookupNames(attributeName: string): string[] {
   }
 
   return [...names];
+}
+
+/**
+ * Nom de champ thème EspaceCo correspondant à une clé canonique (alias, casse).
+ * Ex. `etat` → `Etat du point` si le thème utilise ce libellé.
+ */
+export function matchGeodesyPointReportThemeAttributeName(
+  candidate: string,
+  themeAttributeNames: readonly string[],
+): string | undefined {
+  const lookups = new Set(expandAttributeLookupNames(candidate));
+
+  return themeAttributeNames.find((name) =>
+    lookups.has(normalizeGeodesyPointReportAttributeName(name)),
+  );
 }
 
 export function isGeodesyPointReportMandatoryAttributeName(name: string): boolean {

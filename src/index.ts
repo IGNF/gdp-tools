@@ -297,6 +297,7 @@ export {
   resolvePartnerLogoDisplayUrl,
 } from './partner/partnerLogo';
 export {
+  GDP_POINT_REPORT_THEME_ATTRIBUTE_KEYS,
   GEODESY_POINT_REPORT_MANDATORY_ATTRIBUTE_KEYS,
   GEODESY_POINT_REPORT_PHOTO_SLOTS,
   GEODESY_POINT_REPORT_THEME,
@@ -328,18 +329,30 @@ export {
   withGeodesyPointReportPosition,
 } from './report/geodesyPointReportPosition';
 export {
+  buildGdpPointReportThemeAttributes,
   buildGeodesyPointReportMandatoryThemeAttributes,
   buildGeodesyPointReportThemeAttributes,
   mergeGeodesyPointReportMandatoryThemeAttributes,
+  selectGeodesyPointReportThemeAttributes,
+  type GeodesyPointReportAutofilledAttribute,
+  type GeodesyPointReportThemeAttributeDef,
+  type SelectGeodesyPointReportThemeAttributesOptions,
 } from './report/buildGeodesyPointReportThemeAttributes';
 export {
   buildGeodesyPointReportPrefillMap,
   isGeodesyPointReportExistingRepere,
   isGeodesyPointReportMandatoryAttributeName,
+  matchGeodesyPointReportThemeAttributeName,
   normalizeGeodesyPointReportAttributeName,
   resolveGeodesyPointReportPrefillValue,
   shouldShowGeodesyPointReportThemeAttribute,
 } from './report/geodesyPointReportPrefill';
+export {
+  coerceGeodesyPointReportListValue,
+  GDP_THEME_GPS_VALUES,
+  matchGeodesyPointReportListValue,
+  normalizeGeodesyPointReportComparableValue,
+} from './report/geodesyPointReportListValues';
 export {
   mapGeodesyPointReportToApiBody,
   type MapGeodesyPointReportToApiBodyOptions,

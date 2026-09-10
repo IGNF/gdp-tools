@@ -268,6 +268,8 @@ Le package prépare le **contexte** et le **corps API** ; l’app hôte gère l�
 
 Constantes : `GEODESY_POINT_REPORT_THEME` (nom de thème par défaut : `gdp-tools`), `GEODESY_POINT_REPORT_MANDATORY_ATTRIBUTE_KEYS` (`id`, `domaine` toujours envoyés si connus). Le **nom de thème EspaceCo** effectif est choisi par l’application.
 
+Le corps `report.add` **ne contient pas de sketch**. Les attributs envoyés sont une whitelist : champs du thème communauté, ou à défaut `GEODESY_POINT_REPORT_THEME_ATTRIBUTE_KEYS` (repli historique). Le contrat GDP (`id`, `domaine`, `etat`, `gps`) est `GDP_POINT_REPORT_THEME_ATTRIBUTE_KEYS` via `buildGdpPointReportThemeAttributes` — sans changer le repli pof-mobile.
+
 ```ts
 import {
   buildGeodesyPointReportContext,
