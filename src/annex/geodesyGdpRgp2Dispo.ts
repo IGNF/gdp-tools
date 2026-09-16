@@ -80,6 +80,15 @@ export function formatGdpRgp2DispoForDisplay(value: unknown): string {
 }
 
 /**
+ * True si le champ `dispo` contient des données exploitables (chaîne de `0`/`1` non vide).
+ * False si absent/vide/invalide → la station elle-même est considérée en panne.
+ */
+export function hasGdpRgp2DispoData(value: unknown): boolean {
+  const raw = normalizeDispoRaw(value);
+  return raw !== '' && /^[01]+$/.test(raw);
+}
+
+/**
  * True si la station est entièrement disponible (tous les chiffres `dispo` valent `1`).
  * `null`, vide ou présence d’un `0` → indisponible (cercle rouge).
  */
