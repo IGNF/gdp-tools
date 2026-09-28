@@ -325,6 +325,27 @@ export function buildGeodesyPointDisplay(
   };
 }
 
+export interface GeodesyPointTitleDisplay {
+  title: string;
+  titlePicto?: GeodesyPointTitlePicto;
+}
+
+/**
+ * Titre + symbole d’un repère à partir de ses seules propriétés WFS (sans feature OL),
+ * ex. pour un repère relu par identifiant ({@link fetchGeodesyWfsPointsByRef}).
+ */
+export function buildGeodesyPointTitleDisplay(
+  properties: Record<string, unknown>,
+  options: BuildGeodesyPointDisplayOptions = {},
+): GeodesyPointTitleDisplay {
+  const attributeCatalog = options.attributeCatalog ?? DEFAULT_GEODESY_ATTRIBUTE_CATALOG;
+
+  return {
+    title: resolveGeodesyPopupTitle(properties, attributeCatalog),
+    titlePicto: buildGeodesyPointTitlePicto(properties, { ...options, attributeCatalog }),
+  };
+}
+
 export function formatMapCoordinateSubtitle(longitude: number, latitude: number): string {
   return `${latitude.toFixed(5)}° N, ${longitude.toFixed(5)}° E`;
 }

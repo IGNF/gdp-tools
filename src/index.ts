@@ -199,6 +199,12 @@ export {
 } from './wfs/parseGeodesyWfsGeoJson';
 export { loadGeodesyWfsFeatures, type LoadGeodesyWfsFeaturesOptions } from './wfs/loadGeodesyWfsFeatures';
 export {
+  fetchGeodesyWfsPointsByRef,
+  geodesyPointRefKey,
+  type FetchGeodesyWfsPointsByRefOptions,
+  type GeodesyPointRef,
+} from './wfs/fetchGeodesyWfsPointsByRef';
+export {
   collectGeodesyWfsVectorSources,
   getGeodesyWfsLoadingState,
   subscribeGeodesyWfsLoading,
@@ -308,12 +314,14 @@ export {
 export { collectGeodesyPointPhotos, type GeodesyPointPhoto } from './report/geodesyPointPhotos';
 export {
   buildGeodesyPointDisplay,
+  buildGeodesyPointTitleDisplay,
   extractGeodesyCoordinates,
   formatGeodesyHitAsComment,
   formatMapCoordinateSubtitle,
   type BuildGeodesyPointDisplayOptions,
   type GeodesyPointAttribute,
   type GeodesyPointDisplay,
+  type GeodesyPointTitleDisplay,
   type GeodesyPointTitlePicto,
 } from './report/geodesyPointDisplay';
 export {

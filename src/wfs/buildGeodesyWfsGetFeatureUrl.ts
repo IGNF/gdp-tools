@@ -43,7 +43,12 @@ export function formatGeodesyWfsBbox(
 export interface BuildGeodesyWfsGetFeatureUrlOptions {
   wfsUrl: string;
   typeName: string;
-  bbox: string;
+  /** Emprise `bbox` — exclusif avec {@link cqlFilter} côté GeoServer. */
+  bbox?: string;
+  /** Filtre attributaire `CQL_FILTER` (ex. recherche par identifiant). */
+  cqlFilter?: string;
+  /** Restreint les propriétés renvoyées (`PROPERTYNAME`). */
+  propertyNames?: readonly string[];
   apiKey?: string;
   version?: string;
   outputFormat?: string;
@@ -63,6 +68,8 @@ export function buildGeodesyWfsGetFeatureUrl(
     wfsUrl,
     typeName,
     bbox,
+    cqlFilter,
+    propertyNames,
     apiKey,
     version = '2.0.0',
     outputFormat = 'application/json',
@@ -74,8 +81,19 @@ export function buildGeodesyWfsGetFeatureUrl(
     VERSION: version,
     REQUEST: 'GetFeature',
     OUTPUTFORMAT: outputFormat,
-    bbox,
   });
+
+  if (bbox) {
+    params.set('bbox', bbox);
+  }
+
+  if (cqlFilter) {
+    params.set('CQL_FILTER', cqlFilter);
+  }
+
+  if (propertyNames?.length) {
+    params.set('PROPERTYNAME', propertyNames.join(','));
+  }
 
   if (usesWfs20TypeNamesParam(version)) {
     params.set('typeNames', typeName);
