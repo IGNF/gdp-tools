@@ -1,0 +1,1 @@
+{"version":3,"file":"geodesyCacheStats.d.ts","sourceRoot":"","sources":["../../src/cache/geodesyCacheStats.ts"],"names":[],"mappings":"AAGA,MAAM,WAAW,iBAAiB;IAChC,qBAAqB,EAAE,MAAM,CAAC;IAC9B,oBAAoB,EAAE,MAAM,CAAC;IAC7B,eAAe,EAAE,MAAM,CAAC;IACxB,cAAc,EAAE,MAAM,CAAC;CACxB;AAED,wBAAgB,oBAAoB,IAAI,iBAAiB,CAUxD;AAED,wBAAgB,qBAAqB,IAAI,IAAI,CAG5C"}

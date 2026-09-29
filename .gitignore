@@ -1,6 +1,5 @@
 # Dépendances et artefacts de build
 node_modules
-dist
 
 # Logs
 logs
