@@ -8,18 +8,25 @@
   "types": "./dist/index.d.ts",
   "author": "IGN",
   "license": "GPLv3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IGNF/gdp-tools.git"
+  },
   "keywords": [
     "ecosystem:capacitor"
   ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
     "./react": {
       "import": "./dist/react.js",
+      "require": "./dist/react.js",
       "types": "./dist/react.d.ts"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -27,6 +34,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build && tsc",
+    "prepare": "npm run build",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
