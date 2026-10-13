@@ -123,9 +123,14 @@ export {
 export { parseGeodesyGdpRgp2, type ParseGeodesyGdpRgp2Options } from './annex/parseGeodesyGdpRgp2';
 export {
   formatGdpRgp2DispoForDisplay,
+  GDP_RGP2_AVAILABILITY_COLORS,
+  GDP_RGP2_AVAILABILITY_LABELS,
+  hasGdpRgp2DispoData,
   isGdpRgp2StationAvailable,
   parseGdpRgp2DispoStates,
+  resolveGdpRgp2AvailabilityLevel,
   translateGdpRgp2DispoDigit,
+  type GdpRgp2AvailabilityLevel,
   type GdpRgp2DispoState,
 } from './annex/geodesyGdpRgp2Dispo';
 export { isGeodesyLayerReportingEnabled } from './annex/isGeodesyLayerReportingEnabled';

@@ -15,7 +15,7 @@ export { createGeodesyWfsLayer } from './layers/geodesyWfsLayer';
 export { createGeodesyAnnexLayer } from './layers/geodesyAnnexLayer';
 export { GEODESY_ANNEX_LAYERS, GEODESY_ANNEX_LAYER_IDS, GEODESY_GDP_RGP2_ATTRIBUTE_KEYS, GEODESY_GDP_RGP2_URL, type GeodesyAnnexFormat, type GeodesyAnnexLayerDefinition, type GeodesyAnnexLayerId, } from './constants/annex';
 export { parseGeodesyGdpRgp2, type ParseGeodesyGdpRgp2Options } from './annex/parseGeodesyGdpRgp2';
-export { formatGdpRgp2DispoForDisplay, isGdpRgp2StationAvailable, parseGdpRgp2DispoStates, translateGdpRgp2DispoDigit, type GdpRgp2DispoState, } from './annex/geodesyGdpRgp2Dispo';
+export { formatGdpRgp2DispoForDisplay, GDP_RGP2_AVAILABILITY_COLORS, GDP_RGP2_AVAILABILITY_LABELS, hasGdpRgp2DispoData, isGdpRgp2StationAvailable, parseGdpRgp2DispoStates, resolveGdpRgp2AvailabilityLevel, translateGdpRgp2DispoDigit, type GdpRgp2AvailabilityLevel, type GdpRgp2DispoState, } from './annex/geodesyGdpRgp2Dispo';
 export { isGeodesyLayerReportingEnabled } from './annex/isGeodesyLayerReportingEnabled';
 export { buildGdpRgp2StationFicheUrl, GEODESY_GDP_RGP2_FICHE_LINK_LABEL, GEODESY_GDP_RGP2_FICHE_LINK_TEXT, GEODESY_GDP_RGP2_FICHE_URL, } from './annex/geodesyGdpRgp2FicheUrl';
 export { appendGeodesySourceParam, createGeodesyExternalUrlTransform, DEFAULT_GEODESY_EXTERNAL_URL_SOURCE, resolveGeodesyExternalUrlSource, } from './constants/geodesyExternalUrl';

@@ -3,31 +3,11 @@ import type { FeatureLike } from 'ol/Feature';
 import Icon from 'ol/style/Icon';
 import Style, { type StyleFunction } from 'ol/style/Style';
 
-import { hasGdpRgp2DispoData, parseGdpRgp2DispoStates } from '../annex/geodesyGdpRgp2Dispo';
-
-type GdpRgp2AvailabilityLevel = 'full' | 'partial' | 'none' | 'down';
-
-const AVAILABILITY_COLORS: Record<GdpRgp2AvailabilityLevel, string> = {
-  full: '#26a581',
-  partial: '#f18345',
-  none: '#e86f4a',
-  down: '#6c6661',
-};
-
-function resolveGdpRgp2AvailabilityLevel(dispo: unknown): GdpRgp2AvailabilityLevel {
-  if (!hasGdpRgp2DispoData(dispo)) {
-    return 'down';
-  }
-
-  const states = parseGdpRgp2DispoStates(dispo);
-  const availableCount = states.filter((state) => state === 'available').length;
-
-  if (availableCount === 0) {
-    return 'none';
-  }
-
-  return availableCount === states.length ? 'full' : 'partial';
-}
+import {
+  GDP_RGP2_AVAILABILITY_COLORS,
+  resolveGdpRgp2AvailabilityLevel,
+  type GdpRgp2AvailabilityLevel,
+} from '../annex/geodesyGdpRgp2Dispo';
 
 /** Pastille circulaire colorée (sans bordure), encodée en SVG data-URI, pour une couleur donnée. */
 function buildDiscMarkerSvg(color: string): string {
@@ -48,10 +28,10 @@ function buildDiscMarkerStyle(color: string): Style {
 }
 
 const MARKER_STYLES: Record<GdpRgp2AvailabilityLevel, Style> = {
-  full: buildDiscMarkerStyle(AVAILABILITY_COLORS.full),
-  partial: buildDiscMarkerStyle(AVAILABILITY_COLORS.partial),
-  none: buildDiscMarkerStyle(AVAILABILITY_COLORS.none),
-  down: buildDiscMarkerStyle(AVAILABILITY_COLORS.down),
+  full: buildDiscMarkerStyle(GDP_RGP2_AVAILABILITY_COLORS.full),
+  partial: buildDiscMarkerStyle(GDP_RGP2_AVAILABILITY_COLORS.partial),
+  none: buildDiscMarkerStyle(GDP_RGP2_AVAILABILITY_COLORS.none),
+  down: buildDiscMarkerStyle(GDP_RGP2_AVAILABILITY_COLORS.down),
 };
 
 /**
