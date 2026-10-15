@@ -55,6 +55,12 @@ export declare function extractGeodesyCoordinates(hit: GeodesyFeatureInfoHit, fa
     latitude: number;
 };
 export declare function formatGeodesyHitAsComment(hit: GeodesyFeatureInfoHit, attributeCatalog?: GeodesyAttributeCatalog, options?: Pick<BuildGeodesyPointDisplayOptions, 'layerId'>): string;
+/**
+ * Précharge en arrière-plan les photos et croquis de la fiche.
+ * Respecte le catalogue (clés exclues, ex. photos de site). N’attend pas le réseau :
+ * la fiche s’ouvre tout de suite ; un second affichage du même repère réutilise les blobs.
+ */
+export declare function prefetchGeodesyPointDisplayImages(hit: GeodesyFeatureInfoHit, options?: BuildGeodesyPointDisplayOptions): void;
 export declare function buildGeodesyPointDisplay(hit: GeodesyFeatureInfoHit, fallbackCoordinate: Coordinate, options?: BuildGeodesyPointDisplayOptions): GeodesyPointDisplay;
 export interface GeodesyPointTitleDisplay {
     title: string;

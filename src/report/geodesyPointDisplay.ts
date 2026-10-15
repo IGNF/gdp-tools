@@ -25,7 +25,7 @@ import {
   resolveGeodesyPopupTitle,
   selectGeodesyDisplayEntries,
 } from '../catalog/geodesyAttributeCatalog';
-import { resolveGeodesyImageDisplayUrl } from '../cache/geodesyImageCache';
+import { prefetchGeodesyImages, resolveGeodesyImageDisplayUrl } from '../cache/geodesyImageCache';
 import {
   DEFAULT_GEODESY_WFS_PICTO_URL_MAPS,
   resolveGeodesyPictoImageUrl,
@@ -291,15 +291,43 @@ export function formatGeodesyHitAsComment(
   return lines.join('\n');
 }
 
+function resolvePointAttributeCatalog(
+  hit: GeodesyFeatureInfoHit,
+  options: BuildGeodesyPointDisplayOptions,
+): GeodesyAttributeCatalog {
+  const baseAttributeCatalog = options.attributeCatalog ?? DEFAULT_GEODESY_ATTRIBUTE_CATALOG;
+  return options.geodesyCatalog
+    ? resolveGeodesyHitAttributeCatalog(options.geodesyCatalog, hit, baseAttributeCatalog)
+    : baseAttributeCatalog;
+}
+
+/**
+ * Précharge en arrière-plan les photos et croquis de la fiche.
+ * Respecte le catalogue (clés exclues, ex. photos de site). N’attend pas le réseau :
+ * la fiche s’ouvre tout de suite ; un second affichage du même repère réutilise les blobs.
+ */
+export function prefetchGeodesyPointDisplayImages(
+  hit: GeodesyFeatureInfoHit,
+  options: BuildGeodesyPointDisplayOptions = {},
+): void {
+  const attributeCatalog = resolvePointAttributeCatalog(hit, options);
+  const urls = collectGeodesyPointPhotos(hit.feature.getProperties(), attributeCatalog).map(
+    (photo) => photo.url,
+  );
+
+  if (urls.length === 0) {
+    return;
+  }
+
+  void prefetchGeodesyImages(urls).catch(() => undefined);
+}
+
 export function buildGeodesyPointDisplay(
   hit: GeodesyFeatureInfoHit,
   fallbackCoordinate: Coordinate,
   options: BuildGeodesyPointDisplayOptions = {},
 ): GeodesyPointDisplay {
-  const baseAttributeCatalog = options.attributeCatalog ?? DEFAULT_GEODESY_ATTRIBUTE_CATALOG;
-  const attributeCatalog = options.geodesyCatalog
-    ? resolveGeodesyHitAttributeCatalog(options.geodesyCatalog, hit, baseAttributeCatalog)
-    : baseAttributeCatalog;
+  const attributeCatalog = resolvePointAttributeCatalog(hit, options);
   const properties = hit.feature.getProperties();
   const { longitude, latitude } = extractGeodesyCoordinates(hit, fallbackCoordinate);
   const displayOptions: BuildGeodesyPointDisplayOptions = {

@@ -1,6 +1,7 @@
 import {
   buildGeodesyPointDisplay,
   formatMapCoordinateSubtitle,
+  prefetchGeodesyPointDisplayImages,
   type BuildGeodesyPointDisplayOptions,
 } from '../report/geodesyPointDisplay';
 import { buildGeodesyPointReportContext } from '../report/geodesyPointReportContext';
@@ -65,6 +66,8 @@ function buildGeodesyClickResult(
   coordinate: Coordinate,
   displayOptions: BuildGeodesyPointDisplayOptions,
 ): GeodesyMapClickResult {
+  prefetchGeodesyPointDisplayImages(hit, displayOptions);
+
   return {
     kind: 'geodesy',
     display: buildGeodesyPointDisplay(hit, coordinate, displayOptions),
