@@ -493,15 +493,14 @@ function countActiveMultiChoiceOptions(
   definition: GeodesyWfsMultiChoiceFilterDefinition,
   value: boolean | string | null | undefined,
 ): number {
-  if (value === null || value === undefined) {
+  if (!isActiveFilterValue(definition, value) || typeof value !== 'string') {
     return 0;
   }
 
-  const selected = getGeodesyWfsMultiChoiceSelectedValues(definition, value);
-  return Math.max(0, definition.options.length - selected.size);
+  return parseMultiChoiceSelections(value).size;
 }
 
-/** Nombre de contraintes actives : chaque type de point désactivé compte pour 1. */
+/** Nombre de contraintes actives (multiChoice : une unité par type de point sélectionné). */
 export function countActiveGeodesyWfsAttributeFilters(
   definitions: readonly GeodesyWfsAttributeFilterDefinition[],
   values: GeodesyWfsAttributeFilterValues,

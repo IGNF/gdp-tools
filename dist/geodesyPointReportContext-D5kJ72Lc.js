@@ -1016,9 +1016,7 @@ function pn(e, t, n, r = {}) {
 	return i?.length ? i.some((e) => fn(e, t, n, r)) : fn(e, t, n, r);
 }
 function mn(e, t) {
-	if (t == null) return 0;
-	let n = cn(e, t);
-	return Math.max(0, e.options.length - n.size);
+	return !un(e, t) || typeof t != "string" ? 0 : sn(t).size;
 }
 function hn(e, t) {
 	return e.reduce((e, n) => {

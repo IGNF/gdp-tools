@@ -80,7 +80,7 @@ export interface GeodesyWfsAttributeFilterMatchContext {
 }
 /** True si la feature (ou un membre cluster) passe tous les filtres attributs actifs. */
 export declare function geodesyWfsFeatureMatchesAttributeFilters(feature: Feature, definitions: readonly GeodesyWfsAttributeFilterDefinition[], values: GeodesyWfsAttributeFilterValues, filterContext?: GeodesyWfsAttributeFilterMatchContext): boolean;
-/** Nombre de contraintes actives : chaque type de point désactivé compte pour 1. */
+/** Nombre de contraintes actives (multiChoice : une unité par type de point sélectionné). */
 export declare function countActiveGeodesyWfsAttributeFilters(definitions: readonly GeodesyWfsAttributeFilterDefinition[], values: GeodesyWfsAttributeFilterValues): number;
 export declare function createDefaultGeodesyWfsAttributeFilterValues(definitions?: readonly GeodesyWfsAttributeFilterDefinition[]): GeodesyWfsAttributeFilterValues;
 //# sourceMappingURL=wfsAttributeFilters.d.ts.map
