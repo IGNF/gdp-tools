@@ -79,8 +79,10 @@ Raccourcis dédiés (équivalents) : `createGeodesyPublicCatalog`, `createGeodes
 ## Installation
 
 ```json
-"@ign/gdp-tools": "github:IGNF/gdp-tools#main"
+"@ign/gdp-tools": "github:IGNF/gdp-tools#v0.2.0"
 ```
+
+Voir [Publier une version (tag)](#publier-une-version-tag).
 
 Le `dist/` est versionné : l'app consommatrice n'a pas à builder le package.
 
@@ -506,20 +508,48 @@ src/
 
 ## Développement
 
+Prérequis : Node 26, comme `gdp-mobile`.
+
 Depuis `gdp-tools/` :
 
 ```bash
 npm install
-npm run build   # ou npm run dev (watch)
+npm run build       # vite build (dist/*.js, *.css) + tsc (dist/*.d.ts)
+npm run dev         # vite build --watch (sans les .d.ts)
+npm run typecheck   # tsc --noEmit
 ```
 
-Committer et pousser le `dist/` régénéré, puis mettre à jour le lockfile de l’app consommatrice :
+### `dist/` versionné
+
+Le `dist/` est commité : les apps consommatrices installent le package via Git sans le builder (pas de script `prepare`). Toute modification de `src/` doit donc être suivie d’un `npm run build` et du commit du `dist/` régénéré, sinon les apps ne voient pas le changement.
+
+### Publier une version (tag)
+
+Versionnage sémantique : `patch` pour un correctif, `minor` pour un ajout compatible, `major` pour une rupture d’API (en `0.x`, un `minor` peut être cassant).
 
 ```bash
-npm install github:IGNF/gdp-tools#main
+git checkout main && git pull
+npm run build
+git add dist && git commit -m "build: dist"   # si le dist a changé
+npm version minor                              # met à jour package.json, commite et crée le tag vX.Y.Z
+git push --follow-tags
 ```
 
-Pour tester sans pousser : `npm link` ou `"@ign/gdp-tools": "file:../gdp-tools"` en local (à ne pas committer).
+Lister les tags : `git tag --sort=-v:refname`.
+
+### Mettre à jour l’app consommatrice
+
+Dans `gdp-mobile/`, pointer sur le tag publié (version exacte, reproductible) :
+
+```bash
+npm install github:IGNF/gdp-tools#v0.2.0
+```
+
+Le `package.json` et le lockfile sont mis à jour ; les committer. Tant que ce tag n’est pas changé, `npm install` / `npm ci` récupèrent toujours le même code.
+
+### Tester sans publier
+
+`"@ign/gdp-tools": "file:../gdp-tools"` dans `gdp-mobile/package.json` (ou `npm link`), puis `npm run build` ou `npm run dev` dans `gdp-tools/`. À ne pas committer.
 
 ### CSS
 

@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "Extension d'affichage des données de géodésie pour applications IGN mobile",
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -34,7 +37,6 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build && tsc",
-    "prepare": "npm run build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
