@@ -16,8 +16,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        index: path.resolve(__dirname, 'src/index.ts'),
-        react: path.resolve(__dirname, 'src/react.ts'),
+        index: path.resolve(import.meta.dirname, 'src/index.ts'),
+        react: path.resolve(import.meta.dirname, 'src/react.ts'),
       },
       formats: ['es'],
     },

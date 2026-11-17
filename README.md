@@ -79,12 +79,10 @@ Raccourcis dédiés (équivalents) : `createGeodesyPublicCatalog`, `createGeodes
 ## Installation
 
 ```json
-"@ign/gdp-tools": "*"
+"@ign/gdp-tools": "github:IGNF/gdp-tools#main"
 ```
 
-```bash
-npm run build -w @ign/gdp-tools
-```
+Le `dist/` est versionné : l'app consommatrice n'a pas à builder le package.
 
 ### Peer dependencies
 
@@ -508,14 +506,20 @@ src/
 
 ## Développement
 
-En monorepo npm, build du package :
+Depuis `gdp-tools/` :
 
 ```bash
-npm run build -w @ign/gdp-tools
-# ou --watch pour le développement parallèle à l’app consommatrice
+npm install
+npm run build   # ou npm run dev (watch)
 ```
 
-L’app hôte peut aliaser le sources (`gdp-tools/src`) pour le HMR en dev, ou consommer `dist/` en production.
+Committer et pousser le `dist/` régénéré, puis mettre à jour le lockfile de l’app consommatrice :
+
+```bash
+npm install github:IGNF/gdp-tools#main
+```
+
+Pour tester sans pousser : `npm link` ou `"@ign/gdp-tools": "file:../gdp-tools"` en local (à ne pas committer).
 
 ### CSS
 
