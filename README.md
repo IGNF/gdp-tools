@@ -298,6 +298,15 @@ Préremplissage formulaire : `buildGeodesyPointReportPrefillMap`, alias attribut
 | `clearGeodesyFeatureInfoCache()` | Cache WMS GetFeatureInfo |
 | `clearGeodesyImageCache()` | Photos repère (LRU) |
 
+### Fusion PDF (web)
+
+| API | Rôle |
+| --- | ---- |
+| `mergeGeodesyPdfUrls()` | Télécharge des `url_pdf`, fusionne avec **pdf-lib**, retourne les octets |
+| `createGeodesyPdfProxyFetch()` | `fetch` same-origin via `GET /__gdp-pdf?url=…` (contourne CORS) |
+| `triggerBrowserPdfDownload()` | Déclenche le téléchargement dans le navigateur |
+| `isAllowedGeodesyPdfFetchUrl()` | Liste blanche hôtes IGN pour le relais serveur |
+
 ### Affichage fiche repère
 
 Les URLs longues (`url_pdf`, liens externes) sont tronquées par **ellipsis CSS** dans `GeodesyPointDetails` et la popup ol-ext (`geodesyPopup.css`) ; le `href` reste complet.

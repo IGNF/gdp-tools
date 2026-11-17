@@ -249,6 +249,10 @@ export {
   type QueryGeodesyWfsAtPixelOptions,
 } from './wfs/queryGeodesyWfsAtPixel';
 export {
+  collectGeodesyWfsHitsInMapExtent,
+  type CollectGeodesyWfsHitsInMapExtentOptions,
+} from './wfs/collectGeodesyWfsHitsInMapExtent';
+export {
   GEODESY_ATTRIBUTE_LABELS,
   GEODESIE_DATA_ATTRIBUTE_KEYS,
   getGeodesyAttributeLabel,
@@ -374,3 +378,23 @@ export {
   buildGeodesyReportAttachmentsBody,
   type GeodesyReportAttachmentPhoto,
 } from './report/buildGeodesyReportAttachmentsBody';
+export {
+  DEFAULT_GEODESY_PDF_FETCH_PROXY_PATH,
+  GeodesyPdfFetchError,
+  createGeodesyPdfFetchWithProxyFallback,
+  createGeodesyPdfProxyFetch,
+  fetchGeodesyPdfBytes,
+  isAllowedGeodesyPdfFetchUrl,
+  isGeodesyPdfBytes,
+  type GeodesyPdfFetchFn,
+} from './pdf/geodesyPdfFetch';
+export {
+  MergeGeodesyPdfUrlsError,
+  buildMergedGeodesyPdfFilename,
+  mergeGeodesyPdfUrls,
+  type MergeGeodesyPdfSkippedUrl,
+  type MergeGeodesyPdfUrlsOptions,
+  type MergeGeodesyPdfUrlsProgress,
+  type MergeGeodesyPdfUrlsResult,
+} from './pdf/mergeGeodesyPdfUrls';
+export { triggerBrowserPdfDownload } from './pdf/triggerBrowserPdfDownload';

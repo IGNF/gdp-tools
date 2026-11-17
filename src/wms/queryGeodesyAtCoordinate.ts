@@ -15,6 +15,7 @@ import {
 } from '../constants/wms';
 import type { GeodesyLayerId } from '../catalog/geodesyCatalog';
 import { getGeodesyCatalogFromMap } from '../catalog/getGeodesyCatalogFromMap';
+import { getGeodesyLayersVisibility } from '../geodesyLayerVisibility';
 import {
   getCachedFeatureInfoPayload,
   setCachedFeatureInfoPayload,
@@ -334,10 +335,25 @@ export async function queryGeodesyAtCoordinate(
   let hits = mergeGeodesyFeatureHits(hitGroups.flat(), getGeodesyCatalogFromMap(map));
 
   if (filterByVisibleNetworkLayers) {
-    const visibleNetworkLayerIds = getVisibleNetworkLayerIds(map);
-    hits = hits.filter((hit) =>
-      featureMatchesVisibleNetworkLayers(hit.feature.getProperties(), visibleNetworkLayerIds),
-    );
+    const catalog = getGeodesyCatalogFromMap(map);
+    let visibleNetworkLayerIds = getVisibleNetworkLayerIds(map);
+
+    if (visibleNetworkLayerIds.length === 0) {
+      const visibility = getGeodesyLayersVisibility(map);
+      visibleNetworkLayerIds = catalog.layers
+        .filter((layer) => layer.id !== catalog.dataLayerId && visibility[layer.id])
+        .map((layer) => layer.id);
+    }
+
+    if (visibleNetworkLayerIds.length > 0) {
+      hits = hits.filter((hit) =>
+        featureMatchesVisibleNetworkLayers(
+          hit.feature.getProperties(),
+          visibleNetworkLayerIds,
+          catalog,
+        ),
+      );
+    }
   }
 
   return hits;

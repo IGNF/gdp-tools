@@ -42,6 +42,7 @@ export { registerGeodesyPopup, type RegisterGeodesyPopupOptions } from './intera
 export { queryGeodesyAtClick, type QueryGeodesyAtClickOptions, } from './interaction/queryGeodesyAtClick';
 export { clearGeodesyWfsClusterExplosion, getGeodesyWfsClusterSelectInteraction, registerGeodesyWfsClusterSelect, } from './interaction/geodesyWfsClusterSelect';
 export { buildGeodesyWfsHitFromExplodedClusterFeature, hasGeodesyWfsMultiClusterAtPixel, queryGeodesyWfsAtPixel, type QueryGeodesyWfsAtPixelOptions, } from './wfs/queryGeodesyWfsAtPixel';
+export { collectGeodesyWfsHitsInMapExtent, type CollectGeodesyWfsHitsInMapExtentOptions, } from './wfs/collectGeodesyWfsHitsInMapExtent';
 export { GEODESY_ATTRIBUTE_LABELS, GEODESIE_DATA_ATTRIBUTE_KEYS, getGeodesyAttributeLabel, } from './constants/geodesyAttributeLabels';
 export { EXCLUDED_GEODESY_ATTRIBUTE_KEYS, formatGeodesyAttributeLabel, formatGeodesyAttributeImageUrlHtml, formatGeodesyAttributeUrlHtml, getGeodesyScalarPropertyEntries, isEmptyGeodesyAttributeValue, isExcludedGeodesyAttributeKey, isGeodesyAttributeImageUrl, isGeodesyAttributePicto, isGeodesyAttributeUrl, } from './interaction/geodesyFeatureAttributes';
 export { buildGeodesyPopupTemplate, type GeodesyPopupAttributeTemplate, type GeodesyPopupTemplate, } from './interaction/geodesyPopupTemplate';
@@ -61,4 +62,7 @@ export { buildGeodesyPointReportPrefillMap, isGeodesyPointReportExistingRepere, 
 export { coerceGeodesyPointReportListValue, GDP_THEME_GPS_VALUES, matchGeodesyPointReportListValue, normalizeGeodesyPointReportComparableValue, } from './report/geodesyPointReportListValues';
 export { mapGeodesyPointReportToApiBody, type MapGeodesyPointReportToApiBodyOptions, } from './report/mapGeodesyPointReportToApiBody';
 export { buildGeodesyReportAttachmentsBody, type GeodesyReportAttachmentPhoto, } from './report/buildGeodesyReportAttachmentsBody';
+export { DEFAULT_GEODESY_PDF_FETCH_PROXY_PATH, GeodesyPdfFetchError, createGeodesyPdfFetchWithProxyFallback, createGeodesyPdfProxyFetch, fetchGeodesyPdfBytes, isAllowedGeodesyPdfFetchUrl, isGeodesyPdfBytes, type GeodesyPdfFetchFn, } from './pdf/geodesyPdfFetch';
+export { MergeGeodesyPdfUrlsError, buildMergedGeodesyPdfFilename, mergeGeodesyPdfUrls, type MergeGeodesyPdfSkippedUrl, type MergeGeodesyPdfUrlsOptions, type MergeGeodesyPdfUrlsProgress, type MergeGeodesyPdfUrlsResult, } from './pdf/mergeGeodesyPdfUrls';
+export { triggerBrowserPdfDownload } from './pdf/triggerBrowserPdfDownload';
 //# sourceMappingURL=index.d.ts.map
