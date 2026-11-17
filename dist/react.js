@@ -1,4 +1,4 @@
-import { A as e, C as t, E as n, Et as r, Ft as i, O as a, Rt as o, Tt as s, Yt as c, Zt as l, at as u, ct as d, d as f, it as p, jt as m, kt as h, lt as g, n as _, o as v, ot as y, rt as b, s as x, t as S, w as ee, x as te } from "./geodesyPointReportContext-DXEr6aXl.js";
+import { A as e, C as t, E as n, Et as r, Ft as i, O as a, Rt as o, Tt as s, Yt as c, Zt as l, at as u, ct as d, d as f, it as p, jt as m, kt as h, lt as g, n as _, o as v, ot as y, rt as b, s as x, t as S, w as ee, x as te } from "./geodesyPointReportContext-Dzq99MxQ.js";
 import C from "ol/geom/Point";
 import { listen as w, unlistenByKey as T } from "ol/events";
 import { toLonLat as E } from "ol/proj";
@@ -41,7 +41,8 @@ var P = {
 	select: "_select_1eyrw_64",
 	clearButton: "_clearButton_1eyrw_80"
 };
-// src/react/MapLayerSwitcher.tsx
+//#endregion
+//#region src/react/MapLayerSwitcher.tsx
 function R(e, t) {
 	return e.mode === "single" ? e.activeId === t : !!e.activeIds[t];
 }
@@ -70,7 +71,8 @@ function B(e) {
 		})]
 	});
 }
-// src/react/GeodesyLayerSwitcher.tsx
+//#endregion
+//#region src/react/GeodesyLayerSwitcher.tsx
 function V({ visibility: e, onToggle: t, catalog: n = c, groupLabel: r = "Géodésie", className: i }) {
 	let a = n.uiLayers.map((e) => ({
 		id: e.id,
@@ -86,7 +88,8 @@ function V({ visibility: e, onToggle: t, catalog: n = c, groupLabel: r = "Géod�
 		className: i
 	});
 }
-// src/react/GeodesyPointDetails.tsx
+//#endregion
+//#region src/react/GeodesyPointDetails.tsx
 function H({ states: e }) {
 	return /* @__PURE__ */ D("span", {
 		className: F.dispoStates,
@@ -161,7 +164,8 @@ function W({ layerTitle: e, longitude: t, latitude: n, attributes: r, showMeta: 
 		})]
 	});
 }
-// src/react/GeodesyPointTitle.tsx
+//#endregion
+//#region src/react/GeodesyPointTitle.tsx
 function G({ title: e, picto: t, className: n }) {
 	let [r, i] = N(!1), a = t?.displayImageUrl ?? t?.imageUrl, o = t && a && !r;
 	return /* @__PURE__ */ O("span", {
@@ -178,7 +182,8 @@ function G({ title: e, picto: t, className: n }) {
 		})]
 	});
 }
-// src/react/GeodesyWfsAttributeFiltersPanel.tsx
+//#endregion
+//#region src/react/GeodesyWfsAttributeFiltersPanel.tsx
 function K(e, t, n) {
 	return {
 		...e,
@@ -336,7 +341,8 @@ function ne({ filters: e, values: t, onChange: n, onClear: r, className: i }) {
 		}) : null]
 	}) : null;
 }
-// src/react/useGeodesyMapClick.ts
+//#endregion
+//#region src/react/useGeodesyMapClick.ts
 function re(e) {
 	let [t, n] = E(e);
 	return {
@@ -475,7 +481,8 @@ function ie(e, t = {}) {
 		openAtCoordinate: S
 	};
 }
-// src/react/useGeodesyOnMap.ts
+//#endregion
+//#region src/react/useGeodesyOnMap.ts
 function ae(n, r = {}) {
 	let { catalog: o, initialActive: s = ["RBF"], initialWfsAttributeFilterValues: c, popup: u, layers: d, layerIds: f, uiLayerIds: p, dataLayerId: m, networkLayerIds: h, wmsUrl: g, wmsGpOlExt: _, attributes: v, attributeKeys: y, excludedKeys: b, titleKeys: x, labels: S, wfsLayers: C, wfsLayerIds: w, wfsUiLayerIds: T, wfsUrl: E, wfsApiKey: D, wfsDataProjection: O, wfsBboxPaddingRatio: M, wfsUseCacheBuster: P, wfsCluster: F, wfsDomainLayers: I, wfsDomainSourceLayerId: L, wfsAttributeFilters: R, annexLayers: z, annexLayerIds: B, annexUiLayerIds: V } = r, H = j(() => o ?? l({
 		layers: d,
@@ -592,7 +599,8 @@ function ae(n, r = {}) {
 		activeLabels: ne
 	};
 }
-// src/react/useGeodesyWfsLoading.ts
+//#endregion
+//#region src/react/useGeodesyWfsLoading.ts
 var oe = 400;
 function se(e, t) {
 	let n = e.wfsDomainLayers.length > 0 ? e.wfsDomainLayers : e.wfsLayers;
@@ -659,4 +667,5 @@ function ce(e, t) {
 		};
 	}, [c.isLoading]), c;
 }
+//#endregion
 export { V as GeodesyLayerSwitcher, W as GeodesyPointDetails, G as GeodesyPointTitle, ne as GeodesyWfsAttributeFiltersPanel, B as MapLayerSwitcher, ie as useGeodesyMapClick, ae as useGeodesyOnMap, ce as useGeodesyWfsLoading };
