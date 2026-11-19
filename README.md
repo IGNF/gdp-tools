@@ -513,7 +513,7 @@ Prérequis : Node 26, comme `gdp-mobile`.
 Depuis `gdp-tools/` :
 
 ```bash
-npm install
+npm install --ignore-scripts
 npm run build       # vite build (dist/*.js, *.css) + tsc (dist/*.d.ts)
 npm run dev         # vite build --watch (sans les .d.ts)
 npm run typecheck   # tsc --noEmit
