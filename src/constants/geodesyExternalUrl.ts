@@ -12,8 +12,11 @@ export function appendGeodesySourceParam(
   source: string = DEFAULT_GEODESY_EXTERNAL_URL_SOURCE,
 ): string {
   const resolvedSource = resolveGeodesyExternalUrlSource(source);
-  const separator = url.includes('?') ? '&' : '?';
-  return `${url}${separator}source=${encodeURIComponent(resolvedSource)}`;
+  const hashIndex = url.indexOf('#');
+  const pathAndQuery = hashIndex >= 0 ? url.slice(0, hashIndex) : url;
+  const hash = hashIndex >= 0 ? url.slice(hashIndex) : '';
+  const separator = pathAndQuery.includes('?') ? '&' : '?';
+  return `${pathAndQuery}${separator}source=${encodeURIComponent(resolvedSource)}${hash}`;
 }
 
 /** Fabrique un transformateur d’URL externe pour une application cliente. */

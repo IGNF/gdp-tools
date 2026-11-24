@@ -4,9 +4,8 @@ import {
   resolveGeodesyExternalUrlSource,
 } from '../constants/geodesyExternalUrl';
 
-/** URL de redirection vers la fiche station RGP (fiches géodésie IGN). */
-export const GEODESY_GDP_RGP2_FICHE_URL =
-  'https://fiches-geodesie.ign.fr/st-datageod.php/pt-rgp-1-redirect.html';
+/** Portail RGP IGN — liste des stations ; l’acronyme est passé en fragment (`#CHEV`). */
+export const GEODESY_GDP_RGP2_FICHE_URL = 'https://rgp.ign.fr/STATIONS/';
 
 /** Libellé du lien fiche dans la fiche repère RGP. */
 export const GEODESY_GDP_RGP2_FICHE_LINK_LABEL = 'Fiche RGP';
@@ -27,6 +26,6 @@ export function buildGdpRgp2StationFicheUrl(
     return undefined;
   }
 
-  const baseUrl = `${GEODESY_GDP_RGP2_FICHE_URL}?station=${encodeURIComponent(station)}`;
+  const baseUrl = `${GEODESY_GDP_RGP2_FICHE_URL}#${encodeURIComponent(station)}`;
   return appendGeodesySourceParam(baseUrl, resolveGeodesyExternalUrlSource(source));
 }

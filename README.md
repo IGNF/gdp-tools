@@ -531,7 +531,7 @@ Versionnage sémantique : `patch` pour un correctif, `minor` pour un ajout compa
 git checkout main && git pull
 npm run build
 git add dist && git commit -m "build: dist"   # si le dist a changé
-npm version minor                              # met à jour package.json, commite et crée le tag vX.Y.Z
+npm version patch                              # met à jour package.json, commite et crée le tag vX.Y.Z
 git push --follow-tags
 ```
 
