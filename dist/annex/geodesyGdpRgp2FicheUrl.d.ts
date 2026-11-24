@@ -1,5 +1,5 @@
-/** URL de redirection vers la fiche station RGP (fiches géodésie IGN). */
-export declare const GEODESY_GDP_RGP2_FICHE_URL = "https://fiches-geodesie.ign.fr/st-datageod.php/pt-rgp-1-redirect.html";
+/** Portail RGP IGN — liste des stations ; l’acronyme est passé en fragment (`#CHEV`). */
+export declare const GEODESY_GDP_RGP2_FICHE_URL = "https://rgp.ign.fr/STATIONS/";
 /** Libellé du lien fiche dans la fiche repère RGP. */
 export declare const GEODESY_GDP_RGP2_FICHE_LINK_LABEL = "Fiche RGP";
 /** Texte affiché pour le lien fiche station RGP. */
