@@ -204,7 +204,7 @@ const geodesy = useGeodesyOnMap(map, {
 
 Composants optionnels : `GeodesyLayerSwitcher`, `GeodesyWfsAttributeFiltersPanel` (filtres expert), `GeodesyPointDetails` / `GeodesyPointTitle`.
 
-### Indicateur de chargement WFS
+### Indicateur de chargement géodésie (WMS + WFS)
 
 ```tsx
 import { useGeodesyOnMap, useGeodesyWfsLoading } from '@ign/gdp-tools/react';
@@ -220,7 +220,7 @@ const wfsLoading = useGeodesyWfsLoading(map, {
 // wfsLoading.isLoading, wfsLoading.elapsedMs
 ```
 
-Suit les requêtes WFS **bbox** en cours (zone visible), pas l’intégralité du flux. Événements OpenLayers `featuresloadstart` / `featuresloadend` sur les sources WFS.
+Suit les tuiles WMS géodésie (`tileloadstart` / `tileloadend`) et les requêtes WFS **bbox** (`featuresloadstart` / `featuresloadend`) pour la zone visible.
 
 ---
 

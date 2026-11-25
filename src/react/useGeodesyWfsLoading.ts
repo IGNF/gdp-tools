@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { GeodesyCatalog } from '../catalog/geodesyCatalog';
 import type { GeodesyLayerVisibility } from '../geodesyLayerVisibility';
 import {
-  subscribeGeodesyWfsLoading,
-  type GeodesyWfsLoadingState,
-} from '../wfs/geodesyWfsLoadingState';
+  subscribeGeodesyMapLoading,
+  type GeodesyMapLoadingState,
+} from '../geodesyMapLoadingState';
 
 export interface UseGeodesyWfsLoadingOptions {
   catalog: GeodesyCatalog;
@@ -20,23 +20,26 @@ export interface UseGeodesyWfsLoadingOptions {
   showAfterMs?: number;
 }
 
-export interface UseGeodesyWfsLoadingResult extends GeodesyWfsLoadingState {
+export interface UseGeodesyWfsLoadingResult extends GeodesyMapLoadingState {
   /** Durée écoulée depuis le début du chargement en cours (ms). */
   elapsedMs: number;
 }
 
 const MIN_VISIBLE_MS = 400;
 
-function isGeodesyWfsLoadingEnabled(
+function isGeodesyMapLoadingEnabled(
   catalog: GeodesyCatalog,
   visibility: GeodesyLayerVisibility,
 ): boolean {
+  const wmsActive = catalog.layers.some(
+    (layer) => layer.id !== catalog.dataLayerId && visibility[layer.id],
+  );
+  if (wmsActive) {
+    return true;
+  }
+
   const displayLayers =
     catalog.wfsDomainLayers.length > 0 ? catalog.wfsDomainLayers : catalog.wfsLayers;
-
-  if (displayLayers.length === 0) {
-    return false;
-  }
 
   return displayLayers.some((layer) => visibility[layer.id]);
 }
@@ -45,17 +48,17 @@ function elapsedSince(startedAt: number | null): number {
   return startedAt === null ? 0 : Date.now() - startedAt;
 }
 
-/** Suit les requêtes WFS bbox en cours pour les couches géodésie visibles. */
+/** Suit les chargements WMS tuiles et WFS bbox des couches géodésie visibles. */
 export function useGeodesyWfsLoading(
   map: Map | null,
   options: UseGeodesyWfsLoadingOptions,
 ): UseGeodesyWfsLoadingResult {
   const { catalog, visibility, showIndicator = true, showAfterMs = 0 } = options;
-  const enabled = showIndicator && isGeodesyWfsLoadingEnabled(catalog, visibility);
+  const enabled = showIndicator && isGeodesyMapLoadingEnabled(catalog, visibility);
   const loadingStartedAtRef = useRef<number | null>(null);
   const hideTimeoutRef = useRef<number | null>(null);
   const showAfterTimeoutRef = useRef<number | null>(null);
-  const wfsLoadingActiveRef = useRef(false);
+  const geodesyLoadingActiveRef = useRef(false);
   const indicatorVisibleRef = useRef(false);
 
   const [state, setState] = useState<UseGeodesyWfsLoadingResult>({
@@ -66,7 +69,7 @@ export function useGeodesyWfsLoading(
 
   useEffect(() => {
     if (!map || !enabled) {
-      wfsLoadingActiveRef.current = false;
+      geodesyLoadingActiveRef.current = false;
       indicatorVisibleRef.current = false;
       loadingStartedAtRef.current = null;
       if (hideTimeoutRef.current !== null) {
@@ -81,15 +84,15 @@ export function useGeodesyWfsLoading(
       return;
     }
 
-    const unsubscribe = subscribeGeodesyWfsLoading(map, (next) => {
+    const unsubscribe = subscribeGeodesyMapLoading(map, (next) => {
       if (hideTimeoutRef.current !== null) {
         window.clearTimeout(hideTimeoutRef.current);
         hideTimeoutRef.current = null;
       }
 
       if (next.isLoading) {
-        const isNewSession = !wfsLoadingActiveRef.current;
-        wfsLoadingActiveRef.current = true;
+        const isNewSession = !geodesyLoadingActiveRef.current;
+        geodesyLoadingActiveRef.current = true;
 
         if (isNewSession) {
           loadingStartedAtRef.current = Date.now();
@@ -103,7 +106,7 @@ export function useGeodesyWfsLoading(
           if (showAfterMs > 0) {
             showAfterTimeoutRef.current = window.setTimeout(() => {
               showAfterTimeoutRef.current = null;
-              if (!wfsLoadingActiveRef.current) {
+              if (!geodesyLoadingActiveRef.current) {
                 return;
               }
 
@@ -129,7 +132,7 @@ export function useGeodesyWfsLoading(
         return;
       }
 
-      wfsLoadingActiveRef.current = false;
+      geodesyLoadingActiveRef.current = false;
 
       if (showAfterTimeoutRef.current !== null) {
         window.clearTimeout(showAfterTimeoutRef.current);
@@ -170,7 +173,7 @@ export function useGeodesyWfsLoading(
 
     return () => {
       unsubscribe();
-      wfsLoadingActiveRef.current = false;
+      geodesyLoadingActiveRef.current = false;
       if (hideTimeoutRef.current !== null) {
         window.clearTimeout(hideTimeoutRef.current);
         hideTimeoutRef.current = null;

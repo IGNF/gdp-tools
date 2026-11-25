@@ -216,6 +216,17 @@ export {
   type GeodesyWfsLoadingState,
 } from './wfs/geodesyWfsLoadingState';
 export {
+  collectGeodesyWmsTileSources,
+  getGeodesyWmsLoadingState,
+  subscribeGeodesyWmsLoading,
+  type GeodesyWmsLoadingState,
+} from './wms/geodesyWmsLoadingState';
+export {
+  getGeodesyMapLoadingState,
+  subscribeGeodesyMapLoading,
+  type GeodesyMapLoadingState,
+} from './geodesyMapLoadingState';
+export {
   DEFAULT_GEODESY_WFS_CLUSTER,
   resolveGeodesyWfsClusterConfig,
   type GeodesyWfsClusterConfig,

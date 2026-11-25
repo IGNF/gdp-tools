@@ -1,15 +1,15 @@
-import { A as e, C as t, E as n, Et as r, Ft as i, O as a, Rt as o, Tt as s, Yt as c, Zt as l, at as u, ct as d, d as f, it as p, jt as m, kt as h, lt as g, n as _, o as v, ot as y, rt as b, s as x, t as S, w as ee, x as te } from "./geodesyPointReportContext-BAtbcSRb.js";
-import C from "ol/geom/Point";
-import { listen as w, unlistenByKey as T } from "ol/events";
-import { toLonLat as E } from "ol/proj";
-import { jsx as D, jsxs as O } from "react/jsx-runtime";
-import { useCallback as k, useEffect as A, useMemo as j, useRef as M, useState as N } from "react";
-var P = {
+import { At as e, Bt as t, E as n, F as r, It as i, N as a, O as o, Pt as s, Ut as c, ct as l, dt as u, en as d, j as f, jt as p, k as m, lt as h, mt as g, n as _, nn as v, o as y, pt as b, s as x, t as S, u as C, ut as w } from "./geodesyPointReportContext-DwPOSJrU.js";
+import T from "ol/geom/Point";
+import { listen as E, unlistenByKey as D } from "ol/events";
+import { toLonLat as O } from "ol/proj";
+import { jsx as k, jsxs as A } from "react/jsx-runtime";
+import { useCallback as j, useEffect as M, useMemo as N, useRef as P, useState as F } from "react";
+var I = {
 	switcher: "_switcher_jknvk_1",
 	groupLabel: "_groupLabel_jknvk_9",
 	layerButton: "_layerButton_jknvk_19",
 	layerButtonActive: "_layerButtonActive_jknvk_32"
-}, F = {
+}, L = {
 	details: "_details_auv5o_1",
 	meta: "_meta_auv5o_7",
 	attributeList: "_attributeList_auv5o_13",
@@ -23,11 +23,11 @@ var P = {
 	dispoStates: "_dispoStates_auv5o_109",
 	dispoDotAvailable: "_dispoDotAvailable_auv5o_115",
 	dispoDotUnavailable: "_dispoDotUnavailable_auv5o_116"
-}, I = {
+}, R = {
 	titleRow: "_titleRow_1al4w_1",
 	titlePicto: "_titlePicto_1al4w_8",
 	titleText: "_titleText_1al4w_15"
-}, L = {
+}, z = {
 	panel: "_panel_1eyrw_1",
 	filterRow: "_filterRow_1eyrw_7",
 	filterLabel: "_filterLabel_1eyrw_17",
@@ -42,42 +42,42 @@ var P = {
 	clearButton: "_clearButton_1eyrw_80"
 };
 // src/react/MapLayerSwitcher.tsx
-function R(e, t) {
+function B(e, t) {
 	return e.mode === "single" ? e.activeId === t : !!e.activeIds[t];
 }
-function z(e, t) {
+function V(e, t) {
 	e.mode === "single" ? e.onActiveIdChange(t) : e.onToggle(t);
 }
-function B(e) {
-	let { options: t, groupLabel: n, className: r } = e, i = r ? `${P.switcher} ${r}` : P.switcher;
-	return /* @__PURE__ */ O("div", {
+function H(e) {
+	let { options: t, groupLabel: n, className: r } = e, i = r ? `${I.switcher} ${r}` : I.switcher;
+	return /* @__PURE__ */ A("div", {
 		className: i,
 		role: "group",
 		"aria-label": n,
-		children: [n ? /* @__PURE__ */ D("span", {
-			className: P.groupLabel,
+		children: [n ? /* @__PURE__ */ k("span", {
+			className: I.groupLabel,
 			children: n
 		}) : null, t.map((t) => {
-			let n = R(e, t.id);
-			return /* @__PURE__ */ D("button", {
+			let n = B(e, t.id);
+			return /* @__PURE__ */ k("button", {
 				type: "button",
 				title: t.title,
-				className: `${P.layerButton} ${n ? P.layerButtonActive : ""}`,
+				className: `${I.layerButton} ${n ? I.layerButtonActive : ""}`,
 				"aria-pressed": e.mode === "multiple" ? n : void 0,
-				onClick: () => z(e, t.id),
+				onClick: () => V(e, t.id),
 				children: t.label
 			}, t.id);
 		})]
 	});
 }
 // src/react/GeodesyLayerSwitcher.tsx
-function V({ visibility: e, onToggle: t, catalog: n = c, groupLabel: r = "Géodésie", className: i }) {
+function U({ visibility: e, onToggle: t, catalog: n = d, groupLabel: r = "Géodésie", className: i }) {
 	let a = n.uiLayers.map((e) => ({
 		id: e.id,
 		label: e.shortLabel,
 		title: e.title
 	})), o = Object.fromEntries(a.map((t) => [t.id, e[t.id] ?? !1]));
-	return /* @__PURE__ */ D(B, {
+	return /* @__PURE__ */ k(H, {
 		mode: "multiple",
 		groupLabel: r,
 		options: a,
@@ -87,60 +87,60 @@ function V({ visibility: e, onToggle: t, catalog: n = c, groupLabel: r = "Géod�
 	});
 }
 // src/react/GeodesyPointDetails.tsx
-function H({ states: e }) {
-	return /* @__PURE__ */ D("span", {
-		className: F.dispoStates,
+function W({ states: e }) {
+	return /* @__PURE__ */ k("span", {
+		className: L.dispoStates,
 		role: "img",
 		"aria-label": "Disponibilité",
-		children: e.map((e, t) => /* @__PURE__ */ D("span", {
-			className: e === "available" ? F.dispoDotAvailable : F.dispoDotUnavailable,
+		children: e.map((e, t) => /* @__PURE__ */ k("span", {
+			className: e === "available" ? L.dispoDotAvailable : L.dispoDotUnavailable,
 			"aria-hidden": "true"
 		}, `${e}-${t}`))
 	});
 }
-function U({ attribute: e }) {
-	let [t, n] = N(!1), r = e.displayImageUrl ?? e.imageUrl;
-	return e.dispoStates?.length ? /* @__PURE__ */ D(H, { states: e.dispoStates }) : r && !t ? /* @__PURE__ */ O("div", {
-		className: F.imageBlock,
+function G({ attribute: e }) {
+	let [t, n] = F(!1), r = e.displayImageUrl ?? e.imageUrl;
+	return e.dispoStates?.length ? /* @__PURE__ */ k(W, { states: e.dispoStates }) : r && !t ? /* @__PURE__ */ A("div", {
+		className: L.imageBlock,
 		children: [
-			/* @__PURE__ */ D("a", {
+			/* @__PURE__ */ k("a", {
 				href: e.href ?? r,
 				target: "_blank",
 				rel: "noopener noreferrer",
-				className: F.imageLink,
+				className: L.imageLink,
 				title: `Ouvrir ${e.label}`,
-				children: /* @__PURE__ */ D("img", {
+				children: /* @__PURE__ */ k("img", {
 					src: r,
 					alt: e.label,
-					className: F.imageThumb,
+					className: L.imageThumb,
 					loading: "lazy",
 					onError: () => n(!0)
 				})
 			}),
-			e.isPicto ? /* @__PURE__ */ D("span", {
-				className: F.pictoCode,
+			e.isPicto ? /* @__PURE__ */ k("span", {
+				className: L.pictoCode,
 				children: e.value
 			}) : null,
-			e.href && !e.isPicto ? /* @__PURE__ */ D("a", {
+			e.href && !e.isPicto ? /* @__PURE__ */ k("a", {
 				href: e.href,
 				target: "_blank",
 				rel: "noopener noreferrer",
-				className: F.imageOpenLink,
+				className: L.imageOpenLink,
 				children: "Ouvrir l'image"
 			}) : null
 		]
-	}) : e.href ? /* @__PURE__ */ D("a", {
+	}) : e.href ? /* @__PURE__ */ k("a", {
 		href: e.href,
 		target: "_blank",
 		rel: "noopener noreferrer",
 		children: e.value
 	}) : e.value;
 }
-function W({ layerTitle: e, longitude: t, latitude: n, attributes: r, showMeta: i = !0 }) {
-	return /* @__PURE__ */ O("div", {
-		className: F.details,
-		children: [i ? /* @__PURE__ */ O("p", {
-			className: F.meta,
+function K({ layerTitle: e, longitude: t, latitude: n, attributes: r, showMeta: i = !0 }) {
+	return /* @__PURE__ */ A("div", {
+		className: L.details,
+		children: [i ? /* @__PURE__ */ A("p", {
+			className: L.meta,
 			children: [
 				e,
 				" · ",
@@ -149,66 +149,66 @@ function W({ layerTitle: e, longitude: t, latitude: n, attributes: r, showMeta: 
 				t.toFixed(5),
 				"° E"
 			]
-		}) : null, r.length > 0 ? /* @__PURE__ */ D("dl", {
-			className: F.attributeList,
-			children: r.map((e, t) => /* @__PURE__ */ O("div", {
-				className: F.attributeRow,
-				children: [/* @__PURE__ */ D("dt", { children: e.label }), /* @__PURE__ */ D("dd", { children: /* @__PURE__ */ D(U, { attribute: e }) })]
+		}) : null, r.length > 0 ? /* @__PURE__ */ k("dl", {
+			className: L.attributeList,
+			children: r.map((e, t) => /* @__PURE__ */ A("div", {
+				className: L.attributeRow,
+				children: [/* @__PURE__ */ k("dt", { children: e.label }), /* @__PURE__ */ k("dd", { children: /* @__PURE__ */ k(G, { attribute: e }) })]
 			}, `${e.label}-${e.value}-${t}`))
-		}) : /* @__PURE__ */ D("p", {
-			className: F.empty,
+		}) : /* @__PURE__ */ k("p", {
+			className: L.empty,
 			children: "Aucun attribut disponible pour ce point."
 		})]
 	});
 }
 // src/react/GeodesyPointTitle.tsx
-function G({ title: e, picto: t, className: n }) {
-	let [r, i] = N(!1), a = t?.displayImageUrl ?? t?.imageUrl, o = t && a && !r;
-	return /* @__PURE__ */ O("span", {
-		className: [I.titleRow, n].filter(Boolean).join(" "),
-		children: [o ? /* @__PURE__ */ D("img", {
+function q({ title: e, picto: t, className: n }) {
+	let [r, i] = F(!1), a = t?.displayImageUrl ?? t?.imageUrl, o = t && a && !r;
+	return /* @__PURE__ */ A("span", {
+		className: [R.titleRow, n].filter(Boolean).join(" "),
+		children: [o ? /* @__PURE__ */ k("img", {
 			src: a,
 			alt: "",
-			className: I.titlePicto,
+			className: R.titlePicto,
 			loading: "lazy",
 			onError: () => i(!0)
-		}) : null, /* @__PURE__ */ D("span", {
-			className: I.titleText,
+		}) : null, /* @__PURE__ */ k("span", {
+			className: R.titleText,
 			children: e
 		})]
 	});
 }
 // src/react/GeodesyWfsAttributeFiltersPanel.tsx
-function K(e, t, n) {
+function J(e, t, n) {
 	return {
 		...e,
 		[t]: n
 	};
 }
-function q({ definition: e, value: t, onChange: n }) {
+function Y({ definition: e, value: t, onChange: n }) {
 	let r = e.trueLabel ?? "Oui", i = e.falseLabel ?? "Non";
-	return /* @__PURE__ */ O("div", {
-		className: L.segmented,
+	return /* @__PURE__ */ A("div", {
+		className: z.segmented,
 		role: "group",
 		"aria-label": e.title,
 		children: [
-			/* @__PURE__ */ D("button", {
+			/* @__PURE__ */ k("button", {
 				type: "button",
-				className: L.segment,
+				className: z.segment,
 				"data-active": t == null ? "true" : void 0,
 				onClick: () => n(null),
 				children: "Tous"
 			}),
-			/* @__PURE__ */ D("button", {
+			/* @__PURE__ */ k("button", {
 				type: "button",
-				className: L.segment,
+				className: z.segment,
 				"data-active": t === !0 ? "true" : void 0,
 				onClick: () => n(!0),
 				children: r
 			}),
-			/* @__PURE__ */ D("button", {
+			/* @__PURE__ */ k("button", {
 				type: "button",
-				className: L.segment,
+				className: z.segment,
 				"data-active": t === !1 ? "true" : void 0,
 				onClick: () => n(!1),
 				children: i
@@ -216,42 +216,42 @@ function q({ definition: e, value: t, onChange: n }) {
 		]
 	});
 }
-function J({ value: e, onChange: t }) {
+function X({ value: e, onChange: t }) {
 	let n = typeof e == "string", r = (n) => {
 		n ? typeof e == "string" && e.length > 0 ? t(e) : t((/* @__PURE__ */ new Date()).toISOString().slice(0, 10)) : t(null);
 	};
-	return /* @__PURE__ */ O("div", {
-		className: L.dateRow,
-		children: [/* @__PURE__ */ O("label", {
-			className: L.checkboxLabel,
-			children: [/* @__PURE__ */ D("input", {
+	return /* @__PURE__ */ A("div", {
+		className: z.dateRow,
+		children: [/* @__PURE__ */ A("label", {
+			className: z.checkboxLabel,
+			children: [/* @__PURE__ */ k("input", {
 				type: "checkbox",
 				checked: n,
 				onChange: (e) => r(e.target.checked)
 			}), "Activer"]
-		}), /* @__PURE__ */ D("input", {
+		}), /* @__PURE__ */ k("input", {
 			type: "date",
-			className: L.dateInput,
+			className: z.dateInput,
 			value: typeof e == "string" ? e : "",
 			disabled: !n,
 			onChange: (e) => t(e.target.value || null)
 		})]
 	});
 }
-function Y({ definition: e, value: t, onChange: n }) {
+function ee({ definition: e, value: t, onChange: n }) {
 	let r = typeof t == "string";
-	return /* @__PURE__ */ O("div", {
-		className: L.textRow,
-		children: [/* @__PURE__ */ O("label", {
-			className: L.checkboxLabel,
-			children: [/* @__PURE__ */ D("input", {
+	return /* @__PURE__ */ A("div", {
+		className: z.textRow,
+		children: [/* @__PURE__ */ A("label", {
+			className: z.checkboxLabel,
+			children: [/* @__PURE__ */ k("input", {
 				type: "checkbox",
 				checked: r,
 				onChange: (e) => n(e.target.checked ? String(t ?? "") : null)
 			}), "Activer"]
-		}), /* @__PURE__ */ D("input", {
+		}), /* @__PURE__ */ k("input", {
 			type: "text",
-			className: L.textInput,
+			className: z.textInput,
 			value: typeof t == "string" ? t : "",
 			disabled: !r,
 			placeholder: e.placeholder ?? "",
@@ -259,32 +259,32 @@ function Y({ definition: e, value: t, onChange: n }) {
 		})]
 	});
 }
-function X({ definition: e, value: t, onChange: n }) {
-	return /* @__PURE__ */ O("select", {
-		className: L.select,
+function te({ definition: e, value: t, onChange: n }) {
+	return /* @__PURE__ */ A("select", {
+		className: z.select,
 		value: typeof t == "string" ? t : "",
 		onChange: (e) => n(e.target.value || null),
-		children: [/* @__PURE__ */ D("option", {
+		children: [/* @__PURE__ */ k("option", {
 			value: "",
 			children: "Tous"
-		}), e.options.map((e) => /* @__PURE__ */ D("option", {
+		}), e.options.map((e) => /* @__PURE__ */ k("option", {
 			value: e.value,
 			children: e.label
 		}, e.value))]
 	});
 }
 function ne({ definition: e, value: t, onChange: n }) {
-	let r = o(e, t), i = (t) => {
+	let r = c(e, t), i = (t) => {
 		let i = new Set(r);
 		i.has(t) ? i.delete(t) : i.add(t), i.size === 0 ? n("") : i.size === e.options.length ? n(null) : n([...i].join(","));
 	};
-	return /* @__PURE__ */ D("div", {
-		className: L.segmented,
+	return /* @__PURE__ */ k("div", {
+		className: z.segmented,
 		role: "group",
 		"aria-label": e.title,
-		children: e.options.map((e) => /* @__PURE__ */ D("button", {
+		children: e.options.map((e) => /* @__PURE__ */ k("button", {
 			type: "button",
-			className: L.segment,
+			className: z.segment,
 			"data-active": r.has(e.value) ? "true" : void 0,
 			"aria-pressed": r.has(e.value),
 			onClick: () => i(e.value),
@@ -293,44 +293,44 @@ function ne({ definition: e, value: t, onChange: n }) {
 	});
 }
 function re({ filters: e, values: t, onChange: n, onClear: r, className: i }) {
-	return e.length ? /* @__PURE__ */ O("div", {
-		className: [L.panel, i].filter(Boolean).join(" "),
-		children: [e.map((e) => /* @__PURE__ */ O("div", {
-			className: L.filterRow,
+	return e.length ? /* @__PURE__ */ A("div", {
+		className: [z.panel, i].filter(Boolean).join(" "),
+		children: [e.map((e) => /* @__PURE__ */ A("div", {
+			className: z.filterRow,
 			children: [
-				/* @__PURE__ */ D("span", {
-					className: L.filterLabel,
+				/* @__PURE__ */ k("span", {
+					className: z.filterLabel,
 					children: e.title
 				}),
-				e.type === "boolean" ? /* @__PURE__ */ D(q, {
+				e.type === "boolean" ? /* @__PURE__ */ k(Y, {
 					definition: e,
 					value: t[e.id],
-					onChange: (r) => n(K(t, e.id, r))
+					onChange: (r) => n(J(t, e.id, r))
 				}) : null,
-				e.type === "date" ? /* @__PURE__ */ D(J, {
+				e.type === "date" ? /* @__PURE__ */ k(X, {
 					definition: e,
 					value: t[e.id],
-					onChange: (r) => n(K(t, e.id, r))
+					onChange: (r) => n(J(t, e.id, r))
 				}) : null,
-				e.type === "text" ? /* @__PURE__ */ D(Y, {
+				e.type === "text" ? /* @__PURE__ */ k(ee, {
 					definition: e,
 					value: t[e.id],
-					onChange: (r) => n(K(t, e.id, r))
+					onChange: (r) => n(J(t, e.id, r))
 				}) : null,
-				e.type === "choice" ? /* @__PURE__ */ D(X, {
+				e.type === "choice" ? /* @__PURE__ */ k(te, {
 					definition: e,
 					value: t[e.id],
-					onChange: (r) => n(K(t, e.id, r))
+					onChange: (r) => n(J(t, e.id, r))
 				}) : null,
-				e.type === "multiChoice" ? /* @__PURE__ */ D(ne, {
+				e.type === "multiChoice" ? /* @__PURE__ */ k(ne, {
 					definition: e,
 					value: t[e.id],
-					onChange: (r) => n(K(t, e.id, r))
+					onChange: (r) => n(J(t, e.id, r))
 				}) : null
 			]
-		}, e.id)), r ? /* @__PURE__ */ D("button", {
+		}, e.id)), r ? /* @__PURE__ */ k("button", {
 			type: "button",
-			className: L.clearButton,
+			className: z.clearButton,
 			onClick: r,
 			children: "Réinitialiser les filtres"
 		}) : null]
@@ -338,13 +338,13 @@ function re({ filters: e, values: t, onChange: n, onClear: r, className: i }) {
 }
 // src/react/useGeodesyMapClick.ts
 function ie(e) {
-	let [t, n] = E(e);
+	let [t, n] = O(e);
 	return {
 		kind: "coordinate",
 		coordinate: {
 			longitude: t,
 			latitude: n,
-			subtitle: v(t, n)
+			subtitle: y(t, n)
 		}
 	};
 }
@@ -361,160 +361,158 @@ function Z(e, t, n) {
 function Q(e, t) {
 	return {
 		attributeCatalog: t.attributeCatalog,
-		geodesyCatalog: m(e),
+		geodesyCatalog: i(e),
 		externalUrlSource: t.externalUrlSource,
 		transformExternalUrl: t.transformExternalUrl,
 		pictoUrlMaps: t.pictoUrlMaps
 	};
 }
-function ae(e, t = {}) {
-	let { enabled: i = !0, isMapReady: a = !1, query: o, attributeCatalog: c, externalUrlSource: l, transformExternalUrl: f, pictoUrlMaps: m } = t, [_, v] = N(null), x = k(() => {
-		e && s(e), v(null);
-	}, [e]), S = k(async (t) => {
-		if (!e) return !1;
-		let n = e.getPixelFromCoordinate(t);
+function ae(t, n = {}) {
+	let { enabled: r = !0, isMapReady: i = !1, query: a, attributeCatalog: o, externalUrlSource: c, transformExternalUrl: d, pictoUrlMaps: m } = n, [_, v] = F(null), y = j(() => {
+		t && e(t), v(null);
+	}, [t]), x = j(async (e) => {
+		if (!t) return !1;
+		let n = t.getPixelFromCoordinate(e);
 		if (!n) return !1;
-		let r = await b(e, t, n, o);
+		let r = await l(t, e, n, a);
 		if (r.length === 0) return !1;
-		let i = Q(e, {
-			attributeCatalog: c,
-			externalUrlSource: l,
-			transformExternalUrl: f,
+		let i = Q(t, {
+			attributeCatalog: o,
+			externalUrlSource: c,
+			transformExternalUrl: d,
 			pictoUrlMaps: m
 		});
-		return v(Z(r[0], t, i)), !0;
+		return v(Z(r[0], e, i)), !0;
 	}, [
-		e,
+		t,
+		a,
 		o,
 		c,
-		l,
-		f,
+		d,
 		m
 	]);
-	return A(() => {
-		if (!e || !i || !a) return;
-		let t = 0, s = !1, _ = r(e), b = _?.on("select", (n) => {
-			let r = n, i = r.selected[0];
-			if (!i || !h(i)) return;
-			let a = r.mapBrowserEvent, u = i.getGeometry(), d = a?.coordinate ?? (u instanceof C ? u.getCoordinates() : void 0);
-			if (!d) return;
-			let g = Q(e, {
-				attributeCatalog: c,
-				externalUrlSource: l,
-				transformExternalUrl: f,
+	return M(() => {
+		if (!t || !r || !i) return;
+		let e = 0, n = !1, l = p(t), _ = l?.on("select", (r) => {
+			let i = r, l = i.selected[0];
+			if (!l || !s(l)) return;
+			let u = i.mapBrowserEvent, f = l.getGeometry(), p = u?.coordinate ?? (f instanceof T ? f.getCoordinates() : void 0);
+			if (!p) return;
+			let g = Q(t, {
+				attributeCatalog: o,
+				externalUrlSource: c,
+				transformExternalUrl: d,
 				pictoUrlMaps: m
-			}), _ = p(e, i, d, o?.wfs);
-			_ && (s = !0, t += 1, v(Z(_, d, g)));
-		}), x = w(e, "singleclick", (r) => {
+			}), _ = h(t, l, p, a?.wfs);
+			_ && (n = !0, e += 1, v(Z(_, p, g)));
+		}), y = E(t, "singleclick", (r) => {
 			let i = r;
-			if (s) {
-				s = !1;
+			if (n) {
+				n = !1;
 				return;
 			}
-			if ((_?.getLayer()?.getSource()?.getFeatures().length ?? 0) > 0) return;
-			let a = Q(e, {
-				attributeCatalog: c,
-				externalUrlSource: l,
-				transformExternalUrl: f,
+			if ((l?.getLayer()?.getSource()?.getFeatures().length ?? 0) > 0) return;
+			let s = Q(t, {
+				attributeCatalog: o,
+				externalUrlSource: c,
+				transformExternalUrl: d,
 				pictoUrlMaps: m
-			}), p = o?.preferWfs ?? !0;
+			}), p = a?.preferWfs ?? !0;
 			if (p) {
-				let t = y(e, i.pixel, o?.wfs);
-				if (t.length > 0) {
-					v(Z(t[0], i.coordinate, a));
+				let e = u(t, i.pixel, a?.wfs);
+				if (e.length > 0) {
+					v(Z(e[0], i.coordinate, s));
 					return;
 				}
-				let n = d(e, i.pixel, o?.annex);
+				let n = b(t, i.pixel, a?.annex);
 				if (n.length > 0) {
-					v(Z(n[0], i.coordinate, a));
+					v(Z(n[0], i.coordinate, s));
 					return;
 				}
-				if (u(e, i.pixel, o?.wfs)) return;
+				if (w(t, i.pixel, a?.wfs)) return;
 			}
 			(async () => {
-				let r = ++t, s = ie(i.coordinate);
+				let n = ++e, r = ie(i.coordinate);
 				try {
-					if (v(s), !n(e)) return;
-					let c = await g(e, i.coordinate, o?.wms);
-					if (r !== t) return;
+					if (v(r), !f(t)) return;
+					let o = await g(t, i.coordinate, a?.wms);
+					if (n !== e) return;
+					if (o.length > 0) {
+						v(Z(o[0], i.coordinate, s));
+						return;
+					}
+					if (!p || w(t, i.pixel, a?.wfs)) return;
+					let c = u(t, i.pixel, a?.wfs);
+					if (n !== e) return;
 					if (c.length > 0) {
-						v(Z(c[0], i.coordinate, a));
+						v(Z(c[0], i.coordinate, s));
 						return;
 					}
-					if (!p || u(e, i.pixel, o?.wfs)) return;
-					let l = y(e, i.pixel, o?.wfs);
-					if (r !== t) return;
-					if (l.length > 0) {
-						v(Z(l[0], i.coordinate, a));
-						return;
-					}
-					let f = d(e, i.pixel, o?.annex);
-					if (r !== t) return;
-					f.length > 0 && v(Z(f[0], i.coordinate, a));
+					let l = b(t, i.pixel, a?.annex);
+					if (n !== e) return;
+					l.length > 0 && v(Z(l[0], i.coordinate, s));
 				} catch {
-					if (r !== t) return;
-					v(s);
+					if (n !== e) return;
+					v(r);
 				}
 			})();
 		});
 		return () => {
-			t += 1, b && T(b), T(x);
+			e += 1, _ && D(_), D(y);
 		};
 	}, [
+		o,
+		r,
 		c,
 		i,
-		l,
-		a,
-		e,
+		t,
 		m,
-		o,
-		f
+		a,
+		d
 	]), {
 		pendingClick: _,
-		clearPendingClick: x,
-		openAtCoordinate: S
+		clearPendingClick: y,
+		openAtCoordinate: x
 	};
 }
 // src/react/useGeodesyOnMap.ts
-function oe(n, r = {}) {
-	let { catalog: o, initialActive: s = ["RBF"], initialWfsAttributeFilterValues: c, popup: u, layers: d, layerIds: f, uiLayerIds: p, dataLayerId: m, networkLayerIds: h, wmsUrl: g, wmsGpOlExt: _, attributes: v, attributeKeys: y, excludedKeys: b, titleKeys: x, labels: S, wfsLayers: C, wfsLayerIds: w, wfsUiLayerIds: T, wfsUrl: E, wfsApiKey: D, wfsDataProjection: O, wfsBboxPaddingRatio: M, wfsUseCacheBuster: P, wfsCluster: F, wfsDomainLayers: I, wfsDomainSourceLayerId: L, wfsAttributeFilters: R, annexLayers: z, annexLayerIds: B, annexUiLayerIds: V } = r, H = j(() => o ?? l({
+function oe(e, i = {}) {
+	let { catalog: s, initialActive: c = ["RBF"], initialWfsAttributeFilterValues: l, popup: u, layers: d, layerIds: f, uiLayerIds: p, dataLayerId: h, networkLayerIds: g, wmsUrl: _, wmsGpOlExt: y, attributes: b, attributeKeys: x, excludedKeys: S, titleKeys: C, labels: w, wfsLayers: T, wfsLayerIds: E, wfsUiLayerIds: D, wfsUrl: O, wfsApiKey: k, wfsDataProjection: A, wfsBboxPaddingRatio: P, wfsUseCacheBuster: I, wfsCluster: L, wfsDomainLayers: R, wfsDomainSourceLayerId: z, wfsAttributeFilters: B, annexLayers: V, annexLayerIds: H, annexUiLayerIds: U } = i, W = N(() => s ?? v({
 		layers: d,
 		layerIds: f,
 		uiLayerIds: p,
-		dataLayerId: m,
-		networkLayerIds: h,
-		wmsUrl: g,
-		wmsGpOlExt: _,
-		attributes: v,
-		attributeKeys: y,
-		excludedKeys: b,
-		titleKeys: x,
-		labels: S,
-		wfsLayers: C,
-		wfsLayerIds: w,
-		wfsUiLayerIds: T,
-		wfsUrl: E,
-		wfsApiKey: D,
-		wfsDataProjection: O,
-		wfsBboxPaddingRatio: M,
-		wfsUseCacheBuster: P,
-		wfsCluster: F,
-		wfsDomainLayers: I,
-		wfsDomainSourceLayerId: L,
-		wfsAttributeFilters: R,
-		annexLayers: z,
-		annexLayerIds: B,
-		annexUiLayerIds: V
+		dataLayerId: h,
+		networkLayerIds: g,
+		wmsUrl: _,
+		wmsGpOlExt: y,
+		attributes: b,
+		attributeKeys: x,
+		excludedKeys: S,
+		titleKeys: C,
+		labels: w,
+		wfsLayers: T,
+		wfsLayerIds: E,
+		wfsUiLayerIds: D,
+		wfsUrl: O,
+		wfsApiKey: k,
+		wfsDataProjection: A,
+		wfsBboxPaddingRatio: P,
+		wfsUseCacheBuster: I,
+		wfsCluster: L,
+		wfsDomainLayers: R,
+		wfsDomainSourceLayerId: z,
+		wfsAttributeFilters: B,
+		annexLayers: V,
+		annexLayerIds: H,
+		annexUiLayerIds: U
 	}), [
-		o,
+		s,
 		d,
 		f,
 		p,
-		m,
 		h,
 		g,
 		_,
-		v,
 		y,
 		b,
 		x,
@@ -525,107 +523,108 @@ function oe(n, r = {}) {
 		E,
 		D,
 		O,
-		M,
+		k,
+		A,
 		P,
-		F,
 		I,
 		L,
 		R,
 		z,
 		B,
-		V
-	]), U = j(() => H.wfsDomainLayers.length > 0 ? H.wfsDomainLayers : H.wfsUiLayers, [H.wfsDomainLayers, H.wfsUiLayers]), [W, G] = N(() => ee(s, H)), [K, q] = N(() => c ?? i(H.wfsAttributeFilters));
-	A(() => {
-		if (n) return e(n, {
-			catalog: H,
-			visibility: W,
-			attributeFilterValues: K,
+		V,
+		H,
+		U
+	]), G = N(() => W.wfsDomainLayers.length > 0 ? W.wfsDomainLayers : W.wfsUiLayers, [W.wfsDomainLayers, W.wfsUiLayers]), [K, q] = F(() => m(c, W)), [J, Y] = F(() => l ?? t(W.wfsAttributeFilters));
+	M(() => {
+		if (e) return r(e, {
+			catalog: W,
+			visibility: K,
+			attributeFilterValues: J,
 			popup: u
 		});
 	}, [
-		n,
+		e,
 		u,
-		H
-	]), A(() => {
-		n && a(n, W);
-	}, [n, W]), A(() => {
-		n && t(n, K);
-	}, [n, K]);
-	let J = k((e) => {
-		let t = H.uiLayers.some((t) => t.id === e) || H.wfsUiLayers.some((t) => t.id === e) || H.wfsDomainLayers.some((t) => t.id === e) || H.annexUiLayers.some((t) => t.id === e);
-		G((n) => ({
+		W
+	]), M(() => {
+		e && a(e, K);
+	}, [e, K]), M(() => {
+		e && o(e, J);
+	}, [e, J]);
+	let X = j((e) => {
+		let t = W.uiLayers.some((t) => t.id === e) || W.wfsUiLayers.some((t) => t.id === e) || W.wfsDomainLayers.some((t) => t.id === e) || W.annexUiLayers.some((t) => t.id === e);
+		q((n) => ({
 			...n,
 			[e]: t ? !n[e] : n[e]
 		}));
 	}, [
-		H.uiLayers,
-		H.wfsUiLayers,
-		H.wfsDomainLayers,
-		H.annexUiLayers
-	]), Y = k((e) => {
-		G(e);
-	}, []), X = k((e) => {
+		W.uiLayers,
+		W.wfsUiLayers,
+		W.wfsDomainLayers,
+		W.annexUiLayers
+	]), ee = j((e) => {
 		q(e);
-	}, []), ne = k(() => {
-		q(i(H.wfsAttributeFilters)), n && te(n);
-	}, [H.wfsAttributeFilters, n]), re = j(() => [
-		...H.uiLayers.filter((e) => W[e.id]).map((e) => e.shortLabel),
-		...U.filter((e) => W[e.id]).map((e) => e.shortLabel),
-		...H.annexUiLayers.filter((e) => W[e.id]).map((e) => e.shortLabel)
+	}, []), te = j((e) => {
+		Y(e);
+	}, []), ne = j(() => {
+		Y(t(W.wfsAttributeFilters)), e && n(e);
+	}, [W.wfsAttributeFilters, e]), re = N(() => [
+		...W.uiLayers.filter((e) => K[e.id]).map((e) => e.shortLabel),
+		...G.filter((e) => K[e.id]).map((e) => e.shortLabel),
+		...W.annexUiLayers.filter((e) => K[e.id]).map((e) => e.shortLabel)
 	], [
-		H.uiLayers,
-		H.annexUiLayers,
-		U,
-		W
+		W.uiLayers,
+		W.annexUiLayers,
+		G,
+		K
 	]);
 	return {
-		catalog: H,
-		uiLayers: H.uiLayers,
-		uiWfsLayers: U,
-		uiAnnexLayers: H.annexUiLayers,
-		visibility: W,
-		wfsAttributeFilterValues: K,
-		setWfsAttributeFilterValues: X,
+		catalog: W,
+		uiLayers: W.uiLayers,
+		uiWfsLayers: G,
+		uiAnnexLayers: W.annexUiLayers,
+		visibility: K,
+		wfsAttributeFilterValues: J,
+		setWfsAttributeFilterValues: te,
 		clearWfsAttributeFilterValues: ne,
-		toggleLayer: J,
-		setVisibility: Y,
+		toggleLayer: X,
+		setVisibility: ee,
 		activeLabels: re
 	};
 }
 // src/react/useGeodesyWfsLoading.ts
 var se = 400;
 function ce(e, t) {
-	let n = e.wfsDomainLayers.length > 0 ? e.wfsDomainLayers : e.wfsLayers;
-	return n.length !== 0 && n.some((e) => t[e.id]);
+	return e.layers.some((n) => n.id !== e.dataLayerId && t[n.id]) ? !0 : (e.wfsDomainLayers.length > 0 ? e.wfsDomainLayers : e.wfsLayers).some((e) => t[e.id]);
 }
 function $(e) {
 	return e === null ? 0 : Date.now() - e;
 }
 function le(e, t) {
-	let { catalog: n, visibility: r, showIndicator: i = !0, showAfterMs: a = 0 } = t, o = i && ce(n, r), s = M(null), c = M(null), l = M(null), u = M(!1), d = M(!1), [p, m] = N({
+	let { catalog: n, visibility: r, showIndicator: i = !0, showAfterMs: a = 0 } = t, o = i && ce(n, r), s = P(null), c = P(null), l = P(null), u = P(!1), d = P(!1), [f, p] = F({
 		pendingCount: 0,
 		isLoading: !1,
 		elapsedMs: 0
 	});
-	return A(() => {
+	return M(() => {
 		if (!e || !o) {
-			u.current = !1, d.current = !1, s.current = null, c.current !== null && (window.clearTimeout(c.current), c.current = null), l.current !== null && (window.clearTimeout(l.current), l.current = null), m({
+			u.current = !1, d.current = !1, s.current = null, c.current !== null && (window.clearTimeout(c.current), c.current = null), l.current !== null && (window.clearTimeout(l.current), l.current = null), p({
 				pendingCount: 0,
 				isLoading: !1,
 				elapsedMs: 0
 			});
 			return;
 		}
-		let t = f(e, (e) => {
+		let t = C(e, (e) => {
 			if (c.current !== null && (window.clearTimeout(c.current), c.current = null), e.isLoading) {
 				let t = !u.current;
 				u.current = !0, t && (s.current = Date.now(), d.current = a === 0, l.current !== null && (window.clearTimeout(l.current), l.current = null), a > 0 && (l.current = window.setTimeout(() => {
-					l.current = null, u.current && (d.current = !0, m((e) => ({
+					l.current = null, u.current && (d.current = !0, p((e) => ({
 						...e,
 						isLoading: !0,
 						elapsedMs: $(s.current)
 					})));
-				}, a))), m((t) => ({
+				}, a))), p((t) => ({
 					...e,
 					isLoading: d.current,
 					elapsedMs: d.current ? t.isLoading ? t.elapsedMs : $(s.current) : 0
@@ -633,23 +632,23 @@ function le(e, t) {
 				return;
 			}
 			if (u.current = !1, l.current !== null && (window.clearTimeout(l.current), l.current = null), !d.current) {
-				s.current = null, m({
+				s.current = null, p({
 					...e,
 					elapsedMs: 0
 				});
 				return;
 			}
 			let t = s.current, n = $(t), r = Math.max(0, se - n);
-			r === 0 ? (s.current = null, d.current = !1, m({
+			r === 0 ? (s.current = null, d.current = !1, p({
 				...e,
 				elapsedMs: 0
-			})) : (m((e) => ({
+			})) : (p((e) => ({
 				...e,
 				pendingCount: 0,
 				isLoading: !0,
 				elapsedMs: n
 			})), c.current = window.setTimeout(() => {
-				s.current = null, d.current = !1, c.current = null, m({
+				s.current = null, d.current = !1, c.current = null, p({
 					pendingCount: 0,
 					isLoading: !1,
 					elapsedMs: 0
@@ -664,11 +663,11 @@ function le(e, t) {
 		o,
 		n,
 		a
-	]), A(() => {
-		if (!p.isLoading) return;
+	]), M(() => {
+		if (!f.isLoading) return;
 		let e = window.setInterval(() => {
 			let e = s.current;
-			e !== null && m((t) => ({
+			e !== null && p((t) => ({
 				...t,
 				elapsedMs: Date.now() - e
 			}));
@@ -676,6 +675,6 @@ function le(e, t) {
 		return () => {
 			window.clearInterval(e);
 		};
-	}, [p.isLoading]), p;
+	}, [f.isLoading]), f;
 }
-export { V as GeodesyLayerSwitcher, W as GeodesyPointDetails, G as GeodesyPointTitle, re as GeodesyWfsAttributeFiltersPanel, B as MapLayerSwitcher, ae as useGeodesyMapClick, oe as useGeodesyOnMap, le as useGeodesyWfsLoading };
+export { U as GeodesyLayerSwitcher, K as GeodesyPointDetails, q as GeodesyPointTitle, re as GeodesyWfsAttributeFiltersPanel, H as MapLayerSwitcher, ae as useGeodesyMapClick, oe as useGeodesyOnMap, le as useGeodesyWfsLoading };

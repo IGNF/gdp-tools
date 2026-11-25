@@ -34,6 +34,8 @@ export { parseGeodesyWfsGeoJson, type ParseGeodesyWfsGeoJsonOptions, } from './w
 export { loadGeodesyWfsFeatures, type LoadGeodesyWfsFeaturesOptions } from './wfs/loadGeodesyWfsFeatures';
 export { fetchGeodesyWfsPointsByRef, geodesyPointRefKey, type FetchGeodesyWfsPointsByRefOptions, type GeodesyPointRef, } from './wfs/fetchGeodesyWfsPointsByRef';
 export { collectGeodesyWfsVectorSources, getGeodesyWfsLoadingState, subscribeGeodesyWfsLoading, type GeodesyWfsLoadingState, } from './wfs/geodesyWfsLoadingState';
+export { collectGeodesyWmsTileSources, getGeodesyWmsLoadingState, subscribeGeodesyWmsLoading, type GeodesyWmsLoadingState, } from './wms/geodesyWmsLoadingState';
+export { getGeodesyMapLoadingState, subscribeGeodesyMapLoading, type GeodesyMapLoadingState, } from './geodesyMapLoadingState';
 export { DEFAULT_GEODESY_WFS_CLUSTER, resolveGeodesyWfsClusterConfig, type GeodesyWfsClusterConfig, type GeodesyWfsClusterOptions, } from './constants/wfsCluster';
 export { createGeodesyWfsClusterStyleFunction, wrapGeodesyWfsStyleForCluster, type GeodesyWfsClusterStyleOptions, } from './style/geodesyWfsClusterStyle';
 export { resolveGeodesyWfsHitFeature } from './wfs/resolveGeodesyWfsHitFeature';

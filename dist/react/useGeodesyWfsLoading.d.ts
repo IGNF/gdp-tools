@@ -1,7 +1,7 @@
 import type Map from 'ol/Map';
 import type { GeodesyCatalog } from '../catalog/geodesyCatalog';
 import type { GeodesyLayerVisibility } from '../geodesyLayerVisibility';
-import { type GeodesyWfsLoadingState } from '../wfs/geodesyWfsLoadingState';
+import { type GeodesyMapLoadingState } from '../geodesyMapLoadingState';
 export interface UseGeodesyWfsLoadingOptions {
     catalog: GeodesyCatalog;
     visibility: GeodesyLayerVisibility;
@@ -13,10 +13,10 @@ export interface UseGeodesyWfsLoadingOptions {
      */
     showAfterMs?: number;
 }
-export interface UseGeodesyWfsLoadingResult extends GeodesyWfsLoadingState {
+export interface UseGeodesyWfsLoadingResult extends GeodesyMapLoadingState {
     /** Durée écoulée depuis le début du chargement en cours (ms). */
     elapsedMs: number;
 }
-/** Suit les requêtes WFS bbox en cours pour les couches géodésie visibles. */
+/** Suit les chargements WMS tuiles et WFS bbox des couches géodésie visibles. */
 export declare function useGeodesyWfsLoading(map: Map | null, options: UseGeodesyWfsLoadingOptions): UseGeodesyWfsLoadingResult;
 //# sourceMappingURL=useGeodesyWfsLoading.d.ts.map
