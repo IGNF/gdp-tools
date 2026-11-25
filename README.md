@@ -214,6 +214,7 @@ const wfsLoading = useGeodesyWfsLoading(map, {
   catalog: geodesy.catalog,
   visibility: geodesy.visibility,
   showIndicator: true, // désactivable par l’app hôte
+  showAfterMs: 5000, // optionnel : pastille seulement après 5 s de chargement
 });
 
 // wfsLoading.isLoading, wfsLoading.elapsedMs

@@ -7,6 +7,11 @@ export interface UseGeodesyWfsLoadingOptions {
     visibility: GeodesyLayerVisibility;
     /** Affiche le suivi de chargement (désactivable par l’app hôte). @default true */
     showIndicator?: boolean;
+    /**
+     * Délai avant d’afficher l’indicateur (évite la pastille sur les chargements courts).
+     * @default 0
+     */
+    showAfterMs?: number;
 }
 export interface UseGeodesyWfsLoadingResult extends GeodesyWfsLoadingState {
     /** Durée écoulée depuis le début du chargement en cours (ms). */
