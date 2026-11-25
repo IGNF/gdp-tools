@@ -1,6 +1,6 @@
 {
   "name": "@ign/gdp-tools",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Extension d'affichage des données de géodésie pour applications IGN mobile",
   "type": "module",
   "engines": {
