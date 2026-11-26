@@ -1,14 +1,101 @@
 import type ImageTile from 'ol/ImageTile';
+import type Map from 'ol/Map';
+import type BaseLayer from 'ol/layer/Base';
+import LayerGroup from 'ol/layer/Group';
+import TileLayer from 'ol/layer/Tile';
 import type Tile from 'ol/Tile';
 import TileState from 'ol/TileState';
+import TileWMS from 'ol/source/TileWMS';
 
-import { beginGeodesyWmsTileLoad, endGeodesyWmsTileLoad } from './geodesyWmsTileLoadPending';
+import { GEODESY_LAYER_ID_PROPERTY } from '../constants/wms';
+import { getGeodesyLayerGroup } from '../registerGeodesyOnMap';
 
 /** Timeout tuile WMS géodésie (libère les connexions HTTP vers data.geopf.fr). */
 export const GEODESY_WMS_TILE_TIMEOUT_MS = 6_000;
 
 /** Limite de requêtes WMS géodésie simultanées (laisse de la place au WMTS fond de carte). */
 export const GEODESY_WMS_MAX_CONCURRENT_TILE_LOADS = 2;
+
+export interface GeodesyWmsLoadingState {
+  pendingCount: number;
+  isLoading: boolean;
+}
+
+type GeodesyWmsLoadingListener = (state: GeodesyWmsLoadingState) => void;
+
+let wmsPendingCount = 0;
+const wmsLoadingListeners = new Set<GeodesyWmsLoadingListener>();
+
+function wmsLoadingSnapshot(): GeodesyWmsLoadingState {
+  return {
+    pendingCount: wmsPendingCount,
+    isLoading: wmsPendingCount > 0,
+  };
+}
+
+function notifyWmsLoading(): void {
+  const state = wmsLoadingSnapshot();
+  wmsLoadingListeners.forEach((listener) => listener(state));
+}
+
+function beginGeodesyWmsTileLoad(): void {
+  wmsPendingCount += 1;
+  notifyWmsLoading();
+}
+
+function endGeodesyWmsTileLoad(): void {
+  wmsPendingCount = Math.max(0, wmsPendingCount - 1);
+  notifyWmsLoading();
+}
+
+export function getGeodesyWmsLoadingState(_map?: Map): GeodesyWmsLoadingState {
+  return wmsLoadingSnapshot();
+}
+
+/** Suit les chargements du chargeur partagé (`geodesyWmsTileLoadFunction`). */
+export function subscribeGeodesyWmsLoading(
+  _map: Map,
+  listener: (state: GeodesyWmsLoadingState) => void,
+): () => void {
+  wmsLoadingListeners.add(listener);
+  listener(wmsLoadingSnapshot());
+  return () => {
+    wmsLoadingListeners.delete(listener);
+  };
+}
+
+/** Sources TileWMS des couches WMS géodésie dans le groupe carte. */
+export function collectGeodesyWmsTileSources(map: Map): TileWMS[] {
+  const group = getGeodesyLayerGroup(map);
+  if (!group) {
+    return [];
+  }
+
+  const sources = new Set<TileWMS>();
+
+  const visitLayer = (layer: BaseLayer): void => {
+    if (layer instanceof LayerGroup) {
+      layer.getLayers().forEach(visitLayer);
+      return;
+    }
+
+    if (!(layer instanceof TileLayer)) {
+      return;
+    }
+
+    if (!layer.get(GEODESY_LAYER_ID_PROPERTY)) {
+      return;
+    }
+
+    const source = layer.getSource();
+    if (source instanceof TileWMS) {
+      sources.add(source);
+    }
+  };
+
+  group.getLayers().forEach(visitLayer);
+  return [...sources];
+}
 
 interface GeodesyWmsTileLoadOptions {
   timeoutMs?: number;

@@ -6,7 +6,7 @@ import type { GeodesyLayerVisibility } from '../geodesyLayerVisibility';
 import {
   subscribeGeodesyMapLoading,
   type GeodesyMapLoadingState,
-} from '../geodesyMapLoadingState';
+} from '../wfs/geodesyWfsLoadingState';
 
 export interface UseGeodesyWfsLoadingOptions {
   catalog: GeodesyCatalog;

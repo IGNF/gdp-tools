@@ -211,8 +211,11 @@ export {
 } from './wfs/fetchGeodesyWfsPointsByRef';
 export {
   collectGeodesyWfsVectorSources,
+  getGeodesyMapLoadingState,
   getGeodesyWfsLoadingState,
+  subscribeGeodesyMapLoading,
   subscribeGeodesyWfsLoading,
+  type GeodesyMapLoadingState,
   type GeodesyWfsLoadingState,
 } from './wfs/geodesyWfsLoadingState';
 export {
@@ -220,12 +223,7 @@ export {
   getGeodesyWmsLoadingState,
   subscribeGeodesyWmsLoading,
   type GeodesyWmsLoadingState,
-} from './wms/geodesyWmsLoadingState';
-export {
-  getGeodesyMapLoadingState,
-  subscribeGeodesyMapLoading,
-  type GeodesyMapLoadingState,
-} from './geodesyMapLoadingState';
+} from './wms/geodesyWmsTileLoad';
 export {
   DEFAULT_GEODESY_WFS_CLUSTER,
   resolveGeodesyWfsClusterConfig,

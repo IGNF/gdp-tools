@@ -11,4 +11,9 @@ export declare function collectGeodesyWfsVectorSources(map: Map): VectorSource[]
 export declare function getGeodesyWfsLoadingState(map: Map): GeodesyWfsLoadingState;
 /** Écoute les chargements WFS bbox des couches géodésie sur la carte. */
 export declare function subscribeGeodesyWfsLoading(map: Map, listener: (state: GeodesyWfsLoadingState) => void): () => void;
+/** Chargements WMS tuiles + WFS bbox des couches géodésie. */
+export type GeodesyMapLoadingState = GeodesyWfsLoadingState;
+export declare function getGeodesyMapLoadingState(map: Map): GeodesyMapLoadingState;
+/** Écoute les chargements WMS et WFS géodésie sur la carte. */
+export declare function subscribeGeodesyMapLoading(map: Map, listener: (state: GeodesyMapLoadingState) => void): () => void;
 //# sourceMappingURL=geodesyWfsLoadingState.d.ts.map

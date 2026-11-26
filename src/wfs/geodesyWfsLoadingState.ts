@@ -11,6 +11,10 @@ import { GEODESY_LAYER_GROUP_NAME } from '../constants/wms';
 import { GEODESY_LAYER_KIND_PROPERTY } from '../constants/wfs';
 import { GEODESY_WFS_DATA_LAYER_PROPERTY } from '../constants/wfsDomainLayers';
 import { getGeodesyLayerGroup } from '../registerGeodesyOnMap';
+import {
+  getGeodesyWmsLoadingState,
+  subscribeGeodesyWmsLoading,
+} from '../wms/geodesyWmsTileLoad';
 
 export interface GeodesyWfsLoadingState {
   /** Nombre de requêtes WFS bbox en cours sur les sources suivies. */
@@ -156,5 +160,50 @@ export function subscribeGeodesyWfsLoading(
   return () => {
     sourceKeys.forEach(unByKey);
     layerKeys.forEach(unByKey);
+  };
+}
+
+/** Chargements WMS tuiles + WFS bbox des couches géodésie. */
+export type GeodesyMapLoadingState = GeodesyWfsLoadingState;
+
+export function getGeodesyMapLoadingState(map: Map): GeodesyMapLoadingState {
+  const wfs = getGeodesyWfsLoadingState(map);
+  const wms = getGeodesyWmsLoadingState(map);
+
+  return {
+    pendingCount: wfs.pendingCount + wms.pendingCount,
+    isLoading: wfs.isLoading || wms.isLoading,
+  };
+}
+
+/** Écoute les chargements WMS et WFS géodésie sur la carte. */
+export function subscribeGeodesyMapLoading(
+  map: Map,
+  listener: (state: GeodesyMapLoadingState) => void,
+): () => void {
+  let wfsState = getGeodesyWfsLoadingState(map);
+  let wmsState = getGeodesyWmsLoadingState(map);
+
+  const notify = (): void => {
+    listener({
+      pendingCount: wfsState.pendingCount + wmsState.pendingCount,
+      isLoading: wfsState.isLoading || wmsState.isLoading,
+    });
+  };
+
+  const unsubscribeWfs = subscribeGeodesyWfsLoading(map, (state) => {
+    wfsState = state;
+    notify();
+  });
+  const unsubscribeWms = subscribeGeodesyWmsLoading(map, (state) => {
+    wmsState = state;
+    notify();
+  });
+
+  notify();
+
+  return () => {
+    unsubscribeWfs();
+    unsubscribeWms();
   };
 }

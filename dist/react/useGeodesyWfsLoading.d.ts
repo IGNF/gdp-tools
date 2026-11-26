@@ -1,7 +1,7 @@
 import type Map from 'ol/Map';
 import type { GeodesyCatalog } from '../catalog/geodesyCatalog';
 import type { GeodesyLayerVisibility } from '../geodesyLayerVisibility';
-import { type GeodesyMapLoadingState } from '../geodesyMapLoadingState';
+import { type GeodesyMapLoadingState } from '../wfs/geodesyWfsLoadingState';
 export interface UseGeodesyWfsLoadingOptions {
     catalog: GeodesyCatalog;
     visibility: GeodesyLayerVisibility;
