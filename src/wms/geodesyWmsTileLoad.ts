@@ -2,6 +2,8 @@ import type ImageTile from 'ol/ImageTile';
 import type Tile from 'ol/Tile';
 import TileState from 'ol/TileState';
 
+import { beginGeodesyWmsTileLoad, endGeodesyWmsTileLoad } from './geodesyWmsTileLoadPending';
+
 /** Timeout tuile WMS géodésie (libère les connexions HTTP vers data.geopf.fr). */
 export const GEODESY_WMS_TILE_TIMEOUT_MS = 6_000;
 
@@ -63,6 +65,17 @@ export function createGeodesyWmsTileLoadFunction(
 
   return (tile, src) => {
     void gate.acquire().then(async () => {
+      beginGeodesyWmsTileLoad();
+      let loadEnded = false;
+      const finishLoad = (): void => {
+        if (loadEnded) {
+          return;
+        }
+        loadEnded = true;
+        endGeodesyWmsTileLoad();
+        gate.release();
+      };
+
       const controller = new AbortController();
       const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
 
@@ -75,12 +88,14 @@ export function createGeodesyWmsTileLoadFunction(
 
         if (!response.ok) {
           tile.setState(TileState.ERROR);
+          finishLoad();
           return;
         }
 
         const contentType = response.headers.get('content-type') ?? '';
         if (!isImageContentType(contentType)) {
           tile.setState(TileState.ERROR);
+          finishLoad();
           return;
         }
 
@@ -90,17 +105,19 @@ export function createGeodesyWmsTileLoadFunction(
 
         image.onload = () => {
           URL.revokeObjectURL(objectUrl);
+          finishLoad();
         };
         image.onerror = () => {
           URL.revokeObjectURL(objectUrl);
           tile.setState(TileState.ERROR);
+          finishLoad();
         };
         image.src = objectUrl;
       } catch {
         tile.setState(TileState.ERROR);
+        finishLoad();
       } finally {
         window.clearTimeout(timeoutId);
-        gate.release();
       }
     });
   };

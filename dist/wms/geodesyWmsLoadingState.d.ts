@@ -9,6 +9,6 @@ export interface GeodesyWmsLoadingState {
 /** Sources TileWMS des couches WMS géodésie dans le groupe carte. */
 export declare function collectGeodesyWmsTileSources(map: Map): TileWMS[];
 export declare function getGeodesyWmsLoadingState(_map: Map): GeodesyWmsLoadingState;
-/** Écoute les chargements de tuiles WMS des couches géodésie sur la carte. */
-export declare function subscribeGeodesyWmsLoading(map: Map, listener: (state: GeodesyWmsLoadingState) => void): () => void;
+/** Suit les chargements du chargeur WMS géodésie partagé (`geodesyWmsTileLoadFunction`). */
+export declare function subscribeGeodesyWmsLoading(_map: Map, listener: (state: GeodesyWmsLoadingState) => void): () => void;
 //# sourceMappingURL=geodesyWmsLoadingState.d.ts.map

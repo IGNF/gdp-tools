@@ -220,7 +220,7 @@ const wfsLoading = useGeodesyWfsLoading(map, {
 // wfsLoading.isLoading, wfsLoading.elapsedMs
 ```
 
-Suit les tuiles WMS géodésie (`tileloadstart` / `tileloadend`) et les requêtes WFS **bbox** (`featuresloadstart` / `featuresloadend`) pour la zone visible.
+Suit les tuiles WMS géodésie (compteur du chargeur `geodesyWmsTileLoadFunction`) et les requêtes WFS **bbox** (`featuresloadstart` / `featuresloadend`) pour la zone visible.
 
 ---
 

@@ -27,9 +27,9 @@ import se from "ol-ext/layer/AnimatedCluster";
 import ce from "ol/format/WKT";
 import le from "ol/source/TileWMS";
 import ue from "ol/TileState";
-import { unByKey as b } from "ol/Observable";
+import { unByKey as de } from "ol/Observable";
 // src/constants/wms.ts
-var de = "geodesyGroup", x = "geodesyLayerId", fe = "https://data.geopf.fr/wms-v/ows", pe = "1.0.0-beta.11", S = [
+var fe = "geodesyGroup", b = "geodesyLayerId", pe = "https://data.geopf.fr/wms-v/ows", me = "1.0.0-beta.11", x = [
 	{
 		id: "RBF",
 		wmsLayer: "IGNF_GEODESIE-RBF",
@@ -65,7 +65,7 @@ var de = "geodesyGroup", x = "geodesyLayerId", fe = "https://data.geopf.fr/wms-v
 		title: "Toutes les données géodésiques",
 		shortLabel: "Toutes"
 	}
-], me = "TOUT", he = S.filter((e) => e.id !== me).map((e) => e.id), ge = S.filter((e) => e.id !== me), _e = [me], ve = S.map((e) => e.id), ye = S[0].wmsLayer, be = S[0].style, xe = "https://data.geopf.fr/annexes/geodesie/gdp/GDP_RGP2.txt", Se = [
+], S = "TOUT", he = x.filter((e) => e.id !== S).map((e) => e.id), ge = x.filter((e) => e.id !== S), _e = [S], ve = x.map((e) => e.id), ye = x[0].wmsLayer, be = x[0].style, xe = "https://data.geopf.fr/annexes/geodesie/gdp/GDP_RGP2.txt", Se = [
 	"nom",
 	"cadence",
 	"commune",
@@ -120,13 +120,13 @@ function Ne(e) {
 	let t = String(e).trim();
 	return t ? t.toUpperCase() : void 0;
 }
-function Pe(e, t) {
+function w(e, t) {
 	let n = e[t];
 	if (n) return n;
 	let r = t.toLowerCase();
 	for (let [t, n] of Object.entries(e)) if (t.toLowerCase() === r) return n;
 }
-var w = new a({ image: new t({
+var T = new a({ image: new t({
 	radius: 5,
 	fill: new n({ color: "rgba(38, 165, 129, 0.85)" }),
 	stroke: new i({
@@ -134,19 +134,19 @@ var w = new a({ image: new t({
 		width: 1.5
 	})
 }) });
-function Fe(e) {
+function Pe(e) {
 	return Ne(e);
 }
-function Ie(e, t) {
-	return Pe(e, t);
+function Fe(e, t) {
+	return w(e, t);
 }
-function Le(t, n = {}) {
-	let i = n.fallbackStyle ?? w, o = n.pictoProperty ?? "picto", s = n.iconScale ?? 1, c = /* @__PURE__ */ new Map();
+function Ie(t, n = {}) {
+	let i = n.fallbackStyle ?? T, o = n.pictoProperty ?? "picto", s = n.iconScale ?? 1, c = /* @__PURE__ */ new Map();
 	return (n) => {
 		if (!(n instanceof e)) return i;
-		let l = Fe(n.get(o));
+		let l = Pe(n.get(o));
 		if (!l) return i;
-		let u = Ie(t, l);
+		let u = Fe(t, l);
 		if (!u) return i;
 		let d = c.get(l);
 		if (d) return d;
@@ -158,8 +158,8 @@ function Le(t, n = {}) {
 		return c.set(l, f), f;
 	};
 }
-function T(e, t) {
-	return t === void 0 ? e && Object.keys(e).length > 0 ? Le(e) : w : t;
+function Le(e, t) {
+	return t === void 0 ? e && Object.keys(e).length > 0 ? Ie(e) : T : t;
 }
 function Re(e) {
 	return typeof e == "function" ? e : () => e;
@@ -168,11 +168,11 @@ function ze(e) {
 	let t = /* @__PURE__ */ new Map();
 	for (let n of e.wfsLayerIds) {
 		let r = e.wfsPictoUrlMaps[n];
-		t.set(n, Re(T(r)));
+		t.set(n, Re(Le(r)));
 	}
 	return (e, n) => {
-		let r = e.get(x), i = r ? t.get(r) : void 0;
-		return i ? i(e, n) : w;
+		let r = e.get(b), i = r ? t.get(r) : void 0;
+		return i ? i(e, n) : T;
 	};
 }
 function Be(e) {
@@ -197,11 +197,11 @@ function He(e, t = {}) {
 	if (t.layerId) {
 		let e = r[t.layerId];
 		if (e) {
-			let t = Pe(e, n);
+			let t = w(e, n);
 			if (t) return t;
 		}
 	}
-	return Pe(Ve(r), n);
+	return w(Ve(r), n);
 }
 var Ue = {
 	PT_RN_GOOD: E("rn_bon_15.gif"),
@@ -333,25 +333,25 @@ async function Ze(e) {
 	});
 	return A.set(t, i), i;
 }
-async function Qe(e) {
+async function M(e) {
 	await Promise.all(e.map((e) => Ze(e)));
 }
-async function $e(e) {
-	await Qe(Ye(e));
+async function Qe(e) {
+	await M(Ye(e));
 }
-async function et(e) {
+async function $e(e) {
 	let t = new DOMParser().parseFromString(e, "text/html"), n = t.querySelectorAll("img[src]");
-	return n.length === 0 ? e : (await Qe(Array.from(n).map((e) => e.getAttribute("src")).filter((e) => !!e?.trim())), n.forEach((e) => {
+	return n.length === 0 ? e : (await M(Array.from(n).map((e) => e.getAttribute("src")).filter((e) => !!e?.trim())), n.forEach((e) => {
 		let t = e.getAttribute("src");
 		t && e.setAttribute("src", j(t));
 	}), t.querySelector("table.featureInfo")?.outerHTML ?? t.body.innerHTML);
 }
-function tt() {
+function et() {
 	k.forEach((e) => {
 		qe(e);
 	}), k.clear(), A.clear();
 }
-function nt() {
+function tt() {
 	let e = 0;
 	return k.forEach((t) => {
 		e += t.sizeBytes;
@@ -361,7 +361,7 @@ function nt() {
 	};
 }
 // src/constants/geodesyAttributeLabels.ts
-var M = {
+var nt = {
 	id: "Identifiant",
 	domaine: "Domaine",
 	picto: "Pictogramme",
@@ -488,9 +488,9 @@ var M = {
 	groupe_typecode: "Code réseau",
 	groupe_typeinfo: "Info type réseau",
 	groupe_lieudit: "Lieu-dit du groupe"
-}, rt = Object.keys(M);
+}, rt = Object.keys(nt);
 function it(e) {
-	return M[e.toLowerCase()] || e.replace(/_/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2").trim();
+	return nt[e.toLowerCase()] || e.replace(/_/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2").trim();
 }
 // src/interaction/geodesyFeatureAttributes.ts
 var at = [
@@ -543,9 +543,9 @@ function ht(e, t = "Image") {
   </a>
 </div>`;
 }
-function F(e, t = L) {
+function F(e, t = I) {
 	return Object.keys(e).flatMap((n) => {
-		if (vt(n, t)) return [];
+		if (yt(n, t)) return [];
 		let r = e[n];
 		return N(r) ? [] : [[n, String(r).trim()]];
 	});
@@ -571,35 +571,35 @@ function _t(e) {
 		return !t.has(n) && (t.add(n), !0);
 	});
 }
-function I(e = {}) {
+function vt(e = {}) {
 	return {
 		attributeKeys: _t(e.attributeKeys ?? rt),
 		excludedKeys: _t([...at, ...e.excludedKeys ?? []]),
 		titleKeys: _t(e.titleKeys ?? gt),
 		labels: {
-			...M,
+			...nt,
 			...e.labels ?? {}
 		}
 	};
 }
-var L = I();
-function R(e, t = L) {
+var I = vt();
+function L(e, t = I) {
 	let n = e.toLowerCase();
 	return t.labels[n] || it(e);
 }
-function vt(e, t = L) {
+function yt(e, t = I) {
 	if (st(e)) return !0;
 	let n = e.toLowerCase();
 	return t.excludedKeys.some((e) => e.toLowerCase() === n);
 }
-function z(e, t = L, n = "Point géodésique") {
+function R(e, t = I, n = "Point géodésique") {
 	for (let n of t.titleKeys) {
 		let t = e[n];
 		if (t != null && String(t).trim() !== "") return String(t);
 	}
 	return n;
 }
-function B(e, t = L) {
+function z(e, t = I) {
 	let n = /* @__PURE__ */ new Map();
 	for (let t of e) {
 		let [e, r] = t;
@@ -611,33 +611,33 @@ function B(e, t = L) {
 	});
 }
 // src/catalog/geodesyCatalog.ts
-var yt = "geodesyCatalog";
-function bt(e) {
+var bt = "geodesyCatalog";
+function xt(e) {
 	return Array.from(new Set(e));
 }
-function xt(e, t) {
+function St(e, t) {
 	let n = new Map(e.map((e) => [e.id, e]));
 	return t.flatMap((e) => {
 		let t = n.get(e);
 		return t ? [t] : [];
 	});
-}
-function St(e) {
-	if (e.layers?.length) return e.layers;
-	let t = S;
-	return e.layerIds?.length ? xt(t, bt(e.layerIds)) : t;
 }
 function Ct(e) {
+	if (e.layers?.length) return e.layers;
+	let t = x;
+	return e.layerIds?.length ? St(t, xt(e.layerIds)) : t;
+}
+function wt(e) {
 	return Array.from(new Set(e));
 }
-function wt(e, t) {
+function Tt(e, t) {
 	let n = new Map(e.map((e) => [e.id, e]));
 	return t.flatMap((e) => {
 		let t = n.get(e);
 		return t ? [t] : [];
 	});
 }
-function Tt(e, t) {
+function Et(e, t) {
 	if (e && t.includes(e)) return e;
 	if (t.includes("DATA_GEOD")) return "DATA_GEOD";
 	if (t.includes("GDP")) return "GDP";
@@ -645,35 +645,35 @@ function Tt(e, t) {
 	if (!n) throw Error("[gdp-tools] wfsDomainLayers require at least one active WFS layer in the catalog.");
 	return n;
 }
-function Et(e) {
+function Dt(e) {
 	return Array.from(new Set(e));
 }
-function Dt(e, t) {
+function Ot(e, t) {
 	let n = new Map(e.map((e) => [e.id, e]));
 	return t.flatMap((e) => {
 		let t = n.get(e);
 		return t ? [t] : [];
 	});
 }
-function Ot(e) {
-	return e.annexLayers?.length ? e.annexLayers : e.annexLayerIds?.length ? Dt(Ce, Et(e.annexLayerIds)) : [];
-}
 function kt(e) {
+	return e.annexLayers?.length ? e.annexLayers : e.annexLayerIds?.length ? Ot(Ce, Dt(e.annexLayerIds)) : [];
+}
+function At(e) {
 	let t = [];
 	if (e.wfsLayers?.length) t = [...e.wfsLayers];
-	else if (e.wfsLayerIds?.length) t = wt(Oe, Ct(e.wfsLayerIds));
+	else if (e.wfsLayerIds?.length) t = Tt(Oe, wt(e.wfsLayerIds));
 	else return [];
 	return t.filter((t) => Ae(t, e.wfsApiKey));
 }
-function At(e = {}) {
-	let t = St(e), n = t.map((e) => e.id), r = e.dataLayerId ?? "TOUT";
+function jt(e = {}) {
+	let t = Ct(e), n = t.map((e) => e.id), r = e.dataLayerId ?? "TOUT";
 	if (!n.includes(r)) throw Error(`[gdp-tools] dataLayerId "${r}" must be included in the catalog layers.`);
-	let i = n.filter((e) => e !== r), a = bt(e.networkLayerIds ?? i).filter((e) => n.includes(e)), o = n.filter((e) => e !== r), s = bt(e.uiLayerIds ?? o).filter((e) => n.includes(e)), c = xt(t, s), l = e.attributes ?? I({
+	let i = n.filter((e) => e !== r), a = xt(e.networkLayerIds ?? i).filter((e) => n.includes(e)), o = n.filter((e) => e !== r), s = xt(e.uiLayerIds ?? o).filter((e) => n.includes(e)), c = St(t, s), l = e.attributes ?? vt({
 		attributeKeys: e.attributeKeys,
 		excludedKeys: e.excludedKeys,
 		titleKeys: e.titleKeys,
 		labels: e.labels
-	}), u = kt(e), d = u.map((e) => e.id), f = Ct(e.wfsUiLayerIds ?? d).filter((e) => d.includes(e)), ee = wt(u, f), p = e.wfsDomainLayers ?? [], m = p.map((e) => e.id), te = e.wfsAttributeFilters ?? [], h = p.length > 0 ? Tt(e.wfsDomainSourceLayerId, d) : void 0, g = p.length > 0 ? [...m] : [...f], _ = Ot(e), v = _.map((e) => e.id), y = Et(e.annexUiLayerIds ?? v).filter((e) => v.includes(e)), ne = Dt(_, y);
+	}), u = At(e), d = u.map((e) => e.id), f = wt(e.wfsUiLayerIds ?? d).filter((e) => d.includes(e)), ee = Tt(u, f), p = e.wfsDomainLayers ?? [], m = p.map((e) => e.id), te = e.wfsAttributeFilters ?? [], h = p.length > 0 ? Et(e.wfsDomainSourceLayerId, d) : void 0, g = p.length > 0 ? [...m] : [...f], _ = kt(e), v = _.map((e) => e.id), y = Dt(e.annexUiLayerIds ?? v).filter((e) => v.includes(e)), ne = Ot(_, y);
 	return {
 		layers: t,
 		layerIds: n,
@@ -708,15 +708,15 @@ function At(e = {}) {
 		annexUiLayerIds: y
 	};
 }
-var V = At();
-function jt(e, t) {
+var B = jt();
+function Mt(e, t) {
 	return e.layers.find((e) => e.id === t);
 }
-function Mt(e, t) {
+function Nt(e, t) {
 	let n = e.layerIds.indexOf(t);
 	return n >= 0 ? n : e.layerIds.length;
 }
-function Nt(e) {
+function Pt(e) {
 	if (e.wfsDomainLayerIds.length > 0) {
 		let t = e.wfsDomainSourceLayerId ? [e.wfsDomainSourceLayerId] : [];
 		return [
@@ -733,7 +733,7 @@ function Nt(e) {
 	];
 }
 // src/constants/wfsDomainLayers.ts
-var Pt = "domaine", Ft = "geodesyWfsDomainSourceLayerId", H = "geodesyWfsDataLayer", It = [{
+var Ft = "domaine", It = "geodesyWfsDomainSourceLayerId", V = "geodesyWfsDataLayer", Lt = [{
 	id: "DOMAIN_GEODESIE",
 	title: "Géodésie",
 	shortLabel: "Géod",
@@ -752,86 +752,86 @@ var Pt = "domaine", Ft = "geodesyWfsDomainSourceLayerId", H = "geodesyWfsDataLay
 		"nive"
 	]
 }];
-function Lt(e) {
+function Rt(e) {
 	if (e != null) return String(e).trim().toLowerCase() || void 0;
 }
-function Rt(e) {
-	return Lt(e.get("domaine") ?? e.get("DOMAINE"));
+function zt(e) {
+	return Rt(e.get("domaine") ?? e.get("DOMAINE"));
 }
-function U(e, t) {
+function H(e, t) {
 	if (!t.length) return !0;
 	let n = new Set(t.map((e) => e.toLowerCase())), r = e.get("features");
 	if (r?.length) return r.some((e) => {
-		let t = Rt(e);
+		let t = zt(e);
 		return t !== void 0 && n.has(t);
 	});
-	let i = Rt(e);
+	let i = zt(e);
 	return i !== void 0 && n.has(i);
 }
 // src/constants/geodesyNetworkFilterCategories.ts
-var zt = [
+var Bt = [
 	"RBF",
 	"RDF",
 	"TRIPLET",
 	"NON_TRIPLET"
-], Bt = ["PT_RN_TRIPLET", "PT_RN_CANEX_TRIPLET"];
-function Vt(e, t) {
+], Vt = ["PT_RN_TRIPLET", "PT_RN_CANEX_TRIPLET"];
+function Ht(e, t) {
 	if (t in e) return e[t];
 	let n = t.toLowerCase(), r = Object.keys(e).find((e) => e.toLowerCase() === n);
 	return r ? e[r] : void 0;
 }
-function Ht(e) {
-	return Ne(Vt(e, "picto") ?? Vt(e, "PICTO"));
-}
 function Ut(e) {
-	return Bt.some((t) => e.startsWith(t));
+	return Ne(Ht(e, "picto") ?? Ht(e, "PICTO"));
 }
 function Wt(e) {
-	let t = Ht(e);
-	return t !== void 0 && Ut(t);
+	return Vt.some((t) => e.startsWith(t));
 }
 function Gt(e) {
-	let t = Ht(e);
+	let t = Ut(e);
+	return t !== void 0 && Wt(t);
+}
+function Kt(e) {
+	let t = Ut(e);
 	if (!t) return [];
 	let n = [];
-	return t.startsWith("PT_RBF") && n.push("RBF"), t.startsWith("PT_RDF") && n.push("RDF"), Ut(t) ? n.push("TRIPLET") : t.startsWith("PT_RN") && n.push("NON_TRIPLET"), n;
+	return t.startsWith("PT_RBF") && n.push("RBF"), t.startsWith("PT_RDF") && n.push("RDF"), Wt(t) ? n.push("TRIPLET") : t.startsWith("PT_RN") && n.push("NON_TRIPLET"), n;
 }
 // src/wfs/geodesyWfsFeatureId.ts
-var Kt = [
+var qt = [
 	"id",
 	"ID",
 	"no",
 	"NO"
 ];
-function qt(e) {
-	for (let t of Kt) {
+function Jt(e) {
+	for (let t of qt) {
 		let n = e[t];
 		if (n == null) continue;
 		let r = String(n).trim();
 		if (r) return r;
 	}
 }
-function Jt(e, t) {
+function Yt(e, t) {
 	return `${e}:${t}`;
 }
-function Yt(e, t) {
+function Xt(e, t) {
 	let n = e.getGeometry();
 	if (!(n instanceof o)) return;
 	let [r, i] = n.getCoordinates();
-	return Jt(t, `${r.toFixed(3)}:${i.toFixed(3)}`);
+	return Yt(t, `${r.toFixed(3)}:${i.toFixed(3)}`);
 }
-function Xt(e, t) {
+function Zt(e, t) {
 	let n = `${t}:`, r = e.getId();
 	if (r !== void 0 && String(r).startsWith(n)) return;
-	let i = qt(e.getProperties()) ?? (r === void 0 ? void 0 : String(r).trim()) ?? Yt(e, t);
-	i && e.setId(i.startsWith(n) ? i : Jt(t, i));
+	let i = Jt(e.getProperties()) ?? (r === void 0 ? void 0 : String(r).trim()) ?? Xt(e, t);
+	i && e.setId(i.startsWith(n) ? i : Yt(t, i));
 }
 // src/constants/wfsAttributeFilters.ts
-var W = "geodesyWfsAttributeFilterValues";
-function Zt(e = {}) {
+var U = "geodesyWfsAttributeFilterValues";
+function Qt(e = {}) {
 	return { values: { ...e } };
 }
-var Qt = [
+var $t = [
 	{
 		id: "HAS_PHOTO",
 		type: "boolean",
@@ -911,32 +911,32 @@ var Qt = [
 		falseLabel: "Non"
 	}
 ];
-function $t(e, t) {
+function en(e, t) {
 	return e.get(t) ?? e.get(t.toUpperCase());
 }
-function en(e, t) {
+function tn(e, t) {
 	return e[t] ?? e[t.toUpperCase()];
 }
-function tn(e, t) {
+function nn(e, t) {
 	let n = /* @__PURE__ */ new Set();
 	for (let r of e) r.wfsLayerId && (t && r.wfsLayerId === t || n.add(r.wfsLayerId));
 	return [...n];
 }
-function G(e, t, n = {}) {
+function W(e, t, n = {}) {
 	let { domainSourceLayerId: r, auxiliaryPropertiesByLayerId: i } = n;
 	if (t.wfsLayerId && r && t.wfsLayerId !== r) {
-		let n = qt(e.getProperties());
+		let n = Jt(e.getProperties());
 		if (!n) return;
 		let r = i?.get(t.wfsLayerId)?.get(n);
-		return r ? en(r, t.property) : void 0;
+		return r ? tn(r, t.property) : void 0;
 	}
-	return $t(e, t.property);
-}
-function nn(e) {
-	return e == null ? "" : String(e).trim();
+	return en(e, t.property);
 }
 function rn(e) {
-	let t = nn(e);
+	return e == null ? "" : String(e).trim();
+}
+function an(e) {
+	let t = rn(e);
 	if (!t) return null;
 	let n = Date.parse(t);
 	if (!Number.isNaN(n)) return n;
@@ -947,16 +947,16 @@ function rn(e) {
 	}
 	return null;
 }
-function an(e, t, n, r) {
-	let i = !N(G(e, t, r));
+function on(e, t, n, r) {
+	let i = !N(W(e, t, r));
 	return n ? i : !i;
 }
-function on(e, t, n, r) {
-	let i = rn(G(e, t, r)), a = rn(n);
+function sn(e, t, n, r) {
+	let i = an(W(e, t, r)), a = an(n);
 	return i === null || a === null ? !1 : t.operator === "before" ? i < a : i > a;
 }
-function sn(e, t, n, r) {
-	let i = nn(G(e, t, r)).toLowerCase(), a = n.trim().toLowerCase();
+function cn(e, t, n, r) {
+	let i = rn(W(e, t, r)).toLowerCase(), a = n.trim().toLowerCase();
 	if (!a) return !0;
 	switch (t.operator ?? "equals") {
 		case "contains": return i.includes(a);
@@ -964,68 +964,68 @@ function sn(e, t, n, r) {
 		default: return i === a;
 	}
 }
-function cn(e, t, n, r) {
-	let i = nn(G(e, t, r)).toLowerCase(), a = t.options.find((e) => e.value === n);
+function ln(e, t, n, r) {
+	let i = rn(W(e, t, r)).toLowerCase(), a = t.options.find((e) => e.value === n);
 	return a ? a.matchOthers ? !t.options.filter((e) => !e.matchOthers).map((e) => e.value.toLowerCase()).includes(i) : i === a.value.toLowerCase() : !0;
 }
-function K(e) {
+function G(e) {
 	return new Set(e.split(",").map((e) => e.trim()).filter(Boolean));
 }
-function ln(e, t) {
-	return t == null ? new Set(e.options.map((e) => e.value)) : typeof t == "string" && t.trim() === "" ? /* @__PURE__ */ new Set() : typeof t == "string" ? K(t) : new Set(e.options.map((e) => e.value));
-}
-function un(e, t, n, r) {
-	let i = K(n);
-	return i.size === 0 ? !1 : i.size >= t.options.length || Gt(e.getProperties()).some((e) => i.has(e));
-}
-function q(e, t) {
-	return t == null ? !1 : e.type === "multiChoice" ? typeof t == "string" && K(t).size < e.options.length : typeof t == "boolean" || t.trim() !== "";
+function un(e, t) {
+	return t == null ? new Set(e.options.map((e) => e.value)) : typeof t == "string" && t.trim() === "" ? /* @__PURE__ */ new Set() : typeof t == "string" ? G(t) : new Set(e.options.map((e) => e.value));
 }
 function dn(e, t, n, r) {
+	let i = G(n);
+	return i.size === 0 ? !1 : i.size >= t.options.length || Kt(e.getProperties()).some((e) => i.has(e));
+}
+function K(e, t) {
+	return t == null ? !1 : e.type === "multiChoice" ? typeof t == "string" && G(t).size < e.options.length : typeof t == "boolean" || t.trim() !== "";
+}
+function fn(e, t, n, r) {
 	switch (t.type) {
-		case "boolean": return an(e, t, n, r);
-		case "date": return on(e, t, String(n), r);
-		case "text": return sn(e, t, String(n), r);
-		case "choice": return cn(e, t, String(n), r);
-		case "multiChoice": return un(e, t, String(n), r);
+		case "boolean": return on(e, t, n, r);
+		case "date": return sn(e, t, String(n), r);
+		case "text": return cn(e, t, String(n), r);
+		case "choice": return ln(e, t, String(n), r);
+		case "multiChoice": return dn(e, t, String(n), r);
 		default: return !0;
 	}
 }
-function fn(e, t, n, r) {
+function pn(e, t, n, r) {
 	for (let i of t) {
 		let t = n[i.id];
-		if (q(i, t) && !dn(e, i, t, r)) return !1;
+		if (K(i, t) && !fn(e, i, t, r)) return !1;
 	}
 	return !0;
 }
-function pn(e, t, n, r = {}) {
-	if (!t.length || !t.some((e) => q(e, n[e.id]))) return !0;
+function mn(e, t, n, r = {}) {
+	if (!t.length || !t.some((e) => K(e, n[e.id]))) return !0;
 	let i = e.get("features");
-	return i?.length ? i.some((e) => fn(e, t, n, r)) : fn(e, t, n, r);
-}
-function mn(e, t) {
-	return !q(e, t) || typeof t != "string" ? 0 : K(t).size;
+	return i?.length ? i.some((e) => pn(e, t, n, r)) : pn(e, t, n, r);
 }
 function hn(e, t) {
+	return !K(e, t) || typeof t != "string" ? 0 : G(t).size;
+}
+function gn(e, t) {
 	return e.reduce((e, n) => {
 		let r = t[n.id];
-		return n.type === "multiChoice" ? e + mn(n, r) : e + +!!q(n, r);
+		return n.type === "multiChoice" ? e + hn(n, r) : e + +!!K(n, r);
 	}, 0);
 }
-function gn(e = []) {
+function _n(e = []) {
 	return Object.fromEntries(e.map((e) => [e.id, null]));
 }
 // src/catalog/getGeodesyCatalogFromMap.ts
-function J(e) {
+function q(e) {
 	let t = e.getLayers().getArray().find((e) => e instanceof s && e.get("name") === "geodesyGroup");
-	return t instanceof s ? t.get("geodesyCatalog") ?? V : V;
+	return t instanceof s ? t.get("geodesyCatalog") ?? B : B;
 }
 // src/interaction/geodesySelectCluster.ts
-function _n(e, t, n) {
+function vn(e, t, n) {
 	let r = e(t, n);
 	return r ? Array.isArray(r) ? r : typeof r == "function" ? [] : [r] : [];
 }
-var vn = class extends d {
+var yn = class extends d {
 	explosionDurationMs;
 	constructor(e = {}) {
 		let t = e.explosionAnimationDuration ?? e.animationDuration ?? 500;
@@ -1051,7 +1051,7 @@ var vn = class extends d {
 				if (!i.get("features")) continue;
 				let r = i.getGeometry();
 				if (!(r instanceof o)) continue;
-				let c = r.getCoordinates(), l = new e(new o([n[0] + s * (c[0] - n[0]), n[1] + s * (c[1] - n[1])])), u = _n(d, i, te);
+				let c = r.getCoordinates(), l = new e(new o([n[0] + s * (c[0] - n[0]), n[1] + s * (c[1] - n[1])])), u = vn(d, i, te);
 				for (let e of u) a.drawFeature(l, ee(t, e));
 			}
 			s >= 1 ? (i.listenerKey_ && u(i.listenerKey_), i.overlayLayer_.getSource()?.addFeatures(r), i.overlayLayer_.changed()) : t.frameState.animate = !0;
@@ -1061,12 +1061,12 @@ var vn = class extends d {
 	}
 };
 // src/wfs/geodesyWfsLayerUtils.ts
-function Y(e, t) {
+function J(e, t) {
 	if (!(e instanceof p) || e.get("geodesyWfsDataLayer") === !0 || !e.getVisible() || e.get("geodesyLayerKind") !== "wfs") return !1;
-	let n = e.get(x);
+	let n = e.get(b);
 	return n !== void 0 && t.has(n);
 }
-function yn(e) {
+function bn(e) {
 	let t = /* @__PURE__ */ new Set(), n = [];
 	for (let r of e) {
 		let e = r.getId() === void 0 ? m(r) : String(r.getId());
@@ -1074,32 +1074,32 @@ function yn(e) {
 	}
 	return n;
 }
-function bn(e) {
-	let t = e.get("features");
-	return t?.length ? yn(t) : [e];
-}
 function xn(e) {
 	let t = e.get("features");
-	return t?.length ? yn(t).length : 1;
+	return t?.length ? bn(t) : [e];
 }
 function Sn(e) {
-	return xn(e) > 1;
+	let t = e.get("features");
+	return t?.length ? bn(t).length : 1;
 }
 function Cn(e) {
+	return Sn(e) > 1;
+}
+function wn(e) {
 	return e.get("selectclusterfeature") === !0;
 }
 // src/interaction/geodesyWfsClusterSelect.ts
-var wn = /* @__PURE__ */ new WeakMap();
-function Tn(e) {
-	return wn.get(e) ?? null;
-}
+var Tn = /* @__PURE__ */ new WeakMap();
 function En(e) {
-	Tn(e)?.clear();
+	return Tn.get(e) ?? null;
 }
-function Dn(e, t) {
+function Dn(e) {
+	En(e)?.clear();
+}
+function On(e, t) {
 	if (!t.wfsCluster.enabled) return () => {};
-	let n = new Set(t.wfsUiLayerIds), r = new vn({
-		layers: (e) => Y(e, n),
+	let n = new Set(t.wfsUiLayerIds), r = new yn({
+		layers: (e) => J(e, n),
 		featureStyle: Be(t),
 		animate: t.wfsCluster.animateExplosion,
 		explosionAnimationDuration: t.wfsCluster.explosionAnimationDuration,
@@ -1107,53 +1107,53 @@ function Dn(e, t) {
 		autoClose: !0,
 		selectCluster: !1
 	});
-	return e.addInteraction(r), wn.set(e, r), () => {
-		r.clear(), e.removeInteraction(r), wn.delete(e);
+	return e.addInteraction(r), Tn.set(e, r), () => {
+		r.clear(), e.removeInteraction(r), Tn.delete(e);
 	};
 }
 // src/partner/partnerLogo.ts
-var On = "https://data.geopf.fr/annexes/geodesie/gdp/logos";
-function kn(e) {
-	return !e || e.trim() === "" ? null : `${On}/logo_${e.trim()}.jpg`;
-}
+var kn = "https://data.geopf.fr/annexes/geodesie/gdp/logos";
 function An(e) {
+	return !e || e.trim() === "" ? null : `${kn}/logo_${e.trim()}.jpg`;
+}
+function jn(e) {
 	return j(e);
 }
-async function jn(e) {
+async function Mn(e) {
 	return Ze(e);
 }
-async function Mn(e) {
-	await Promise.all(e.map((e) => jn(e)));
-}
 async function Nn(e) {
-	let t = kn(e);
-	return t ? jn(t) : null;
+	await Promise.all(e.map((e) => Mn(e)));
 }
-function Pn(e) {
+async function Pn(e) {
+	let t = An(e);
+	return t ? Mn(t) : null;
+}
+function Fn(e) {
 	let t = e.proprio_id;
 	return typeof t == "string" && t.trim() !== "" ? t.trim() : null;
 }
-function Fn(e) {
+function In(e) {
 	let t = /* @__PURE__ */ new Set();
 	for (let n of e) {
-		let e = Pn(n.feature.getProperties());
+		let e = Fn(n.feature.getProperties());
 		e && t.add(e);
 	}
 	return Array.from(t);
 }
-async function In(e) {
-	await Mn(Fn(e).map((e) => kn(e)).filter((e) => e !== null));
+async function Ln(e) {
+	await Nn(In(e).map((e) => An(e)).filter((e) => e !== null));
 }
 // src/interaction/geodesyPopupTemplate.ts
-function Ln(e, t = L, n = {}) {
-	let r = e.getProperties(), i = z(r, t), a = n.pictoUrlMaps ?? D, o = {};
-	return B(F(r, t), t).forEach(([e, n]) => {
-		let r = R(e, t);
+function Rn(e, t = I, n = {}) {
+	let r = e.getProperties(), i = R(r, t), a = n.pictoUrlMaps ?? D, o = {};
+	return z(F(r, t), t).forEach(([e, n]) => {
+		let r = L(e, t);
 		o[e] = {
 			title: r,
 			visible: (t) => !N(t.get(e)),
 			...ft(e) ? { format: (e, t) => {
-				let n = t.get(x), i = He(e, {
+				let n = t.get(b), i = He(e, {
 					pictoUrlMaps: a,
 					layerId: n
 				});
@@ -1166,29 +1166,29 @@ function Ln(e, t = L, n = {}) {
 	};
 }
 // src/cache/geodesyFeatureInfoCache.ts
-var X = new Ge(128);
-function Rn(e) {
-	return X.get(e);
+var Y = new Ge(128);
+function zn(e) {
+	return Y.get(e);
 }
-function zn(e, t) {
-	X.set(e, t);
-}
-function Bn() {
-	X.clear();
+function Bn(e, t) {
+	Y.set(e, t);
 }
 function Vn() {
+	Y.clear();
+}
+function Hn() {
 	let e = 0;
-	return X.forEach((t, n) => {
+	return Y.forEach((t, n) => {
 		e += n.length * 2, e += t.length * 2;
 	}), {
-		entryCount: X.entryCount,
+		entryCount: Y.entryCount,
 		sizeBytes: e
 	};
 }
 // src/utils/fetchWithTimeout.ts
-var Hn = 5e3;
-async function Un(e, t = {}) {
-	let { timeoutMs: n = Hn, signal: r, ...i } = t, a = new AbortController(), o = window.setTimeout(() => a.abort(), n);
+var Un = 5e3;
+async function Wn(e, t = {}) {
+	let { timeoutMs: n = Un, signal: r, ...i } = t, a = new AbortController(), o = window.setTimeout(() => a.abort(), n);
 	r && (r.aborted ? a.abort() : r.addEventListener("abort", () => a.abort(), { once: !0 }));
 	try {
 		return await fetch(e, {
@@ -1200,26 +1200,26 @@ async function Un(e, t = {}) {
 	}
 }
 // src/wms/mergeGeodesyFeatureHits.ts
-function Wn(e) {
+function Gn(e) {
 	return e != null && typeof e != "object";
 }
-function Gn(e, t) {
-	for (let [n, r] of Object.entries(t)) Wn(r) && String(r).trim() !== "" && e.set(n.toLowerCase(), {
+function Kn(e, t) {
+	for (let [n, r] of Object.entries(t)) Gn(r) && String(r).trim() !== "" && e.set(n.toLowerCase(), {
 		key: n,
 		value: r
 	});
 }
-function Kn(e, t) {
-	let n = /* @__PURE__ */ new Map();
-	return Gn(n, t), Object.fromEntries([...n.values()].map(({ key: e, value: t }) => [e, t]));
-}
 function qn(e, t) {
+	let n = /* @__PURE__ */ new Map();
+	return Kn(n, t), Object.fromEntries([...n.values()].map(({ key: e, value: t }) => [e, t]));
+}
+function Jn(e, t) {
 	if (t in e) return e[t];
 	let n = t.toLowerCase(), r = Object.keys(e).find((e) => e.toLowerCase() === n);
 	return r ? e[r] : void 0;
 }
-function Jn(e, t = "Point géodésique", n = V) {
-	let r = String(qn(e, "groupe_type") ?? "").trim();
+function Yn(e, t = "Point géodésique", n = B) {
+	let r = String(Jn(e, "groupe_type") ?? "").trim();
 	if (!r) return t;
 	let i = r.toLowerCase();
 	return n.layers.find((e) => e.id !== n.dataLayerId && [
@@ -1228,9 +1228,9 @@ function Jn(e, t = "Point géodésique", n = V) {
 		e.title
 	].map((e) => e.toLowerCase()).some((t) => i.includes(t) || t.includes(i) || i === e.id.toLowerCase()))?.title ?? r;
 }
-function Yn(e, t, n = V) {
+function Xn(e, t, n = B) {
 	if (t.length === 0) return !1;
-	let r = String(qn(e, "groupe_type") ?? "").trim();
+	let r = String(Jn(e, "groupe_type") ?? "").trim();
 	if (!r) return !0;
 	let i = r.toLowerCase();
 	return t.some((e) => {
@@ -1242,43 +1242,43 @@ function Yn(e, t, n = V) {
 		].map((e) => e.toLowerCase()).some((e) => i.includes(e) || e.includes(i) || i === t.id.toLowerCase()) : !1;
 	});
 }
-function Xn(e, t) {
+function Zn(e, t) {
 	return e.layerId === t.dataLayerId ? {
 		...e,
-		layerTitle: Jn(e.feature.getProperties(), e.layerTitle, t)
+		layerTitle: Yn(e.feature.getProperties(), e.layerTitle, t)
 	} : e;
 }
-function Zn(t, n, r) {
-	let i = new e(Kn(t.feature.getProperties(), n.feature.getProperties())), a = n.feature.getGeometry() ?? t.feature.getGeometry();
+function Qn(t, n, r) {
+	let i = new e(qn(t.feature.getProperties(), n.feature.getProperties())), a = n.feature.getGeometry() ?? t.feature.getGeometry();
 	a && i.setGeometry(a.clone());
 	let o = t.feature.get("coordinate") ?? n.feature.get("coordinate");
 	return o !== void 0 && i.set("coordinate", o), {
-		layerTitle: Jn(i.getProperties(), t.layerTitle, r),
+		layerTitle: Yn(i.getProperties(), t.layerTitle, r),
 		layerId: r.dataLayerId,
 		feature: i
 	};
 }
-function Qn(e, t = V) {
+function $n(e, t = B) {
 	if (e.length === 0) return e;
-	let n = new Set(t.networkLayerIds), r = e.filter((e) => e.layerId === t.dataLayerId).map((e) => Xn(e, t));
+	let n = new Set(t.networkLayerIds), r = e.filter((e) => e.layerId === t.dataLayerId).map((e) => Zn(e, t));
 	if (r.length > 0) return r;
-	if (e.length <= 1) return e.map((e) => Xn(e, t));
+	if (e.length <= 1) return e.map((e) => Zn(e, t));
 	let i = e.filter((e) => e.layerId !== void 0 && n.has(e.layerId))[0], a = e.find((e) => e.layerId === t.dataLayerId);
-	return i && a ? [Zn(i, a, t)] : e.map((e) => Xn(e, t));
+	return i && a ? [Qn(i, a, t)] : e.map((e) => Zn(e, t));
 }
 // src/wms/queryGeodesyAtCoordinate.ts
-var $n = "application/json", er = "text/html";
-function tr(e) {
+var er = "application/json", tr = "text/html";
+function nr(e) {
 	let t = e.getLayers().getArray().find((e) => e instanceof s && e.get("name") === "geodesyGroup");
 	return t instanceof s ? t : null;
 }
-function nr(e, t) {
-	let n = tr(e);
+function rr(e, t) {
+	let n = nr(e);
 	if (!n) return [];
 	let r = t.layerIds ? new Set(t.layerIds) : null;
 	return n.getLayers().getArray().flatMap((e) => {
 		if (!(e instanceof _)) return [];
-		let n = e.get(x);
+		let n = e.get(b);
 		return !n || r && !r.has(n) || t.visibleOnly && !e.getVisible() || !t.visibleOnly && e.getVisible() || !e.getSource() ? [] : [{
 			layer: e,
 			layerTitle: e.get("title") ?? "Géodésie",
@@ -1286,15 +1286,15 @@ function nr(e, t) {
 		}];
 	});
 }
-function rr(e) {
-	let t = J(e), n = new Set(t.networkLayerIds);
-	return nr(e, { visibleOnly: !0 }).map((e) => e.layerId).filter((e) => n.has(e));
-}
 function ir(e) {
+	let t = q(e), n = new Set(t.networkLayerIds);
+	return rr(e, { visibleOnly: !0 }).map((e) => e.layerId).filter((e) => n.has(e));
+}
+function ar(e) {
 	let t = /* @__PURE__ */ new Set();
 	return e.filter((e) => !t.has(e.layerId) && (t.add(e.layerId), !0));
 }
-function ar(e, t) {
+function or(e, t) {
 	try {
 		let n = JSON.parse(e);
 		return n.features?.length ? new g().readFeatures(n, { featureProjection: t }) : [];
@@ -1302,7 +1302,7 @@ function ar(e, t) {
 		return [];
 	}
 }
-function or(t, n) {
+function sr(t, n) {
 	if (!t.includes("table.featureInfo")) return [];
 	let r = new DOMParser().parseFromString(t, "text/html").querySelector("table.featureInfo");
 	if (!r) return [];
@@ -1314,17 +1314,17 @@ function or(t, n) {
 	let o = new e(i);
 	return o.set("coordinate", n), [o];
 }
-function sr(t, n) {
+function cr(t, n) {
 	let r = new DOMParser().parseFromString(t, "text/html").querySelector("table.featureInfo");
 	return r ? [new e({
 		_caption: r.querySelector("caption")?.textContent?.trim() ?? n,
 		_htmlSnippet: r.outerHTML
 	})] : [];
 }
-function cr(e) {
+function lr(e) {
 	return e.includes("ServiceExceptionReport") || e.includes("<ServiceException");
 }
-async function lr(e, t, n, r, i) {
+async function ur(e, t, n, r, i) {
 	let a = e.getParams().LAYERS, o = e.getFeatureInfoUrl(t, n, r, {
 		INFO_FORMAT: i,
 		QUERY_LAYERS: a,
@@ -1333,20 +1333,20 @@ async function lr(e, t, n, r, i) {
 		STYLES: ""
 	});
 	if (!o) return null;
-	let s = Rn(o);
+	let s = zn(o);
 	if (s !== void 0) return s;
-	let c = await Un(o, { timeoutMs: 5e3 });
+	let c = await Wn(o, { timeoutMs: 5e3 });
 	if (!c.ok) return null;
 	let l = await c.text();
-	return cr(l) ? null : (zn(o, l), l);
+	return lr(l) ? null : (Bn(o, l), l);
 }
-async function ur(e, t, n, r) {
+async function dr(e, t, n, r) {
 	let i = e.layer.getSource();
 	if (!i) return [];
-	let a = ar(await lr(i, t, n, r, $n) ?? "", r);
+	let a = or(await ur(i, t, n, r, er) ?? "", r);
 	if (a.length === 0) {
-		let o = await lr(i, t, n, r, er) ?? "";
-		a = or(o, t), a.length === 0 && o.includes("table.featureInfo") && (a = sr(o, e.layerTitle));
+		let o = await ur(i, t, n, r, tr) ?? "";
+		a = sr(o, t), a.length === 0 && o.includes("table.featureInfo") && (a = cr(o, e.layerTitle));
 	}
 	return a.map((t) => ({
 		layerTitle: e.layerTitle,
@@ -1354,36 +1354,36 @@ async function ur(e, t, n, r) {
 		feature: t
 	}));
 }
-async function dr(e, t, n = {}) {
+async function fr(e, t, n = {}) {
 	let r = e.getView(), i = r.getResolution(), a = r.getProjection();
 	if (i === void 0 || !a) return [];
-	let o = n.dataLayerIds ?? n.enrichmentLayerIds ?? [J(e).dataLayerId], s = n.filterByVisibleNetworkLayers ?? !0, c = ir(nr(e, {
+	let o = n.dataLayerIds ?? n.enrichmentLayerIds ?? [q(e).dataLayerId], s = n.filterByVisibleNetworkLayers ?? !0, c = ar(rr(e, {
 		visibleOnly: !1,
 		layerIds: o
 	}));
 	if (c.length === 0) return [];
-	let l = Qn((await Promise.all(c.map((e) => ur(e, t, i, a)))).flat(), J(e));
+	let l = $n((await Promise.all(c.map((e) => dr(e, t, i, a)))).flat(), q(e));
 	if (s) {
-		let t = J(e), n = rr(e);
+		let t = q(e), n = ir(e);
 		if (n.length === 0) {
-			let r = wa(e);
+			let r = Ma(e);
 			n = t.layers.filter((e) => e.id !== t.dataLayerId && r[e.id]).map((e) => e.id);
 		}
-		n.length > 0 && (l = l.filter((e) => Yn(e.feature.getProperties(), n, t)));
+		n.length > 0 && (l = l.filter((e) => Xn(e.feature.getProperties(), n, t)));
 	}
 	return l;
 }
 // src/annex/geodesyAnnexLayerUtils.ts
-function fr(e, t) {
+function pr(e, t) {
 	if (!(e instanceof p) || !e.getVisible() || e.get("geodesyLayerKind") !== "annex") return !1;
-	let n = e.get(x);
+	let n = e.get(b);
 	return n !== void 0 && t.has(n);
 }
-function pr(e) {
+function mr(e) {
 	return e;
 }
 // src/annex/queryGeodesyAnnexAtPixel.ts
-function mr(e, t, n, r) {
+function hr(e, t, n, r) {
 	let i = e.annexLayers.find((e) => e.id === t);
 	return {
 		layerTitle: r ?? i?.title ?? "Géodésie annexe",
@@ -1391,22 +1391,22 @@ function mr(e, t, n, r) {
 		feature: n
 	};
 }
-function hr(e, t, n = {}) {
-	let r = J(e), i = n.hitTolerance ?? 5, a = new Set(n.layerIds ?? r.annexUiLayerIds);
+function gr(e, t, n = {}) {
+	let r = q(e), i = n.hitTolerance ?? 5, a = new Set(n.layerIds ?? r.annexUiLayerIds);
 	if (a.size === 0) return [];
 	let o = null;
 	return e.forEachFeatureAtPixel(t, (e, t) => {
-		if (!fr(t, a)) return;
-		let n = t.get(x), i = pr(e);
-		return o = mr(r, n, i, t.get("title")), !0;
+		if (!pr(t, a)) return;
+		let n = t.get(b), i = mr(e);
+		return o = hr(r, n, i, t.get("title")), !0;
 	}, {
 		hitTolerance: i,
-		layerFilter: (e) => fr(e, a)
+		layerFilter: (e) => pr(e, a)
 	}), o ? [o] : [];
 }
 // src/wfs/resolveGeodesyWfsHitFeature.ts
-function gr(e, t) {
-	let n = yn(e.get("features") ?? []);
+function _r(e, t) {
+	let n = bn(e.get("features") ?? []);
 	if (!n.length) return e;
 	if (n.length === 1 || !t) return n[0];
 	let r = n[0], i = Infinity;
@@ -1419,108 +1419,108 @@ function gr(e, t) {
 	return r;
 }
 // src/wfs/queryGeodesyWfsAtPixel.ts
-function _r(e, t) {
+function vr(e, t) {
 	return e.wfsDomainLayers.find((e) => e.id === t) && e.wfsDomainSourceLayerId ? e.wfsDomainSourceLayerId : t;
 }
-function vr(e, t, n) {
-	let r = t.get(x);
+function yr(e, t, n) {
+	let r = t.get(b);
 	if (r && n.has(r)) return r;
 	let i = e.wfsDomainSourceLayerId;
 	if (!i || e.wfsDomainLayers.length === 0 || r !== void 0 && r !== i) return null;
-	for (let r of e.wfsDomainLayers) if (n.has(r.id) && U(t, r.domaines)) return r.id;
+	for (let r of e.wfsDomainLayers) if (n.has(r.id) && H(t, r.domaines)) return r.id;
 	return null;
 }
-function yr(e, t, n, r) {
-	let i = e.wfsDomainLayers.find((e) => e.id === t), a = _r(e, t), o = e.wfsLayers.find((e) => e.id === a);
+function br(e, t, n, r) {
+	let i = e.wfsDomainLayers.find((e) => e.id === t), a = vr(e, t), o = e.wfsLayers.find((e) => e.id === a);
 	return {
 		layerTitle: r ?? i?.title ?? o?.title ?? "Géodésie WFS",
 		layerId: t,
 		feature: n
 	};
 }
-function br(e, t, n, r) {
-	if (!Cn(e)) return null;
-	let i = gr(e, t), a = vr(n, i, r);
-	return a ? yr(n, a, i) : null;
+function xr(e, t, n, r) {
+	if (!wn(e)) return null;
+	let i = _r(e, t), a = yr(n, i, r);
+	return a ? br(n, a, i) : null;
 }
-function xr(e, t, n, r, i, a) {
-	let o = Tn(e)?.getLayer() ?? null;
+function Sr(e, t, n, r, i, a) {
+	let o = En(e)?.getLayer() ?? null;
 	if (o?.getVisible()) {
 		let s = null;
 		if (e.forEachFeatureAtPixel(t, (e, t) => {
-			if (t === o) return s = br(e, n, r, i), s !== null;
+			if (t === o) return s = xr(e, n, r, i), s !== null;
 		}, {
 			hitTolerance: a,
 			layerFilter: (e) => e === o
 		}), s) return s;
 	}
 	let s = null;
-	return e.forEachFeatureAtPixel(t, (e) => (s = br(e, n, r, i), s !== null), { hitTolerance: a }), s;
+	return e.forEachFeatureAtPixel(t, (e) => (s = xr(e, n, r, i), s !== null), { hitTolerance: a }), s;
 }
-function Sr(e, t, n, r = {}) {
-	let i = J(e), a = new Set(r.layerIds ?? i.wfsUiLayerIds);
-	return a.size === 0 ? null : br(t, n, i, a);
+function Cr(e, t, n, r = {}) {
+	let i = q(e), a = new Set(r.layerIds ?? i.wfsUiLayerIds);
+	return a.size === 0 ? null : xr(t, n, i, a);
 }
-function Cr(e, t, n = {}) {
-	let r = J(e);
+function wr(e, t, n = {}) {
+	let r = q(e);
 	if (!r.wfsCluster.enabled) return !1;
 	let i = n.hitTolerance ?? 5, a = new Set(n.layerIds ?? r.wfsUiLayerIds);
 	if (a.size === 0) return !1;
 	let o = !1;
 	return e.forEachFeatureAtPixel(t, (e, t) => {
-		if (Y(t, a) && Sn(e)) return o = !0, !0;
+		if (J(t, a) && Cn(e)) return o = !0, !0;
 	}, {
 		hitTolerance: i,
-		layerFilter: (e) => Y(e, a)
+		layerFilter: (e) => J(e, a)
 	}), o;
 }
-function wr(e, t, n = {}) {
-	let r = J(e), i = n.hitTolerance ?? 5, a = new Set(n.layerIds ?? r.wfsUiLayerIds);
+function Tr(e, t, n = {}) {
+	let r = q(e), i = n.hitTolerance ?? 5, a = new Set(n.layerIds ?? r.wfsUiLayerIds);
 	if (a.size === 0) return [];
-	let o = e.getCoordinateFromPixel(t), s = xr(e, t, o, r, a, i);
+	let o = e.getCoordinateFromPixel(t), s = Sr(e, t, o, r, a, i);
 	if (s) return [s];
 	let c = null;
 	return e.forEachFeatureAtPixel(t, (e, t) => {
-		if (!Y(t, a)) return;
+		if (!J(t, a)) return;
 		let n = e;
-		if (r.wfsCluster.enabled && Sn(n)) return;
-		let i = t.get(x), s = gr(n, o);
-		return c = yr(r, i, s, t.get("title")), !0;
+		if (r.wfsCluster.enabled && Cn(n)) return;
+		let i = t.get(b), s = _r(n, o);
+		return c = br(r, i, s, t.get("title")), !0;
 	}, {
 		hitTolerance: i,
-		layerFilter: (e) => Y(e, a)
+		layerFilter: (e) => J(e, a)
 	}), c ? [c] : [];
 }
 // src/interaction/queryGeodesyAtClick.ts
-async function Tr(e, t, n, r = {}) {
+async function Er(e, t, n, r = {}) {
 	let i = r.preferWfs ?? !0;
 	if (i) {
-		let t = wr(e, n, r.wfs);
+		let t = Tr(e, n, r.wfs);
 		if (t.length > 0) return t;
-		let i = hr(e, n, r.annex);
+		let i = gr(e, n, r.annex);
 		if (i.length > 0) return i;
 	}
-	let a = await dr(e, t, r.wms);
+	let a = await fr(e, t, r.wms);
 	if (a.length > 0 || !i) return a;
-	let o = hr(e, n, r.annex);
-	return o.length > 0 ? o : wr(e, n, r.wfs);
+	let o = gr(e, n, r.annex);
+	return o.length > 0 ? o : Tr(e, n, r.wfs);
 }
 // src/interaction/geodesyPopup.ts
-var Er = "default anim geodesy-ec";
-function Dr(e, t = {}) {
+var Dr = "default anim geodesy-ec";
+function Or(e, t = {}) {
 	if (t.disabled) return () => void 0;
 	let n = new h({
-		popupClass: Er,
+		popupClass: Dr,
 		closeBox: !0,
 		positioning: "auto",
 		template: (t) => {
-			let n = J(e);
-			return Ln(t, n.attributes, { pictoUrlMaps: n.wfsPictoUrlMaps });
+			let n = q(e);
+			return Rn(t, n.attributes, { pictoUrlMaps: n.wfsPictoUrlMaps });
 		}
 	});
 	e.addOverlay(n);
 	let r = new te({
-		popupClass: Er,
+		popupClass: Dr,
 		closeBox: !0,
 		positioning: "auto"
 	});
@@ -1530,12 +1530,12 @@ function Dr(e, t = {}) {
 		(async () => {
 			let t = ++i;
 			n.hide(), r.hide();
-			let o = await Tr(e, a.coordinate, a.pixel);
+			let o = await Er(e, a.coordinate, a.pixel);
 			if (t !== i || o.length === 0) return;
-			await Promise.all([$e(o), In(o)]);
+			await Promise.all([Qe(o), Ln(o)]);
 			let s = o[0].feature.get("_htmlSnippet");
 			if (s) {
-				let e = await et(s);
+				let e = await $e(s);
 				r.show(a.coordinate, `<div class="geodesy-popup-html">${e}</div>`);
 			} else n.show(a.coordinate, o.map((e) => e.feature));
 		})();
@@ -1545,25 +1545,25 @@ function Dr(e, t = {}) {
 	};
 }
 // src/wfs/geodesyWfsAttributeFilterIndex.ts
-function Or(e) {
+function kr(e) {
 	let t = /* @__PURE__ */ new Map();
 	return e.getFeatures().forEach((e) => {
-		let n = qt(e.getProperties());
+		let n = Jt(e.getProperties());
 		n && t.set(n, e.getProperties());
 	}), t;
 }
-function kr(e) {
+function Ar(e) {
 	let t = /* @__PURE__ */ new Map();
 	return e.forEach(({ layerId: e, source: n }) => {
-		t.set(e, Or(n));
+		t.set(e, kr(n));
 	}), t;
 }
 // src/annex/parseGeodesyGdpRgp2.ts
-function Ar(e) {
+function jr(e) {
 	let t = (e.match(/,/g) ?? []).length;
 	return (e.match(/;/g) ?? []).length > t ? ";" : ",";
 }
-function jr(e, t) {
+function Mr(e, t) {
 	let n = [], r = "", i = !1;
 	for (let a = 0; a < e.length; a += 1) {
 		let o = e[a];
@@ -1571,157 +1571,157 @@ function jr(e, t) {
 	}
 	return n.push(r.trim()), n;
 }
-function Mr(e) {
+function Nr(e) {
 	return e.trim().toLowerCase();
 }
-function Nr(e) {
+function Pr(e) {
 	let [t, n] = e.split(",").map((e) => e.trim()), r = Number.parseFloat(t?.replace(",", ".") ?? ""), i = Number.parseFloat(n?.replace(",", ".") ?? "");
 	return !Number.isFinite(r) || !Number.isFinite(i) ? null : {
 		longitude: r,
 		latitude: i
 	};
 }
-function Pr(e) {
+function Fr(e) {
 	return e.findIndex((e) => {
-		let t = Mr(e);
+		let t = Nr(e);
 		return t === "longitude,latitude" || t === "lon,lat";
 	});
 }
-function Fr(t, n, r, i) {
+function Ir(t, n, r, i) {
 	let a = {};
 	t.forEach((e, t) => {
 		let r = n[t]?.trim();
-		r && (a[Mr(e)] = r);
+		r && (a[Nr(e)] = r);
 	});
-	let s = Pr(t);
+	let s = Fr(t);
 	if (s < 0) return null;
-	let c = Nr(n[s] ?? "");
+	let c = Pr(n[s] ?? "");
 	if (!c) return null;
 	a.longitude = String(c.longitude), a.latitude = String(c.latitude);
 	let l = ne([c.longitude, c.latitude], r, i), u = new e(a);
 	return u.setGeometry(new o(l)), u.setId(a.nom ?? void 0), u;
 }
-function Ir(e, t = {}) {
+function Lr(e, t = {}) {
 	let { dataProjection: n = "EPSG:4326", featureProjection: r = "EPSG:3857" } = t, i = e.split(/\r?\n/).map((e) => e.trim()).filter((e) => e.length > 0 && !e.startsWith("#"));
 	if (i.length < 2) return [];
-	let a = Ar(i[0]), o = jr(i[0], a);
+	let a = jr(i[0]), o = Mr(i[0], a);
 	return i.slice(1).flatMap((e) => {
-		let t = jr(e, a), i = Fr(o, t, n, r);
+		let t = Mr(e, a), i = Ir(o, t, n, r);
 		return i ? [i] : [];
 	});
 }
 // src/annex/loadGeodesyAnnexFeatures.ts
-var Lr = /* @__PURE__ */ new Map(), Rr = /* @__PURE__ */ new Map();
-function zr(e, t) {
+var Rr = /* @__PURE__ */ new Map(), zr = /* @__PURE__ */ new Map();
+function Br(e, t) {
 	return `${e.url}|${e.format}|${t}`;
 }
-function Br(e, t) {
-	return zr(e, t?.wfsDataProjection ?? "EPSG:4326");
-}
 function Vr(e, t) {
+	return Br(e, t?.wfsDataProjection ?? "EPSG:4326");
+}
+function Hr(e, t) {
 	if (!e) {
-		Lr.clear(), Rr.clear();
+		Rr.clear(), zr.clear();
 		return;
 	}
-	let n = Br(e, t);
-	Lr.delete(n), Rr.delete(n);
+	let n = Vr(e, t);
+	Rr.delete(n), zr.delete(n);
 }
-function Hr(e) {
-	let t = Br(e.definition, e.catalog), n = Rr.get(t);
+function Ur(e) {
+	let t = Vr(e.definition, e.catalog), n = zr.get(t);
 	return n === void 0 ? null : new Date(n);
 }
-function Ur(e, t, n) {
+function Wr(e, t, n) {
 	switch (e.format) {
-		case "gdp-rgp2": return Ir(t, { dataProjection: n });
+		case "gdp-rgp2": return Lr(t, { dataProjection: n });
 		default: return [];
 	}
 }
-async function Wr(e) {
-	let t = await Un(e, { credentials: "omit" });
+async function Gr(e) {
+	let t = await Wn(e, { credentials: "omit" });
 	if (!t.ok) throw Error(`[gdp-tools] Annex fetch failed (${t.status}) for ${e}`);
 	return t.text();
 }
-async function Gr(e) {
-	let { definition: t, catalog: n } = e, r = Br(t, n), i = Lr.get(r);
-	return i || (i = Wr(t.url).then((e) => Ur(t, e, n?.wfsDataProjection ?? "EPSG:4326")).then((e) => (Rr.set(r, Date.now()), e)), Lr.set(r, i)), i;
+async function Kr(e) {
+	let { definition: t, catalog: n } = e, r = Vr(t, n), i = Rr.get(r);
+	return i || (i = Gr(t.url).then((e) => Wr(t, e, n?.wfsDataProjection ?? "EPSG:4326")).then((e) => (zr.set(r, Date.now()), e)), Rr.set(r, i)), i;
 }
 // src/annex/geodesyGdpRgp2Dispo.ts
-var Kr = "Non disponible", qr = "Disponible", Z = {
+var qr = "Non disponible", Jr = "Disponible", X = {
 	full: "#26a581",
 	partial: "#f18345",
 	none: "#f72525",
 	down: "#6c6661"
-}, Jr = {
+}, Yr = {
 	full: "Station opérationnelle",
 	partial: "Station opérationnelle, données en attente",
 	none: "Données manquantes",
 	down: "Station en panne"
 };
-function Yr(e) {
+function Xr(e) {
 	if (e == null) return "";
 	let t = String(e).trim().toLowerCase();
 	return !t || t === "null" ? "" : t;
 }
-function Xr(e) {
+function Zr(e) {
 	return e === "1" ? "available" : e === "0" ? "unavailable" : null;
 }
-function Zr(e) {
-	let t = Yr(e);
+function Qr(e) {
+	let t = Xr(e);
 	return !t || !/^[01]+$/.test(t) ? ["unavailable"] : t.split("").flatMap((e) => {
-		let t = Xr(e);
+		let t = Zr(e);
 		return t ? [t] : [];
 	});
 }
-function Qr(e) {
-	return e === "1" ? qr : e === "0" ? Kr : e;
-}
 function $r(e) {
-	let t = Yr(e);
-	return t ? /^[01]+$/.test(t) ? t.split("").map(Qr).join(", ") : String(e).trim() : Kr;
+	return e === "1" ? Jr : e === "0" ? qr : e;
 }
 function ei(e) {
-	let t = Yr(e);
-	return t !== "" && /^[01]+$/.test(t);
+	let t = Xr(e);
+	return t ? /^[01]+$/.test(t) ? t.split("").map($r).join(", ") : String(e).trim() : qr;
 }
 function ti(e) {
-	if (!ei(e)) return "down";
-	let t = Zr(e), n = t.filter((e) => e === "available").length;
-	return n === 0 ? "none" : n === t.length ? "full" : "partial";
+	let t = Xr(e);
+	return t !== "" && /^[01]+$/.test(t);
 }
 function ni(e) {
-	let t = Yr(e);
+	if (!ti(e)) return "down";
+	let t = Qr(e), n = t.filter((e) => e === "available").length;
+	return n === 0 ? "none" : n === t.length ? "full" : "partial";
+}
+function ri(e) {
+	let t = Xr(e);
 	return !t || !/^[01]+$/.test(t) ? !1 : t.split("").every((e) => e === "1");
 }
 // src/style/geodesyAnnexStyle.ts
-function ri(e) {
+function ii(e) {
 	return `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
 <circle cx="14" cy="14" r="6.5" fill="${e}"/>
 </svg>`;
 }
-function ii(e) {
-	let t = `data:image/svg+xml;utf8,${encodeURIComponent(ri(e))}`;
+function ai(e) {
+	let t = `data:image/svg+xml;utf8,${encodeURIComponent(ii(e))}`;
 	return new a({ image: new r({
 		src: t,
 		anchor: [.5, .5]
 	}) });
 }
-var ai = {
-	full: ii(Z.full),
-	partial: ii(Z.partial),
-	none: ii(Z.none),
-	down: ii(Z.down)
+var oi = {
+	full: ai(X.full),
+	partial: ai(X.partial),
+	none: ai(X.none),
+	down: ai(X.down)
 };
-function oi() {
-	return (t) => t instanceof e ? ai[ti(t.get("dispo"))] : ai.down;
+function si() {
+	return (t) => t instanceof e ? oi[ni(t.get("dispo"))] : oi.down;
 }
 // src/layers/geodesyAnnexLayer.ts
-var si = 55;
-function ci(e, t) {
-	return t === void 0 ? (e.format, oi()) : t;
-}
+var ci = 55;
 function li(e, t) {
+	return t === void 0 ? (e.format, si()) : t;
+}
+function ui(e, t) {
 	let n = new v();
-	return Gr({
+	return Kr({
 		definition: e,
 		catalog: t
 	}).then((e) => {
@@ -1730,23 +1730,23 @@ function li(e, t) {
 		console.error(`[gdp-tools] Failed to load annex layer "${e.id}".`, t);
 	}), n;
 }
-function ui(e, t = {}) {
-	let { visible: n = !1, catalog: r = V, style: i } = t, a = r.annexLayerIds.indexOf(e.id);
+function di(e, t = {}) {
+	let { visible: n = !1, catalog: r = B, style: i } = t, a = r.annexLayerIds.indexOf(e.id);
 	return new p({
 		properties: {
 			title: e.title,
 			name: `geodesyAnnex-${e.id}`,
-			[x]: e.id,
+			[b]: e.id,
 			[C]: "annex"
 		},
 		visible: n,
-		source: li(e, r),
-		style: ci(e, i),
-		zIndex: si + Math.max(a, 0)
+		source: ui(e, r),
+		style: li(e, i),
+		zIndex: ci + Math.max(a, 0)
 	});
 }
 // src/style/geodesyWfsClusterStyle.ts
-var di = {
+var fi = {
 	strokeColor: "#ffffff",
 	textColor: "#ffffff",
 	minRadius: 8,
@@ -1758,7 +1758,7 @@ var di = {
 	mediumClusterThreshold: 8,
 	largeClusterThreshold: 25
 };
-function fi(e) {
+function pi(e) {
 	let t = e.trim().match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)$/i);
 	return t ? [
 		Number(t[1]),
@@ -1767,46 +1767,46 @@ function fi(e) {
 		t[4] === void 0 ? 1 : Number(t[4])
 	] : null;
 }
-function pi(e, t, n, r) {
+function mi(e, t, n, r) {
 	return `rgba(${Math.round(e)}, ${Math.round(t)}, ${Math.round(n)}, ${r.toFixed(2)})`;
 }
-function mi(e, t) {
-	let n = fi(e);
+function hi(e, t) {
+	let n = pi(e);
 	return n ? [
 		n[0],
 		n[1],
 		n[2]
 	] : t;
 }
-function hi(e, t) {
-	return e > t.largeClusterThreshold ? mi(t.largeClusterColor, [
+function gi(e, t) {
+	return e > t.largeClusterThreshold ? hi(t.largeClusterColor, [
 		192,
 		0,
 		0
-	]) : e > t.mediumClusterThreshold ? mi(t.mediumClusterColor, [
+	]) : e > t.mediumClusterThreshold ? hi(t.mediumClusterColor, [
 		255,
 		128,
 		0
-	]) : mi(t.smallClusterColor, [
+	]) : hi(t.smallClusterColor, [
 		0,
 		128,
 		0
 	]);
 }
-function gi(e, t) {
-	if (t.fillColor) return t.fillColor;
-	let [n, r, i] = hi(e, t);
-	return pi(n, r, i, 1);
-}
 function _i(e, t) {
+	if (t.fillColor) return t.fillColor;
+	let [n, r, i] = gi(e, t);
+	return mi(n, r, i, 1);
+}
+function vi(e, t) {
 	return Math.max(t.minRadius, Math.min(e * t.radiusScale, t.maxRadius));
 }
-var vi = 6, yi = 15;
-function bi(e, t) {
-	let n = fi(e), r = n ? pi(n[0], n[1], n[2], .5) : e, a = 2 * Math.PI * t / vi;
+var yi = 6, bi = 15;
+function xi(e, t) {
+	let n = pi(e), r = n ? mi(n[0], n[1], n[2], .5) : e, a = 2 * Math.PI * t / yi;
 	return new i({
 		color: r,
-		width: yi,
+		width: bi,
 		lineDash: [
 			0,
 			a,
@@ -1819,13 +1819,13 @@ function bi(e, t) {
 		lineCap: "butt"
 	});
 }
-function xi(e, r) {
-	let o = _i(e, r), s = gi(e, r);
+function Si(e, r) {
+	let o = vi(e, r), s = _i(e, r);
 	return new a({
 		image: new t({
 			radius: o,
 			fill: new n({ color: s }),
-			stroke: bi(s, o)
+			stroke: xi(s, o)
 		}),
 		text: new ie({
 			text: String(e),
@@ -1837,38 +1837,38 @@ function xi(e, r) {
 		})
 	});
 }
-function Si(e, t = {}) {
+function Ci(e, t = {}) {
 	let n = {
-		...di,
+		...fi,
 		...t
 	}, r = /* @__PURE__ */ new Map();
 	return (t, i) => {
-		let a = t, o = xn(a);
+		let a = t, o = Sn(a);
 		if (o > 1) {
 			let e = r.get(o);
-			return e || (e = xi(o, n), r.set(o, e)), e;
+			return e || (e = Si(o, n), r.set(o, e)), e;
 		}
-		return e(bn(a)[0] ?? a, i);
+		return e(xn(a)[0] ?? a, i);
 	};
 }
-function Ci(e, t) {
-	return Si(typeof e == "function" ? e : () => e, t);
+function wi(e, t) {
+	return Ci(typeof e == "function" ? e : () => e, t);
 }
 // src/style/geodesyWfsDisplayFilterStyle.ts
-function wi(t, n = {}) {
-	let r = typeof t == "function" ? t : () => t, i = n.cluster ? Ci(r) : r, a = n.domaines ?? [], o = n.attributeFilters ?? [], s = n.attributeFilterValues;
+function Ti(t, n = {}) {
+	let r = typeof t == "function" ? t : () => t, i = n.cluster ? wi(r) : r, a = n.domaines ?? [], o = n.attributeFilters ?? [], s = n.attributeFilterValues;
 	return (t, r) => {
 		if (!(t instanceof e)) return i(t, r);
-		if (a.length > 0 && !U(t, a)) return [];
+		if (a.length > 0 && !H(t, a)) return [];
 		let c = s?.values ?? {};
-		return o.length > 0 && !pn(t, o, c, {
+		return o.length > 0 && !mn(t, o, c, {
 			domainSourceLayerId: n.domainSourceLayerId,
 			auxiliaryPropertiesByLayerId: s?.auxiliaryPropertiesByLayerId
 		}) ? [] : i(t, r);
 	};
 }
 // src/layers/geodesyAnimatedClusterLayer.ts
-var Ti = class extends se {
+var Ei = class extends se {
 	getClusterForFeature(e, t) {
 		let n = e.getId();
 		for (let r of t) {
@@ -1881,7 +1881,7 @@ var Ti = class extends se {
 	}
 };
 // src/wfs/buildGeodesyWfsGetFeatureUrl.ts
-function Ei(e, t, n = {}) {
+function Di(e, t, n = {}) {
 	let { bboxOrder: r = "latLon", paddingRatio: i = 0, bboxCrs: a } = n, [o, s, c, l] = re(e, t, "EPSG:4326");
 	if (i > 0) {
 		let e = (c - o) * i, t = (l - s) * i;
@@ -1900,44 +1900,44 @@ function Ei(e, t, n = {}) {
 	]).join(",");
 	return a ? `${u},${a}` : u;
 }
-function Di(e) {
+function Oi(e) {
 	return e.startsWith("2.");
 }
-function Oi(e) {
+function ki(e) {
 	let { wfsUrl: t, typeName: n, bbox: r, cqlFilter: i, propertyNames: a, apiKey: o, version: s = "2.0.0", outputFormat: c = "application/json", useCacheBuster: l = !0 } = e, u = new URLSearchParams({
 		SERVICE: "WFS",
 		VERSION: s,
 		REQUEST: "GetFeature",
 		OUTPUTFORMAT: c
 	});
-	return r && u.set("bbox", r), i && u.set("CQL_FILTER", i), a?.length && u.set("PROPERTYNAME", a.join(",")), Di(s) ? u.set("typeNames", n) : u.set("TYPENAME", n), o && u.set("apikey", o), l && u.set("_t", String(Date.now())), `${t}${t.includes("?") ? "&" : "?"}${u.toString()}`;
+	return r && u.set("bbox", r), i && u.set("CQL_FILTER", i), a?.length && u.set("PROPERTYNAME", a.join(",")), Oi(s) ? u.set("typeNames", n) : u.set("TYPENAME", n), o && u.set("apikey", o), l && u.set("_t", String(Date.now())), `${t}${t.includes("?") ? "&" : "?"}${u.toString()}`;
 }
 // src/wfs/parseGeodesyWfsCsv.ts
-var ki = new ce(), Ai = /* @__PURE__ */ new Set([
+var Ai = new ce(), ji = /* @__PURE__ */ new Set([
 	"the_geom",
 	"geom",
 	"geometry",
 	"wkt",
 	"shape",
 	"geometrie"
-]), ji = /* @__PURE__ */ new Set([
+]), Mi = /* @__PURE__ */ new Set([
 	"lon",
 	"longitude",
 	"x",
 	"coord_x",
 	"cg1_coord1"
-]), Mi = /* @__PURE__ */ new Set([
+]), Ni = /* @__PURE__ */ new Set([
 	"lat",
 	"latitude",
 	"y",
 	"coord_y",
 	"cg1_coord2"
 ]);
-function Ni(e) {
+function Pi(e) {
 	let t = (e.match(/,/g) ?? []).length;
 	return (e.match(/;/g) ?? []).length > t ? ";" : ",";
 }
-function Pi(e, t) {
+function Fi(e, t) {
 	let n = [], r = "", i = !1;
 	for (let a = 0; a < e.length; a += 1) {
 		let o = e[a];
@@ -1945,26 +1945,26 @@ function Pi(e, t) {
 	}
 	return n.push(r.trim()), n;
 }
-function Fi(e) {
+function Ii(e) {
 	return e.trim().toLowerCase();
 }
-function Ii(e, t) {
-	return e.findIndex((e) => t.has(Fi(e)));
+function Li(e, t) {
+	return e.findIndex((e) => t.has(Ii(e)));
 }
-function Li(e) {
-	return e.findIndex((e) => Ai.has(Fi(e)));
+function Ri(e) {
+	return e.findIndex((e) => ji.has(Ii(e)));
 }
-function Ri(t, n, r, i) {
+function zi(t, n, r, i) {
 	let a = {};
 	t.forEach((e, t) => {
 		let r = n[t]?.trim();
 		r && (a[e] = r);
 	});
-	let s = Li(t);
+	let s = Ri(t);
 	if (s >= 0) {
 		let e = n[s]?.trim();
 		if (e) try {
-			let t = ki.readFeature(e, {
+			let t = Ai.readFeature(e, {
 				dataProjection: r,
 				featureProjection: i
 			});
@@ -1973,7 +1973,7 @@ function Ri(t, n, r, i) {
 			return null;
 		}
 	}
-	let c = Ii(t, ji), l = Ii(t, Mi);
+	let c = Li(t, Mi), l = Li(t, Ni);
 	if (c >= 0 && l >= 0) {
 		let t = Number.parseFloat(n[c]?.replace(",", ".") ?? ""), s = Number.parseFloat(n[l]?.replace(",", ".") ?? "");
 		if (Number.isFinite(t) && Number.isFinite(s)) {
@@ -1983,22 +1983,22 @@ function Ri(t, n, r, i) {
 	}
 	return null;
 }
-function zi(e, t = {}) {
+function Bi(e, t = {}) {
 	let { dataProjection: n = "EPSG:4326", featureProjection: r = "EPSG:3857" } = t, i = e.split(/\r?\n/).map((e) => e.trim()).filter((e) => e.length > 0);
 	if (i.length < 2) return [];
-	let a = Ni(i[0]), o = Pi(i[0], a);
+	let a = Pi(i[0]), o = Fi(i[0], a);
 	return i.slice(1).flatMap((e) => {
-		let t = Pi(e, a), i = Ri(o, t, n, r);
+		let t = Fi(e, a), i = zi(o, t, n, r);
 		return i ? [i] : [];
 	});
 }
 // src/wfs/parseGeodesyWfsGeoJson.ts
-var Bi = new g();
-function Vi(e, t = {}) {
+var Vi = new g();
+function Hi(e, t = {}) {
 	let { dataProjection: n = "EPSG:4326", featureProjection: r = "EPSG:3857" } = t;
 	try {
 		let t = JSON.parse(e);
-		return t.features?.length ? Bi.readFeatures(t, {
+		return t.features?.length ? Vi.readFeatures(t, {
 			dataProjection: n,
 			featureProjection: r
 		}) : [];
@@ -2007,28 +2007,28 @@ function Vi(e, t = {}) {
 	}
 }
 // src/wfs/loadGeodesyWfsFeatures.ts
-var Hi = 15e3;
-function Ui(e) {
+var Ui = 15e3;
+function Wi(e) {
 	let t = e.trim().toLowerCase();
 	return t.includes("serviceexception") || t.includes("exceptionreport") || t.startsWith("<?xml");
 }
-function Wi(e, t, n, r) {
-	return t.responseFormat === "geojson" ? Vi(e, {
+function Gi(e, t, n, r) {
+	return t.responseFormat === "geojson" ? Hi(e, {
 		dataProjection: n.wfsDataProjection,
 		featureProjection: r.getCode()
-	}) : zi(e, {
+	}) : Bi(e, {
 		dataProjection: n.wfsDataProjection,
 		featureProjection: r.getCode()
 	});
 }
-async function Gi(e) {
-	let { catalog: t, definition: n, extent: r, projection: i, timeoutMs: a = Hi } = e;
+async function Ki(e) {
+	let { catalog: t, definition: n, extent: r, projection: i, timeoutMs: a = Ui } = e;
 	if (!Ae(n, t.wfsApiKey)) return [];
-	let o = Ei(r, i, {
+	let o = Di(r, i, {
 		bboxOrder: n.bboxOrder,
 		paddingRatio: t.wfsBboxPaddingRatio,
 		bboxCrs: n.bboxCrs
-	}), s = Oi({
+	}), s = ki({
 		wfsUrl: je(n, t.wfsUrl),
 		typeName: n.typeName,
 		apiKey: n.requiresApiKey ? t.wfsApiKey : void 0,
@@ -2043,30 +2043,30 @@ async function Gi(e) {
 	});
 	if (!c.ok) throw Error(`[gdp-tools] WFS GetFeature failed (${c.status})`);
 	let l = await c.text();
-	return !l.trim() || Ui(l) ? [] : Wi(l, n, t, i).map((e) => (e.set(x, n.id), Xt(e, n.id), e));
+	return !l.trim() || Wi(l) ? [] : Gi(l, n, t, i).map((e) => (e.set(b, n.id), Zt(e, n.id), e));
 }
 // src/wfs/geodesyWfsClusterGeometry.ts
-function Ki(e) {
+function qi(e) {
 	let { catalog: t, domaines: n, attributeFilterValues: r, domainSourceLayerId: i } = e, a = t.wfsAttributeFilters, s = {
 		domainSourceLayerId: i,
 		auxiliaryPropertiesByLayerId: r?.auxiliaryPropertiesByLayerId
 	};
 	return (e) => {
 		let t = e.getGeometry();
-		if (!(t instanceof o) || n?.length && !U(e, n)) return null;
+		if (!(t instanceof o) || n?.length && !H(e, n)) return null;
 		let i = r?.values ?? {};
-		return a.length > 0 && !pn(e, a, i, s) ? null : t;
+		return a.length > 0 && !mn(e, a, i, s) ? null : t;
 	};
 }
 // src/layers/geodesyWfsLayer.ts
-var qi = 50;
-function Ji(e) {
+var Ji = 50;
+function Yi(e) {
 	return e.wfsCluster.maxResolution;
 }
-function Yi(e, t) {
+function Xi(e, t) {
 	return new v({
 		strategy: ae,
-		loader: async (n, r, i) => Gi({
+		loader: async (n, r, i) => Ki({
 			catalog: t,
 			definition: e,
 			extent: n,
@@ -2074,95 +2074,95 @@ function Yi(e, t) {
 		})
 	});
 }
-function Xi(e, t, n) {
+function Zi(e, t, n) {
 	return new oe({
 		distance: t.wfsCluster.distance,
 		minDistance: t.wfsCluster.minDistance,
 		source: e,
-		...n ? { geometryFunction: Ki(n) } : {}
+		...n ? { geometryFunction: qi(n) } : {}
 	});
 }
-function Zi(e, t, n) {
-	let r = Yi(e, t);
-	return t.wfsCluster.enabled ? Xi(r, t, n) : r;
+function Qi(e, t, n) {
+	let r = Xi(e, t);
+	return t.wfsCluster.enabled ? Zi(r, t, n) : r;
 }
-function Qi(e) {
+function $i(e) {
 	let { catalog: t, visible: n, source: r, style: i, zIndex: a, properties: o } = e, s = {
 		properties: o,
 		visible: n,
 		source: r,
 		style: i,
 		zIndex: a,
-		maxResolution: Ji(t),
+		maxResolution: Yi(t),
 		...t.wfsCluster.enabled ? {
 			updateWhileAnimating: !0,
 			updateWhileInteracting: !0
 		} : {}
 	};
-	return t.wfsCluster.enabled ? new Ti({
+	return t.wfsCluster.enabled ? new Ei({
 		...s,
 		animationDuration: t.wfsCluster.animationDuration
 	}) : new p(s);
 }
-function $i(e, t = {}) {
-	let n = t.catalog ?? V, r = n.wfsLayerIds.indexOf(e.id);
+function ea(e, t = {}) {
+	let n = t.catalog ?? B, r = n.wfsLayerIds.indexOf(e.id);
 	return new p({
 		properties: {
 			title: e.title,
 			name: `geodesyWfs-${e.id}`,
-			[x]: e.id,
+			[b]: e.id,
 			[C]: "wfs"
 		},
 		visible: t.visible ?? !1,
-		source: Yi(e, n),
+		source: Xi(e, n),
 		style: () => [],
-		maxResolution: Ji(n),
-		zIndex: qi + Math.max(r, 0)
+		maxResolution: Yi(n),
+		zIndex: Ji + Math.max(r, 0)
 	});
 }
-function ea(e, t) {
+function ta(e, t) {
 	let { catalog: n, visible: r, layerStyle: i, layerIndex: a, clusterGeometryFilter: o } = t;
-	return Qi({
+	return $i({
 		catalog: n,
 		visible: r,
-		source: Zi(e, n, o),
+		source: Qi(e, n, o),
 		style: i,
-		zIndex: qi + Math.max(a, 0),
+		zIndex: Ji + Math.max(a, 0),
 		properties: {
 			title: e.title,
 			name: `geodesyWfs-${e.id}`,
-			[x]: e.id,
+			[b]: e.id,
 			[C]: "wfs"
 		}
 	});
 }
-function ta(e, t = {}) {
-	let { visible: n = !1, catalog: r = V, style: i, clusterGeometryFilter: a } = t, o = r.wfsPictoUrlMaps[e.id], s = T(o, i);
-	return ea(e, {
+function na(e, t = {}) {
+	let { visible: n = !1, catalog: r = B, style: i, clusterGeometryFilter: a } = t, o = r.wfsPictoUrlMaps[e.id], s = Le(o, i);
+	return ta(e, {
 		catalog: r,
 		visible: n,
-		layerStyle: r.wfsCluster.enabled ? Ci(s) : s,
+		layerStyle: r.wfsCluster.enabled ? wi(s) : s,
 		layerIndex: r.wfsLayerIds.indexOf(e.id),
 		clusterGeometryFilter: a
 	});
 }
 // src/layers/geodesyWfsDomainLayer.ts
-var na = 1;
-function ra(e, t) {
+var ra = 1;
+function ia(e, t) {
 	let { catalog: n, sourceLayerId: r, source: i, pointStyle: a, baseZIndex: o, attributeFilterValues: s, visible: c = !1 } = t;
-	return Qi({
+	return $i({
 		catalog: n,
 		visible: c,
 		source: i,
-		zIndex: o + na,
+		zIndex: o + ra,
 		properties: {
 			title: e.title,
 			name: `geodesyWfsDomain-${e.id}`,
-			[x]: e.id,
+			[b]: e.id,
 			[C]: "wfs",
-			[Ft]: r
+			[It]: r
 		},
-		style: wi(a, {
+		style: Ti(a, {
 			domaines: e.domaines,
 			attributeFilters: n.wfsAttributeFilters,
 			attributeFilterValues: s,
@@ -2171,7 +2171,33 @@ function ra(e, t) {
 		})
 	});
 }
-function ia(e) {
+// src/wms/geodesyWmsTileLoadPending.ts
+var Z = 0, aa = /* @__PURE__ */ new Set();
+function oa() {
+	return {
+		pendingCount: Z,
+		isLoading: Z > 0
+	};
+}
+function sa() {
+	let e = oa();
+	aa.forEach((t) => t(e));
+}
+function ca() {
+	Z += 1, sa();
+}
+function la() {
+	Z = Math.max(0, Z - 1), sa();
+}
+function ua() {
+	return oa();
+}
+function da(e) {
+	return aa.add(e), e(oa()), () => {
+		aa.delete(e);
+	};
+}
+function fa(e) {
 	let t = 0, n = [];
 	return {
 		acquire: () => t < e ? (t += 1, Promise.resolve()) : new Promise((e) => {
@@ -2186,47 +2212,50 @@ function ia(e) {
 		}
 	};
 }
-var aa = ia(2);
-function oa(e) {
+var pa = fa(2);
+function ma(e) {
 	return e.startsWith("image/");
 }
-function sa(e = {}) {
-	let t = e.timeoutMs ?? 6e3, n = e.maxConcurrent ? ia(e.maxConcurrent) : aa;
+function ha(e = {}) {
+	let t = e.timeoutMs ?? 6e3, n = e.maxConcurrent ? fa(e.maxConcurrent) : pa;
 	return (e, r) => {
 		n.acquire().then(async () => {
-			let i = new AbortController(), a = window.setTimeout(() => i.abort(), t);
+			ca();
+			let i = !1, a = () => {
+				i || (i = !0, la(), n.release());
+			}, o = new AbortController(), s = window.setTimeout(() => o.abort(), t);
 			try {
 				let t = await fetch(r, {
-					signal: i.signal,
+					signal: o.signal,
 					mode: "cors",
 					credentials: "omit"
 				});
-				if (!t.ok || !oa(t.headers.get("content-type") ?? "")) {
-					e.setState(ue.ERROR);
+				if (!t.ok || !ma(t.headers.get("content-type") ?? "")) {
+					e.setState(ue.ERROR), a();
 					return;
 				}
-				let n = await t.blob(), a = URL.createObjectURL(n), o = e.getImage();
-				o.onload = () => {
-					URL.revokeObjectURL(a);
-				}, o.onerror = () => {
-					URL.revokeObjectURL(a), e.setState(ue.ERROR);
-				}, o.src = a;
+				let n = await t.blob(), i = URL.createObjectURL(n), s = e.getImage();
+				s.onload = () => {
+					URL.revokeObjectURL(i), a();
+				}, s.onerror = () => {
+					URL.revokeObjectURL(i), e.setState(ue.ERROR), a();
+				}, s.src = i;
 			} catch {
-				e.setState(ue.ERROR);
+				e.setState(ue.ERROR), a();
 			} finally {
-				window.clearTimeout(a), n.release();
+				window.clearTimeout(s);
 			}
 		});
 	};
 }
-var ca = sa(), la = 20;
-function ua(e, t = {}) {
-	let { visible: n = !1, zIndexOffset: r = 0, catalog: i = V } = t, a = Mt(i, e.id);
+var ga = ha(), _a = 20;
+function va(e, t = {}) {
+	let { visible: n = !1, zIndexOffset: r = 0, catalog: i = B } = t, a = Nt(i, e.id);
 	return new _({
 		properties: {
 			title: e.title,
 			name: `geodesyWms-${e.id}`,
-			[x]: e.id
+			[b]: e.id
 		},
 		visible: n,
 		preload: 0,
@@ -2242,73 +2271,73 @@ function ua(e, t = {}) {
 				"gp-ol-ext": i.wmsGpOlExt
 			},
 			crossOrigin: "anonymous",
-			tileLoadFunction: ca
+			tileLoadFunction: ga
 		}),
-		zIndex: la + a + r
+		zIndex: _a + a + r
 	});
 }
 // src/layers/geodesyLayerGroup.ts
-var da = 50;
-function fa(e) {
+var ya = 50;
+function ba(e) {
 	return e.getSource() || null;
 }
-function pa(e, t, n) {
-	e.auxiliaryPropertiesByLayerId = kr(t.flatMap(({ layerId: e, layer: t }) => {
-		let n = fa(t);
+function xa(e, t, n) {
+	e.auxiliaryPropertiesByLayerId = Ar(t.flatMap(({ layerId: e, layer: t }) => {
+		let n = ba(t);
 		return n ? [{
 			layerId: e,
 			source: n
 		}] : [];
 	})), n.forEach((e) => e.changed());
 }
-function ma(e, t) {
+function Sa(e, t) {
 	e.on("addfeature", t), e.on("removefeature", t), e.on("clear", t);
 }
-function ha(e, t, n, r) {
-	let i = tn(e.wfsAttributeFilters, t);
+function Ca(e, t, n, r) {
+	let i = nn(e.wfsAttributeFilters, t);
 	if (!i.length) return [];
 	let a = i.flatMap((t) => {
 		let n = e.wfsLayers.find((e) => e.id === t);
 		if (!n) return [];
-		let r = $i(n, {
+		let r = ea(n, {
 			catalog: e,
 			visible: !1
 		});
-		r.set(H, !0);
-		let i = fa(r);
+		r.set(V, !0);
+		let i = ba(r);
 		return i ? [{
 			layerId: t,
 			layer: r,
 			source: i
 		}] : [];
 	}), o = () => {
-		pa(n, a, r);
+		xa(n, a, r);
 	};
-	return a.forEach(({ source: e }) => ma(e, o)), o(), a.map(({ layer: e }) => e);
+	return a.forEach(({ source: e }) => Sa(e, o)), o(), a.map(({ layer: e }) => e);
 }
-function ga(e, t) {
+function wa(e, t) {
 	return e.wfsDomainLayerIds.some((e) => t[e]);
 }
-function _a(e, t, n) {
+function Ta(e, t, n) {
 	let r = e.wfsDomainSourceLayerId;
 	if (!r) return [];
 	let i = e.wfsLayers.find((e) => e.id === r);
 	if (!i) throw Error(`[gdp-tools] wfsDomainSourceLayerId "${r}" is missing from the catalog.`);
-	let a = $i(i, {
+	let a = ea(i, {
 		catalog: e,
-		visible: t[r] ?? ga(e, t)
+		visible: t[r] ?? wa(e, t)
 	});
-	a.set(H, !0);
+	a.set(V, !0);
 	let o = a.getSource();
 	if (!o) throw Error(`[gdp-tools] WFS source layer "${r}" has no vector source.`);
-	let s = e.wfsPictoUrlMaps[r], c = T(s), l = da + Math.max(e.wfsLayerIds.indexOf(r), 0), u = e.wfsDomainLayers.map((i) => {
-		let a = e.wfsCluster.enabled ? Xi(o, e, {
+	let s = e.wfsPictoUrlMaps[r], c = Le(s), l = ya + Math.max(e.wfsLayerIds.indexOf(r), 0), u = e.wfsDomainLayers.map((i) => {
+		let a = e.wfsCluster.enabled ? Zi(o, e, {
 			catalog: e,
 			domaines: i.domaines,
 			attributeFilterValues: n,
 			domainSourceLayerId: r
 		}) : o;
-		return ra(i, {
+		return ia(i, {
 			catalog: e,
 			sourceLayerId: r,
 			source: a,
@@ -2320,15 +2349,15 @@ function _a(e, t, n) {
 	});
 	return [
 		a,
-		...ha(e, r, n, u),
+		...Ca(e, r, n, u),
 		...u
 	];
 }
-function va(e = {}) {
-	let t = e.catalog ?? V, { visibility: n = { RBF: !0 }, attributeFilterValues: r } = e, i = Zt(r), a = t.layers.map((e) => ua(e, {
+function Ea(e = {}) {
+	let t = e.catalog ?? B, { visibility: n = { RBF: !0 }, attributeFilterValues: r } = e, i = Qt(r), a = t.layers.map((e) => va(e, {
 		catalog: t,
 		visible: e.id === t.dataLayerId ? !1 : n[e.id] ?? !1
-	})), o = t.wfsDomainLayers.length > 0 ? _a(t, n, i) : t.wfsLayers.map((e) => ta(e, {
+	})), o = t.wfsDomainLayers.length > 0 ? Ta(t, n, i) : t.wfsLayers.map((e) => na(e, {
 		catalog: t,
 		visible: n[e.id] ?? !1,
 		clusterGeometryFilter: {
@@ -2336,16 +2365,16 @@ function va(e = {}) {
 			attributeFilterValues: i,
 			domainSourceLayerId: e.id
 		}
-	})), c = t.annexLayers.map((e) => ui(e, {
+	})), c = t.annexLayers.map((e) => di(e, {
 		catalog: t,
 		visible: n[e.id] ?? !1
 	}));
 	return new s({
 		properties: {
 			title: "Géodésie",
-			name: de,
-			[yt]: t,
-			[W]: i
+			name: fe,
+			[bt]: t,
+			[U]: i
 		},
 		layers: [
 			...a,
@@ -2356,28 +2385,28 @@ function va(e = {}) {
 }
 // src/registerGeodesyOnMap.ts
 function Q(e) {
-	let t = e.getLayers().getArray().find((e) => e.get("name") === de);
+	let t = e.getLayers().getArray().find((e) => e.get("name") === fe);
 	return t instanceof s ? t : null;
 }
-function ya(e, t = {}) {
+function Da(e, t = {}) {
 	let n = Q(e);
 	n && e.removeLayer(n);
-	let r = va({
+	let r = Ea({
 		catalog: t.catalog,
 		visibility: t.visibility,
 		attributeFilterValues: t.attributeFilterValues
 	});
 	e.addLayer(r);
-	let i = t.popup === !1, a = Dr(e, {
+	let i = t.popup === !1, a = Or(e, {
 		...typeof t.popup == "object" ? t.popup : {},
 		disabled: i
-	}), o = Dn(e, t.catalog ?? J(e));
+	}), o = On(e, t.catalog ?? q(e));
 	return () => {
 		o(), a(), e.removeLayer(r);
 	};
 }
 // src/geodesyLayerVisibility.ts
-function ba(e = ["RBF"], t = V) {
+function Oa(e = ["RBF"], t = B) {
 	let n = new Set(e), r = Object.fromEntries(t.layers.map((e) => [e.id, e.id !== t.dataLayerId && n.has(e.id)])), i = t.wfsDomainLayerIds.length > 0 ? Object.fromEntries(t.wfsDomainLayers.map((e) => [e.id, n.has(e.id)])) : Object.fromEntries(t.wfsLayers.map((e) => [e.id, n.has(e.id)]));
 	t.wfsDomainSourceLayerId && (i[t.wfsDomainSourceLayerId] = t.wfsDomainLayerIds.some((e) => n.has(e)));
 	let a = Object.fromEntries(t.annexLayers.map((e) => [e.id, n.has(e.id)]));
@@ -2387,11 +2416,11 @@ function ba(e = ["RBF"], t = V) {
 		...a
 	};
 }
-function xa(e, t) {
-	let n = e.get(x);
-	return n ? Nt(t).includes(n) : !1;
+function ka(e, t) {
+	let n = e.get(b);
+	return n ? Pt(t).includes(n) : !1;
 }
-function Sa(e, t) {
+function Aa(e, t) {
 	if (!e.wfsDomainSourceLayerId) return t;
 	let n = e.wfsDomainLayerIds.some((e) => t[e]);
 	return {
@@ -2399,105 +2428,105 @@ function Sa(e, t) {
 		[e.wfsDomainSourceLayerId]: n
 	};
 }
-function Ca(e, t, n) {
-	let r = Sa(n, t);
+function ja(e, t, n) {
+	let r = Aa(n, t);
 	e.getLayers().forEach((e) => {
-		if (!xa(e, n)) return;
-		let t = e.get(x), i = t === n.dataLayerId;
+		if (!ka(e, n)) return;
+		let t = e.get(b), i = t === n.dataLayerId;
 		e.setVisible(i ? !1 : r[t] ?? !1);
 	});
 }
-function wa(e) {
-	let t = J(e), n = ba([], t), r = Q(e);
+function Ma(e) {
+	let t = q(e), n = Oa([], t), r = Q(e);
 	if (!r) return n;
 	let i = { ...n };
 	return r.getLayers().forEach((e) => {
-		if (!xa(e, t)) return;
-		let n = e.get(x);
+		if (!ka(e, t)) return;
+		let n = e.get(b);
 		i[n] = e.getVisible();
 	}), i;
 }
-function Ta(e, t) {
+function Na(e, t) {
 	let n = Q(e);
 	if (!n) return;
-	let r = J(e);
-	Ca(n, {
-		...wa(e),
+	let r = q(e);
+	ja(n, {
+		...Ma(e),
 		...t
 	}, r);
 }
-function Ea(e, t, n) {
-	Ta(e, { [t]: n });
+function Pa(e, t, n) {
+	Na(e, { [t]: n });
 }
-function Da(e) {
-	let t = J(e), n = wa(e);
+function Fa(e) {
+	let t = q(e), n = Ma(e);
 	return t.uiLayers.some((e) => n[e.id]) || t.wfsDomainLayers.some((e) => n[e.id]) || t.wfsUiLayers.some((e) => n[e.id]) || t.annexUiLayers.some((e) => n[e.id]);
 }
 // src/geodesyWfsAttributeFilters.ts
-function Oa(e) {
+function Ia(e) {
 	return e instanceof p && e.get("geodesyLayerKind") === "wfs" && e.get("geodesyWfsDataLayer") !== !0;
 }
-function ka(e) {
+function La(e) {
 	e.getLayers().forEach((e) => {
-		Oa(e) && e.changed();
+		Ia(e) && e.changed();
 	});
 }
-function Aa(e) {
+function Ra(e) {
 	e.getLayers().forEach((e) => {
-		if (!Oa(e)) return;
+		if (!Ia(e)) return;
 		let t = e.getSource();
 		t instanceof oe && t.refresh();
 	});
 }
-function ja(e) {
+function za(e) {
 	let t = Q(e);
 	return t ? t.get("geodesyWfsAttributeFilterValues") ?? null : null;
 }
-function Ma(e) {
-	return ja(e)?.values ?? {};
+function Ba(e) {
+	return za(e)?.values ?? {};
 }
-function Na(e) {
-	return gn(e.wfsAttributeFilters);
+function Va(e) {
+	return _n(e.wfsAttributeFilters);
 }
-function Pa(e, t) {
+function Ha(e, t) {
 	let n = Q(e);
 	if (!n) return;
-	let r = n.get(W);
-	r || (r = { values: Na(J(e)) }, n.set(W, r)), r.values = { ...t }, En(e), Aa(n), ka(n);
+	let r = n.get(U);
+	r || (r = { values: Va(q(e)) }, n.set(U, r)), r.values = { ...t }, Dn(e), Ra(n), La(n);
 }
-function Fa(e) {
-	Pa(e, Na(J(e)));
+function Ua(e) {
+	Ha(e, Va(q(e)));
 }
 // src/constants/geodesyExternalUrl.ts
-var Ia = "gdp-tools";
+var Wa = "gdp-tools";
 function $(e) {
 	return e?.trim() || "gdp-tools";
 }
-function La(e, t = Ia) {
+function Ga(e, t = Wa) {
 	let n = $(t), r = e.indexOf("#"), i = r >= 0 ? e.slice(0, r) : e, a = r >= 0 ? e.slice(r) : "";
 	return `${i}${i.includes("?") ? "&" : "?"}source=${encodeURIComponent(n)}${a}`;
 }
-function Ra(e = Ia) {
+function Ka(e = Wa) {
 	let t = $(e);
-	return (e) => La(e, t);
+	return (e) => Ga(e, t);
 }
 // src/annex/geodesyGdpRgp2FicheUrl.ts
-var za = "https://rgp.ign.fr/STATIONS/", Ba = "Fiche RGP", Va = "Consulter la fiche station";
-function Ha(e, t = Ia) {
+var qa = "https://rgp.ign.fr/STATIONS/", Ja = "Fiche RGP", Ya = "Consulter la fiche station";
+function Xa(e, t = Wa) {
 	let n = e.trim();
-	return n ? La(`${za}#${encodeURIComponent(n)}`, $(t)) : void 0;
+	return n ? Ga(`${qa}#${encodeURIComponent(n)}`, $(t)) : void 0;
 }
 // src/catalog/resolveGeodesyHitAttributeCatalog.ts
-function Ua(e, t, n = L) {
+function Za(e, t, n = I) {
 	let r = e.annexLayers.find((e) => e.id === t.layerId);
-	return r ? I({
+	return r ? vt({
 		attributeKeys: r.attributeKeys,
 		titleKeys: r.titleKeys,
 		labels: n.labels
 	}) : n;
 }
 // src/wfs/geodesyWfsLoadingState.ts
-function Wa(e) {
+function Qa(e) {
 	if (!e) return null;
 	if (e instanceof oe) {
 		let t = e.getSource();
@@ -2505,7 +2534,7 @@ function Wa(e) {
 	}
 	return e instanceof v ? e : null;
 }
-function Ga(e) {
+function $a(e) {
 	let t = Q(e);
 	if (!t) return [];
 	let n = /* @__PURE__ */ new Set(), r = (e) => {
@@ -2514,35 +2543,35 @@ function Ga(e) {
 			return;
 		}
 		if (!(e instanceof p)) return;
-		let t = e.get(H) === !0, i = e.get(C) === "wfs";
+		let t = e.get(V) === !0, i = e.get(C) === "wfs";
 		if (!t && !i) return;
-		let a = Wa(e.getSource());
+		let a = Qa(e.getSource());
 		a && n.add(a);
 	};
 	return t.getLayers().forEach(r), [...n];
 }
-function Ka(e) {
+function eo(e) {
 	let t = e.loading;
 	if (t === !1 || t === void 0) return 0;
 	let n = Number(t);
 	return Number.isFinite(n) ? Math.max(0, n) : 0;
 }
-function qa(e) {
-	let t = Ga(e).reduce((e, t) => e + Ka(t), 0);
+function to(e) {
+	let t = $a(e).reduce((e, t) => e + eo(t), 0);
 	return {
 		pendingCount: t,
 		isLoading: t > 0
 	};
 }
-function Ja(e, t) {
+function no(e, t) {
 	let n = [], r = 0, i = () => {
 		t({
 			pendingCount: r,
 			isLoading: r > 0
 		});
 	}, a = () => {
-		n.forEach(b), n.length = 0, r = 0;
-		for (let t of Ga(e)) n.push(t.on("featuresloadstart", () => {
+		n.forEach(de), n.length = 0, r = 0;
+		for (let t of $a(e)) n.push(t.on("featuresloadstart", () => {
 			r += 1, i();
 		}), t.on("featuresloadend", () => {
 			r = Math.max(0, r - 1), i();
@@ -2551,18 +2580,18 @@ function Ja(e, t) {
 		}));
 		i();
 	};
-	a(), Ga(e).length === 0 && window.setTimeout(a, 0);
+	a(), $a(e).length === 0 && window.setTimeout(a, 0);
 	let o = [e.getLayers().on("add", (e) => {
 		e.element.get("name") === "geodesyGroup" && a();
 	}), e.getLayers().on("remove", (e) => {
 		e.element.get("name") === "geodesyGroup" && a();
 	})];
 	return () => {
-		n.forEach(b), o.forEach(b);
+		n.forEach(de), o.forEach(de);
 	};
 }
 // src/wms/geodesyWmsLoadingState.ts
-function Ya(e) {
+function ro(e) {
 	let t = Q(e);
 	if (!t) return [];
 	let n = /* @__PURE__ */ new Set(), r = (e) => {
@@ -2576,56 +2605,29 @@ function Ya(e) {
 	};
 	return t.getLayers().forEach(r), [...n];
 }
-function Xa(e) {
-	return {
-		pendingCount: 0,
-		isLoading: !1
-	};
+function io(e) {
+	return ua();
 }
-function Za(e, t) {
-	let n = [], r = 0, i = () => {
-		t({
-			pendingCount: r,
-			isLoading: r > 0
-		});
-	}, a = () => {
-		n.forEach(b), n.length = 0, r = 0;
-		for (let t of Ya(e)) n.push(t.on("tileloadstart", () => {
-			r += 1, i();
-		}), t.on("tileloadend", () => {
-			r = Math.max(0, r - 1), i();
-		}), t.on("tileloaderror", () => {
-			r = Math.max(0, r - 1), i();
-		}));
-		i();
-	};
-	a(), Ya(e).length === 0 && window.setTimeout(a, 0);
-	let o = [e.getLayers().on("add", (e) => {
-		e.element.get("name") === "geodesyGroup" && a();
-	}), e.getLayers().on("remove", (e) => {
-		e.element.get("name") === "geodesyGroup" && a();
-	})];
-	return () => {
-		n.forEach(b), o.forEach(b);
-	};
+function ao(e, t) {
+	return da(t);
 }
 // src/geodesyMapLoadingState.ts
-function Qa(e) {
-	let t = qa(e), n = Xa(e);
+function oo(e) {
+	let t = to(e), n = io(e);
 	return {
 		pendingCount: t.pendingCount + n.pendingCount,
 		isLoading: t.isLoading || n.isLoading
 	};
 }
-function $a(e, t) {
-	let n = qa(e), r = Xa(e), i = () => {
+function so(e, t) {
+	let n = to(e), r = io(e), i = () => {
 		t({
 			pendingCount: n.pendingCount + r.pendingCount,
 			isLoading: n.isLoading || r.isLoading
 		});
-	}, a = Ja(e, (e) => {
+	}, a = no(e, (e) => {
 		n = e, i();
-	}), o = Za(e, (e) => {
+	}), o = ao(e, (e) => {
 		r = e, i();
 	});
 	return i(), () => {
@@ -2633,19 +2635,19 @@ function $a(e, t) {
 	};
 }
 // src/report/geodesyPointPhotos.ts
-function eo(e, t) {
+function co(e, t) {
 	return F(e, t).filter(([e, t]) => P(e, t)).map(([e, n]) => {
 		let r = n.trim();
 		return {
 			key: e,
-			label: R(e, t),
+			label: L(e, t),
 			url: r,
 			displayUrl: j(r)
 		};
 	});
 }
 // src/report/geodesyPointDisplay.ts
-function to(e, t) {
+function lo(e, t) {
 	let n = e.feature.getGeometry();
 	if (n instanceof o) {
 		let [e, t] = y(n.getCoordinates());
@@ -2668,28 +2670,28 @@ function to(e, t) {
 		latitude: a
 	};
 }
-function no(e) {
-	return e.transformExternalUrl ? e.transformExternalUrl : Ra($(e.externalUrlSource));
+function uo(e) {
+	return e.transformExternalUrl ? e.transformExternalUrl : Ka($(e.externalUrlSource));
 }
-function ro(e, t, n) {
+function fo(e, t, n) {
 	if (n.layerId !== "GDP_RGP2") return e;
-	let r = Ha(String(t.nom ?? "").trim(), $(n.externalUrlSource));
+	let r = Xa(String(t.nom ?? "").trim(), $(n.externalUrlSource));
 	return r ? [...e, {
-		label: Ba,
-		value: Va,
+		label: Ja,
+		value: Ya,
 		href: r
 	}] : e;
 }
-function io(e, t, n) {
+function po(e, t, n) {
 	let r = t.trim();
-	return n.layerId === "GDP_RGP2" && e.toLowerCase() === "dispo" ? $r(r) : r;
+	return n.layerId === "GDP_RGP2" && e.toLowerCase() === "dispo" ? ei(r) : r;
 }
-function ao(e, t, n, r) {
-	let i = t.trim(), a = R(e, n), o = no(r);
+function mo(e, t, n, r) {
+	let i = t.trim(), a = L(e, n), o = uo(r);
 	if (r.layerId === "GDP_RGP2" && e.toLowerCase() === "dispo") return {
 		label: a,
 		value: i,
-		dispoStates: Zr(i)
+		dispoStates: Qr(i)
 	};
 	if (ft(e)) {
 		let e = He(i, {
@@ -2721,7 +2723,7 @@ function ao(e, t, n, r) {
 		...dt(e, t) ? { href: o(i) } : {}
 	};
 }
-function oo(e, t) {
+function ho(e, t) {
 	let n = e.picto ?? e.PICTO;
 	if (n == null || String(n).trim() === "") return;
 	let r = String(n).trim(), i = He(r, {
@@ -2729,7 +2731,7 @@ function oo(e, t) {
 		layerId: t.layerId
 	});
 	if (!i) return;
-	let a = no(t);
+	let a = uo(t);
 	return {
 		value: r,
 		imageUrl: i,
@@ -2737,72 +2739,72 @@ function oo(e, t) {
 		href: a(i)
 	};
 }
-function so(e, t = {}) {
-	let n = t.attributeCatalog ?? L;
-	return B(F(e, n), n).map(([e, r]) => ao(e, r, n, t));
+function go(e, t = {}) {
+	let n = t.attributeCatalog ?? I;
+	return z(F(e, n), n).map(([e, r]) => mo(e, r, n, t));
 }
-function co(e, t = L, n = {}) {
+function _o(e, t = I, n = {}) {
 	let r = e.feature.getProperties(), i = [`Couche : ${e.layerTitle}`], a = n.layerId ?? e.layerId;
-	return B(F(r, t), t).forEach(([e, n]) => {
-		let r = io(e, n, { layerId: a });
-		i.push(`${R(e, t)} : ${r}`);
+	return z(F(r, t), t).forEach(([e, n]) => {
+		let r = po(e, n, { layerId: a });
+		i.push(`${L(e, t)} : ${r}`);
 	}), i.join("\n");
 }
-function lo(e, t) {
-	let n = t.attributeCatalog ?? L;
-	return t.geodesyCatalog ? Ua(t.geodesyCatalog, e, n) : n;
+function vo(e, t) {
+	let n = t.attributeCatalog ?? I;
+	return t.geodesyCatalog ? Za(t.geodesyCatalog, e, n) : n;
 }
-function uo(e, t = {}) {
-	let n = lo(e, t), r = eo(e.feature.getProperties(), n).map((e) => e.url);
-	r.length !== 0 && Qe(r).catch(() => void 0);
+function yo(e, t = {}) {
+	let n = vo(e, t), r = co(e.feature.getProperties(), n).map((e) => e.url);
+	r.length !== 0 && M(r).catch(() => void 0);
 }
-function fo(e, t, n = {}) {
-	let r = lo(e, n), i = e.feature.getProperties(), { longitude: a, latitude: o } = to(e, t), s = {
+function bo(e, t, n = {}) {
+	let r = vo(e, n), i = e.feature.getProperties(), { longitude: a, latitude: o } = lo(e, t), s = {
 		...n,
 		attributeCatalog: r,
 		layerId: n.layerId ?? e.layerId
-	}, c = oo(i, s);
+	}, c = ho(i, s);
 	return {
-		title: z(i, r),
+		title: R(i, r),
 		titlePicto: c,
 		layerTitle: e.layerTitle,
 		longitude: a,
 		latitude: o,
-		attributes: ro(so(i, s), i, s),
-		photos: eo(i, r),
-		comment: co(e, r, { layerId: s.layerId })
+		attributes: fo(go(i, s), i, s),
+		photos: co(i, r),
+		comment: _o(e, r, { layerId: s.layerId })
 	};
 }
-function po(e, t = {}) {
-	let n = t.attributeCatalog ?? L;
+function xo(e, t = {}) {
+	let n = t.attributeCatalog ?? I;
 	return {
-		title: z(e, n),
-		titlePicto: oo(e, {
+		title: R(e, n),
+		titlePicto: ho(e, {
 			...t,
 			attributeCatalog: n
 		})
 	};
 }
-function mo(e, t) {
+function So(e, t) {
 	return `${t.toFixed(5)}° N, ${e.toFixed(5)}° E`;
 }
 // src/report/geodesyPointReportContext.ts
-function ho(e) {
+function Co(e) {
 	let t = e.id ?? e.ID;
 	if (t != null) return String(t).trim() || void 0;
 }
-function go(e) {
+function wo(e) {
 	let t = {};
 	for (let [n, r] of Object.entries(e)) n === "geometry" || typeof r == "object" && r || (t[n] = r);
 	return t;
 }
-function _o(e, t, n = {}) {
-	let r = go(e.feature.getProperties());
+function To(e, t, n = {}) {
+	let r = wo(e.feature.getProperties());
 	return {
-		...fo(e, t, n),
+		...bo(e, t, n),
 		layerId: e.layerId,
 		properties: r,
-		geodesyId: ho(r)
+		geodesyId: Co(r)
 	};
 }
-export { ni as $, je as $n, Lt as $t, wa as A, Qe as An, En as At, Vi as B, w as Bn, gn as Bt, La as C, rt as Cn, Pn as Ct, Ma as D, Ye as Dn, Mn as Dt, Fa as E, tt as En, Nn as Et, ya as F, We as Fn, Y as Ft, Si as G, T as Gn, zt as Gt, Oi as H, Le as Hn, pn as Ht, va as I, D as In, J as It, oi as J, ke as Jn, It as Jt, Ci as K, C as Kn, Wt as Kt, ua as L, Ue as Ln, Qt as Lt, Ea as M, j as Mn, Dn as Mt, Ta as N, Ge as Nn, bn as Nt, Pa as O, nt as On, In as Ot, Q as P, O as Pn, Cn as Pt, ei as Q, Ae as Qn, U as Qt, ta as R, Ve as Rn, W as Rt, Ia as S, dt as Sn, kn as St, $ as T, it as Tn, jn as Tt, Ei as U, Ne as Un, ln as Ut, zi as V, Me as Vn, Zt as Vt, wi as W, Pe as Wn, tn as Wt, Jr as X, Ee as Xn, Pt as Xt, Z as Y, Te as Yn, H as Yt, $r as Z, De as Zn, Ft as Zt, Ua as _, F as _n, Kn as _t, co as a, Mt as an, _e as ar, Gr as at, za as b, P as bn, Vn as bt, eo as c, I as cn, he as cr, Tr as ct, Ya as d, z as dn, ye as dr, wr as dt, V as en, Ce as er, Zr as et, Xa as f, B as fn, S as fr, gr as ft, Ja as g, mt as gn, Qn as gt, qa as h, ct as hn, fe as hr, Yn as ht, to as i, jt as in, me as ir, Hr as it, Da as j, $e as jn, Tn as jt, ba as k, Ze as kn, An as kt, Qa as l, R as ln, ge as lr, Sr as lt, Ga as m, ht as mn, be as mr, dr as mt, fo as n, At as nn, Se as nr, Qr as nt, mo as o, L as on, de as or, Ir as ot, Za as p, at as pn, ve as pr, hr as pt, ui as q, Oe as qn, Gt as qt, po as r, Nt as rn, xe as rr, Vr as rt, uo as s, gt as sn, x as sr, Dr as st, _o as t, yt as tn, we as tr, ti as tt, $a as u, vt as un, pe as ur, Cr as ut, Ba as v, N as vn, Jn as vt, Ra as w, M as wn, Fn as wt, Ha as x, ft as xn, Ln as xt, Va as y, st as yn, Bn as yt, Gi as z, He as zn, hn as zt };
+export { ri as $, je as $n, Rt as $t, Ma as A, M as An, Dn as At, Hi as B, T as Bn, _n as Bt, Ga as C, rt as Cn, Fn as Ct, Ba as D, Ye as Dn, Nn as Dt, Ua as E, et as En, Pn as Et, Da as F, We as Fn, J as Ft, Ci as G, Le as Gn, Bt as Gt, ki as H, Ie as Hn, mn as Ht, Ea as I, D as In, q as It, si as J, ke as Jn, Lt as Jt, wi as K, C as Kn, Gt as Kt, va as L, Ue as Ln, $t as Lt, Pa as M, j as Mn, On as Mt, Na as N, Ge as Nn, xn as Nt, Ha as O, tt as On, Ln as Ot, Q as P, O as Pn, wn as Pt, ti as Q, Ae as Qn, H as Qt, na as R, Ve as Rn, U as Rt, Wa as S, dt as Sn, An as St, $ as T, it as Tn, Mn as Tt, Di as U, Ne as Un, un as Ut, Bi as V, Me as Vn, Qt as Vt, Ti as W, w as Wn, nn as Wt, Yr as X, Ee as Xn, Ft as Xt, X as Y, Te as Yn, V as Yt, ei as Z, De as Zn, It as Zt, Za as _, F as _n, qn as _t, _o as a, Nt as an, _e as ar, Kr as at, qa as b, P as bn, Hn as bt, co as c, vt as cn, he as cr, Er as ct, ro as d, R as dn, ye as dr, Tr as dt, B as en, Ce as er, Qr as et, io as f, z as fn, x as fr, _r as ft, no as g, mt as gn, $n as gt, to as h, ct as hn, pe as hr, Xn as ht, lo as i, Mt as in, S as ir, Ur as it, Fa as j, Qe as jn, En as jt, Oa as k, Ze as kn, jn as kt, oo as l, L as ln, ge as lr, Cr as lt, $a as m, ht as mn, be as mr, fr as mt, bo as n, jt as nn, Se as nr, $r as nt, So as o, I as on, fe as or, Lr as ot, ao as p, at as pn, ve as pr, gr as pt, di as q, Oe as qn, Kt as qt, xo as r, Pt as rn, xe as rr, Hr as rt, yo as s, gt as sn, b as sr, Or as st, To as t, bt as tn, we as tr, ni as tt, so as u, yt as un, me as ur, wr as ut, Ja as v, N as vn, Yn as vt, Ka as w, nt as wn, In as wt, Xa as x, ft as xn, Rn as xt, Ya as y, st as yn, Vn as yt, Ki as z, He as zn, gn as zt };
